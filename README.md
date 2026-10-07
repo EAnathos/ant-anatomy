@@ -78,6 +78,9 @@ Polices Hanken Grotesk et DM Mono. Les valeurs sont dans `src/styles/tokens.css`
 
 ## Crédits
 
-Planche : « Scheme ant worker anatomy » de Mariana Ruiz Villarreal (LadyofHats), via Wikimedia Commons.
-Le dessin n'est pas modifié : seuls les noms des structures et des zones cliquables ont été ajoutés,
-et les griffes ont été détourées séparément du tarse.
+Planche : [Scheme ant worker anatomy (version sans légende)](https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg),
+par LadyofHats (original) et Sophivorus (version sans légende), domaine public, via Wikimedia Commons.
+Le tracé n'est pas modifié : les noms des structures et des zones cliquables ont été ajoutés, les griffes détourées
+séparément du tarse, et le gastre passé au même gris que le propodéum.
+
+Pour aller plus loin : [Morphology and Terminology](https://antwiki.org/wiki/Morphology_and_Terminology) sur AntWiki.

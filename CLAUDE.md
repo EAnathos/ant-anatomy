@@ -38,7 +38,9 @@ la navigation est un état `Screen` dans `src/App.tsx`.
 
 ## Planche SVG : règles
 
-- Dessin : « Scheme ant worker anatomy » (LadyofHats, Wikimedia Commons). **Ne pas modifier le dessin** :
+- Dessin : « Scheme ant worker anatomy-clean » (LadyofHats et Sophivorus, domaine public,
+  https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg), crédité dans le pied de page
+  (`Footer.tsx`) et le README. **Ne pas modifier le dessin** :
   seuls des attributs (`data-part`, `pointer-events`) et des tracés invisibles ou superposés à l'identique sont ajoutés.
 - Chaque tracé cliquable porte `data-part="<id>"`, id identique à un `PartId` de `parts.ts`. Une structure peut
   compter plusieurs tracés (2 antennes, 6 pattes, segments du gastre) : `AntPlate` applique états, survol et focus

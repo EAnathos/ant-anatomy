@@ -131,6 +131,24 @@ main.container {
   color: var(--paper);
 }
 
+/* Pied de page */
+.site-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 32px 0 48px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--slate);
+}
+
+.site-footer a {
+  color: var(--prusse);
+  font-weight: 500;
+  text-underline-offset: 3px;
+}
+
 /* Boutons */
 .btn {
   align-self: flex-start;

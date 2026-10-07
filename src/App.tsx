@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Footer } from './components/Footer';
 import { Header, type NavTarget } from './components/Header';
 import { REGIONS, partsInRegions, type PartId } from './data/parts';
 import { buildQuestions, shuffle, type Answer, type Settings } from './lib/session';
@@ -75,6 +76,9 @@ export function App() {
           onHome={() => setScreen({ name: 'home' })}
         />
       )}
+      <div className="container">
+        <Footer />
+      </div>
     </>
   );
 }
