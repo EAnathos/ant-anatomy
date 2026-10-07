@@ -4,7 +4,69 @@ import { CheckIcon, CrossIcon, CursorIcon, ReplayIcon } from '../components/icon
 import { Legend } from '../components/Legend';
 import { PART_BY_ID, PLATE_BY_ID, partsOf, type PartId } from '../data/parts';
 import { isCorrectName } from '../lib/answers';
+import { t } from '../i18n';
 import { playableParts, type Settings } from '../lib/session';
+
+const T = t(
+  {
+    attempted: 'Structures tentées',
+    found: ' trouvées',
+    missed: ' ratées',
+    clickTitle: 'Clique une structure',
+    clickHelp: 'Choisis une structure de la planche, puis écris son nom. Tu n’as qu’un essai par structure.',
+    accentsIgnored: ' Les accents et les majuscules ne comptent pas.',
+    accentsCount: ' Les majuscules ne comptent pas, les accents si.',
+    finished: 'Planche terminée',
+    allFirstTry: 'Toutes les structures ont été nommées du premier coup.',
+    remaining: (n: number) => `${n} ${n > 1 ? 'structures restent' : 'structure reste'} en rouge sur la planche.`,
+    restart: 'Recommencer',
+    highlighted: 'Structure surlignée',
+    question: 'Comment s’appelle-t-elle ?',
+    example: (word: string) => `ex. ${word}`,
+    submit: 'Valider',
+    dontKnow: 'Je ne sais pas',
+    exact: (name: string) => `Exact : ${name}`,
+    notQuite: 'Pas tout à fait',
+    youWrote: (text: string) => `Tu as écrit « ${text} ». `,
+    expected: 'Réponse attendue : ',
+    staysRed: '. Elle reste en rouge sur la planche.',
+    another: 'Choisir une autre structure',
+    named: 'Nommées',
+    none: 'Aucune pour l’instant.',
+    missedList: 'Ratées',
+    answer: 'Réponse',
+    plate: 'Planche anatomique',
+  },
+  {
+    attempted: 'Structures attempted',
+    found: ' found',
+    missed: ' missed',
+    clickTitle: 'Click a structure',
+    clickHelp: 'Pick a structure on the plate, then type its name. You only get one try per structure.',
+    accentsIgnored: ' Accents and capitals don’t matter.',
+    accentsCount: ' Capitals don’t matter, accents do.',
+    finished: 'Plate complete',
+    allFirstTry: 'Every structure was named on the first try.',
+    remaining: (n: number) => `${n} ${n > 1 ? 'structures remain' : 'structure remains'} in red on the plate.`,
+    restart: 'Start over',
+    highlighted: 'Highlighted structure',
+    question: 'What is it called?',
+    example: (word: string) => `e.g. ${word}`,
+    submit: 'Check',
+    dontKnow: 'I don’t know',
+    exact: (name: string) => `Correct: ${name}`,
+    notQuite: 'Not quite',
+    youWrote: (text: string) => `You wrote “${text}”. `,
+    expected: 'Expected answer: ',
+    staysRed: '. It stays red on the plate.',
+    another: 'Pick another structure',
+    named: 'Named',
+    none: 'None yet.',
+    missedList: 'Missed',
+    answer: 'Answer',
+    plate: 'Anatomical plate',
+  },
+);
 
 type Verdict = 'ok' | 'ko' | null;
 
@@ -68,20 +130,20 @@ export function NameMode({ settings }: { settings: Settings }) {
 
   return (
     <main className="container play">
-      <section className="play__side" aria-label="Réponse">
+      <section className="play__side" aria-label={T.answer}>
         <div className="progress">
           <div className="progress__row">
-            <span className="eyebrow">Structures tentées</span>
+            <span className="eyebrow">{T.attempted}</span>
             <span className="score">
-              <span className="score--ok"><CheckIcon /> {found.length}<span className="sr-only"> trouvées</span></span>
-              <span className="score--ko"><CrossIcon /> {missed.length}<span className="sr-only"> ratées</span></span>
+              <span className="score--ok"><CheckIcon /> {found.length}<span className="sr-only">{T.found}</span></span>
+              <span className="score--ko"><CrossIcon /> {missed.length}<span className="sr-only">{T.missed}</span></span>
               <span className="ink">{attempted} / {playable.length}</span>
             </span>
           </div>
           <div
             className="bar"
             role="progressbar"
-            aria-label="Structures tentées"
+            aria-label={T.attempted}
             aria-valuemin={0}
             aria-valuemax={playable.length}
             aria-valuenow={attempted}
@@ -94,33 +156,33 @@ export function NameMode({ settings }: { settings: Settings }) {
         {!part && !finished && (
           <div className="empty">
             <span className="icon-disc"><CursorIcon /></span>
-            <h1>Clique une structure</h1>
+            <h1>{T.clickTitle}</h1>
             <p className="muted">
-              Choisis une structure de la planche, puis écris son nom. Tu n’as qu’un essai par structure.
-              {settings.ignoreAccents ? ' Les accents et les majuscules ne comptent pas.' : ' Les majuscules ne comptent pas, les accents si.'}
+              {T.clickHelp}
+              {settings.ignoreAccents ? T.accentsIgnored : T.accentsCount}
             </p>
           </div>
         )}
 
         {!part && finished && (
           <div className="card prompt">
-            <span className="eyebrow">Planche terminée</span>
+            <span className="eyebrow">{T.finished}</span>
             <h1 className="prompt__name">{found.length} / {playable.length}</h1>
             <p className="muted">
               {missed.length === 0
-                ? 'Toutes les structures ont été nommées du premier coup.'
-                : `${missed.length} ${missed.length > 1 ? 'structures restent' : 'structure reste'} en rouge sur la planche.`}
+                ? T.allFirstTry
+                : T.remaining(missed.length)}
             </p>
             <button type="button" className="btn btn--primary" onClick={restart}>
-              <ReplayIcon /> Recommencer
+              <ReplayIcon /> {T.restart}
             </button>
           </div>
         )}
 
         {part && (
           <form className="card answer" onSubmit={submit}>
-            <span className="eyebrow eyebrow--dot">Structure surlignée</span>
-            <label htmlFor="answer" className="answer__label">Comment s’appelle-t-elle ?</label>
+            <span className="eyebrow eyebrow--dot">{T.highlighted}</span>
+            <label htmlFor="answer" className="answer__label">{T.question}</label>
             <input
               ref={inputRef}
               id="answer"
@@ -128,15 +190,15 @@ export function NameMode({ settings }: { settings: Settings }) {
               type="text"
               autoComplete="off"
               spellCheck={false}
-              placeholder={`ex. ${PLATE_BY_ID[settings.plate].example}`}
+              placeholder={T.example(PLATE_BY_ID[settings.plate].example)}
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
               disabled={verdict !== null}
             />
             {verdict === null && (
               <div className="actions">
-                <button type="submit" className="btn btn--primary">Valider</button>
-                <button type="button" className="btn btn--secondary" onClick={() => conclude(false, '')}>Je ne sais pas</button>
+                <button type="submit" className="btn btn--primary">{T.submit}</button>
+                <button type="button" className="btn btn--secondary" onClick={() => conclude(false, '')}>{T.dontKnow}</button>
               </div>
             )}
           </form>
@@ -145,28 +207,28 @@ export function NameMode({ settings }: { settings: Settings }) {
         <div aria-live="polite">
           {part && verdict === 'ok' && (
             <div className="verdict verdict--ok">
-              <div className="verdict__title"><CheckIcon size={20} /> Exact : {part.name}</div>
+              <div className="verdict__title"><CheckIcon size={20} /> {T.exact(part.name)}</div>
               <p>{part.definition}</p>
-              <button type="button" className="btn btn--ghost" onClick={clear}>Choisir une autre structure</button>
+              <button type="button" className="btn btn--ghost" onClick={clear}>{T.another}</button>
             </div>
           )}
           {part && verdict === 'ko' && (
             <div className="verdict verdict--ko">
-              <div className="verdict__title"><CrossIcon size={20} /> Pas tout à fait</div>
+              <div className="verdict__title"><CrossIcon size={20} /> {T.notQuite}</div>
               <p>
-                {typed ? `Tu as écrit « ${typed} ». ` : ''}
-                Réponse attendue : <strong>{part.name}</strong>. Elle reste en rouge sur la planche.
+                {typed ? T.youWrote(typed) : ''}
+                {T.expected}<strong>{part.name}</strong>{T.staysRed}
               </p>
               <p className="verdict__def">{part.definition}</p>
-              <button type="button" className="btn btn--ghost" onClick={clear}>Choisir une autre structure</button>
+              <button type="button" className="btn btn--ghost" onClick={clear}>{T.another}</button>
             </div>
           )}
         </div>
 
         <div className="found">
-          <span className="eyebrow">Nommées</span>
+          <span className="eyebrow">{T.named}</span>
           {found.length === 0 ? (
-            <span className="muted">Aucune pour l’instant.</span>
+            <span className="muted">{T.none}</span>
           ) : (
             <ul className="found__list">
               {found.map((id) => <li key={id}>{PART_BY_ID[id].name}</li>)}
@@ -174,7 +236,7 @@ export function NameMode({ settings }: { settings: Settings }) {
           )}
           {missed.length > 0 && (
             <>
-              <span className="eyebrow">Ratées</span>
+              <span className="eyebrow">{T.missedList}</span>
               <ul className="found__list found__list--ko">
                 {missed.map((id) => <li key={id}>{PART_BY_ID[id].name}</li>)}
               </ul>
@@ -183,7 +245,7 @@ export function NameMode({ settings }: { settings: Settings }) {
         </div>
       </section>
 
-      <section className="plate play__plate" aria-label="Planche anatomique">
+      <section className="plate play__plate" aria-label={T.plate}>
         <AntPlate plate={settings.plate} marks={marks} onPick={pick} locked={[...found, ...missed]} />
         <Legend items={['sel', 'done', 'missed', 'hover']} />
       </section>

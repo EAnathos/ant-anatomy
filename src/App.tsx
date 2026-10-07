@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Footer } from './components/Footer';
 import { Header, type NavTarget } from './components/Header';
-import { layersOf, regionsOf, type PartId } from './data/parts';
+import { regionsOf, type PartId } from './data/parts';
 import { buildQuestions, playableParts, shuffle, type Answer, type Settings } from './lib/session';
 import { FindMode } from './screens/FindMode';
 import { Home } from './screens/Home';
@@ -17,7 +17,6 @@ type Screen =
 const DEFAULT_SETTINGS: Settings = {
   plate: 'ouvriere',
   regions: regionsOf('ouvriere').map((r) => r.id),
-  layers: layersOf('ouvriere'),
   questionCount: 10,
   ignoreAccents: true,
 };

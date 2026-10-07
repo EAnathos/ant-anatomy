@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { PART_BY_ID, PLATES, REGION_BY_ID, partsOf, regionsOf } from '../data/parts';
+import { PART_BY_ID, PLATES, partsFor, partsOf, regionsOf } from '../data/parts';
 import { isCorrectName, normalize } from './answers';
 import { buildQuestions, formatDuration, shuffle, summarize } from './session';
 
@@ -49,6 +49,40 @@ describe('isCorrectName', () => {
   });
 });
 
+describe('anglais', () => {
+  const EN = Object.fromEntries(partsFor('en').map((p) => [p.id, p])) as typeof PART_BY_ID;
+
+  it('accepte les noms, synonymes et pluriels anglais', () => {
+    expect(isCorrectName(EN.femur, 'femur', true)).toBe(true);
+    expect(isCorrectName(EN.femur, 'Femora', true)).toBe(true);
+    expect(isCorrectName(EN.coxa, 'coxa', true)).toBe(true);
+    expect(isCorrectName(EN.griffe, 'claw', true)).toBe(true);
+    expect(isCorrectName(EN.aiguillon, 'stinger', true)).toBe(true);
+    expect(isCorrectName(EN['rs-plus-m'], 'Rs + M', true)).toBe(true);
+    expect(isCorrectName(EN['submarginale-1'], '1st submarginal', true)).toBe(true);
+    expect(isCorrectName(EN.femur, 'fémur', false)).toBe(false);
+  });
+
+  it('traduit toutes les structures', () => {
+    for (const p of partsFor('en')) expect(p.definition, p.id).not.toBe(PART_BY_ID[p.id].definition);
+  });
+});
+
+describe('noms sans ambiguïté', () => {
+  it.each(['fr', 'en'] as const)('%s : aucun nom ni synonyme partagé par deux structures d’une planche', (lang) => {
+    for (const plate of PLATES) {
+      const ids = new Set(partsOf(plate.id).map((p) => p.id));
+      const seen = new Map<string, string>();
+      for (const part of partsFor(lang).filter((p) => ids.has(p.id))) {
+        for (const label of new Set([part.name, ...part.synonyms].map((s) => normalize(s, true).replace(/s$/, '')))) {
+          expect(seen.get(label) ?? part.id, `« ${label} »`).toBe(part.id);
+          seen.set(label, part.id);
+        }
+      }
+    }
+  });
+});
+
 describe('sessions', () => {
   it('mélange sans perdre d’éléments', () => {
     const items = [1, 2, 3, 4, 5];
@@ -56,15 +90,15 @@ describe('sessions', () => {
   });
 
   it('limite les questions aux régions choisies', () => {
-    const qs = buildQuestions({ plate: 'ouvriere', regions: ['antenne'], layers: [], questionCount: 10, ignoreAccents: true });
+    const qs = buildQuestions({ plate: 'ouvriere', regions: ['antenne'], questionCount: 10, ignoreAccents: true });
     expect(qs.sort()).toEqual(['funicule', 'scape']);
   });
 
-  it('ne tire que les couches choisies', () => {
-    const regions = regionsOf('aile').map((r) => r.id);
-    const qs = buildQuestions({ plate: 'aile', regions, layers: ['nervures'], questionCount: 'all', ignoreAccents: true });
+  it('sépare cellules et nervures de l’aile', () => {
+    expect(regionsOf('aile').map((r) => r.id)).toEqual(['cellules', 'nervures']);
+    const qs = buildQuestions({ plate: 'aile', regions: ['nervures'], questionCount: 'all', ignoreAccents: true });
     expect(qs).toHaveLength(22);
-    expect(qs.every((id) => REGION_BY_ID[PART_BY_ID[id].region].layer === 'nervures')).toBe(true);
+    expect(qs.every((id) => PART_BY_ID[id].region === 'nervures')).toBe(true);
   });
 
   it('calcule score, série et erreurs', () => {

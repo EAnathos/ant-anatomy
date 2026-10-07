@@ -2,6 +2,7 @@ import { useEffect, useRef, type KeyboardEvent, type MouseEvent } from 'react';
 import antSvg from '../assets/ant.svg?raw';
 import wingSvg from '../assets/wing.svg?raw';
 import type { PartId, PlateId } from '../data/parts';
+import { t } from '../i18n';
 
 export type Mark = 'sel' | 'ok' | 'ko' | 'done' | 'off';
 export type Marks = Partial<Record<PartId, Mark>>;
@@ -13,7 +14,17 @@ interface AntPlateProps {
   locked?: readonly PartId[];
 }
 
-const SVG_BY_PLATE: Record<PlateId, string> = { ouvriere: antSvg, aile: wingSvg };
+const LABELS = t<Record<PlateId, string>>(
+  { ouvriere: 'Planche : fourmi ouvrière en vue latérale', aile: 'Planche : aile antérieure de reine' },
+  { ouvriere: 'Plate: worker ant, side view', aile: 'Plate: queen forewing' },
+);
+
+const withLabel = (svg: string, label: string) => svg.replace(/aria-label="[^"]*"/, `aria-label="${label}"`);
+
+const SVG_BY_PLATE: Record<PlateId, string> = {
+  ouvriere: withLabel(antSvg, LABELS.ouvriere),
+  aile: withLabel(wingSvg, LABELS.aile),
+};
 
 const EMPTY_MARKS: Marks = {};
 const EMPTY_LOCKED: readonly PartId[] = [];

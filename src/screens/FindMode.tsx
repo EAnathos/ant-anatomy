@@ -3,7 +3,43 @@ import { AntPlate, type Marks } from '../components/AntPlate';
 import { ArrowIcon, BulbIcon, CheckIcon, CrossIcon } from '../components/icons';
 import { Legend } from '../components/Legend';
 import { PART_BY_ID, REGION_BY_ID, type PartId, type PlateId } from '../data/parts';
+import { t } from '../i18n';
 import type { Answer } from '../lib/session';
+
+const T = t(
+  {
+    current: 'Question en cours',
+    good: ' bonnes réponses',
+    bad: ' erreurs',
+    clickOn: 'Clique sur',
+    region: (label: string) => `Région : ${label}`,
+    hint: 'Indice : afficher la région',
+    right: 'Bien vu !',
+    wrong: (name: string) => `Raté, tu as cliqué « ${name} »`,
+    shownInGreen: 'La bonne structure est surlignée en vert.',
+    results: 'Voir le bilan',
+    next: 'Question suivante',
+    help: 'Survole la planche : les structures s’éclairent au passage.',
+    helpRepeated: ' Pour une structure présente plusieurs fois (fémur, griffe…), n’importe laquelle compte.',
+    plate: 'Planche anatomique',
+  },
+  {
+    current: 'Current question',
+    good: ' correct answers',
+    bad: ' mistakes',
+    clickOn: 'Click on',
+    region: (label: string) => `Region: ${label}`,
+    hint: 'Hint: show the region',
+    right: 'Well spotted!',
+    wrong: (name: string) => `Missed, you clicked “${name}”`,
+    shownInGreen: 'The right structure is highlighted in green.',
+    results: 'See results',
+    next: 'Next question',
+    help: 'Hover over the plate: structures light up as you go.',
+    helpRepeated: ' For a structure present several times (femur, claw…), any of them counts.',
+    plate: 'Anatomical plate',
+  },
+);
 
 interface FindModeProps {
   plate: PlateId;
@@ -49,13 +85,13 @@ export function FindMode({ plate, questions, onFinish }: FindModeProps) {
 
   return (
     <main className="container play">
-      <section className="play__side" aria-label="Question en cours">
+      <section className="play__side" aria-label={T.current}>
         <div className="progress">
           <div className="progress__row">
             <span className="mono ink">Question {index + 1} / {questions.length}</span>
             <span className="score">
-              <span className="score--ok"><CheckIcon /> {good}<span className="sr-only"> bonnes réponses</span></span>
-              <span className="score--ko"><CrossIcon /> {log.length - good}<span className="sr-only"> erreurs</span></span>
+              <span className="score--ok"><CheckIcon /> {good}<span className="sr-only">{T.good}</span></span>
+              <span className="score--ko"><CrossIcon /> {log.length - good}<span className="sr-only">{T.bad}</span></span>
             </span>
           </div>
           <div className="dots" aria-hidden="true">
@@ -68,13 +104,13 @@ export function FindMode({ plate, questions, onFinish }: FindModeProps) {
         </div>
 
         <div className="card prompt">
-          <span className="eyebrow">Clique sur</span>
+          <span className="eyebrow">{T.clickOn}</span>
           <h1 className="prompt__name">{part.name}</h1>
           {hint ? (
-            <span className="hint-pill"><BulbIcon /> Région : {REGION_BY_ID[part.region].label}</span>
+            <span className="hint-pill"><BulbIcon /> {T.region(REGION_BY_ID[part.region].label)}</span>
           ) : (
             <button type="button" className="btn btn--secondary btn--small" onClick={() => setHint(true)} disabled={answered}>
-              Indice : afficher la région
+              {T.hint}
             </button>
           )}
         </div>
@@ -82,31 +118,31 @@ export function FindMode({ plate, questions, onFinish }: FindModeProps) {
         <div aria-live="polite">
           {answered && correct && (
             <div className="verdict verdict--ok">
-              <div className="verdict__title"><CheckIcon size={20} /> Bien vu !</div>
+              <div className="verdict__title"><CheckIcon size={20} /> {T.right}</div>
               <p>{part.definition}</p>
             </div>
           )}
           {answered && !correct && picked && (
             <div className="verdict verdict--ko">
-              <div className="verdict__title"><CrossIcon size={20} /> Raté, tu as cliqué « {PART_BY_ID[picked].name} »</div>
-              <p>La bonne structure est surlignée en vert. {part.definition}</p>
+              <div className="verdict__title"><CrossIcon size={20} /> {T.wrong(PART_BY_ID[picked].name)}</div>
+              <p>{T.shownInGreen} {part.definition}</p>
             </div>
           )}
         </div>
 
         {answered ? (
           <button type="button" className="btn btn--primary" onClick={next} autoFocus>
-            {isLast ? 'Voir le bilan' : 'Question suivante'} <ArrowIcon />
+            {isLast ? T.results : T.next} <ArrowIcon />
           </button>
         ) : (
           <p className="muted play__help">
-            Survole la planche : les structures s’éclairent au passage.
-            {plate === 'ouvriere' && ' Pour une structure présente plusieurs fois (fémur, griffe…), n’importe laquelle compte.'}
+            {T.help}
+            {plate === 'ouvriere' && T.helpRepeated}
           </p>
         )}
       </section>
 
-      <section className="plate play__plate" aria-label="Planche anatomique">
+      <section className="plate play__plate" aria-label={T.plate}>
         <AntPlate plate={plate} marks={marks} onPick={pick} />
         <Legend items={['ok', 'ko', 'hover']} />
       </section>

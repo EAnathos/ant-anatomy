@@ -3,7 +3,7 @@
 Atlas anatomique interactif de la fourmi, avec deux planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
 (vue latérale) et aile antérieure de reine d'*Odontomachus* sp. Deux modes de jeu :
 **Trouver** (un nom est donné, on clique la structure) et **Nommer** (on clique une structure, on tape son nom).
-Interface entièrement en français.
+Interface bilingue : français sur `/`, anglais sur `/en/`.
 
 ## Commandes
 
@@ -22,6 +22,20 @@ Site 100 % statique publié sur GitHub Pages (https://ant-anatomy.anathos.me). T
 la CI (`.github/workflows/ci.yml`) est déployé automatiquement par la CD (`.github/workflows/cd.yml`, déclenchée par
 `workflow_run` sur la réussite de la CI) : ne pousser sur `main` que du code prêt à être en ligne. Le domaine est réglé dans les paramètres Pages du dépôt, pas via un fichier `CNAME`.
 
+## Langues
+
+- Deux pages HTML : `index.html` (fr) et `en/index.html` (en), déclarées dans `vite.config.ts` (`build.rollupOptions.input`).
+  Chacune porte son `lang`, ses balises d'aperçu et son image (`public/og.png`, `public/og-en.png`). Garder les deux
+  fichiers alignés quand on modifie le `<head>`.
+- `index.html` redirige vers `/en/` si l'anglais a été choisi (`localStorage.lang`) ou si le navigateur n'est pas en
+  français et qu'aucun choix n'est mémorisé. Le sélecteur FR / EN de l'en-tête mémorise le choix.
+- Textes d'interface : `const T = t({ ...fr }, { ...en })` dans chaque composant. `en` doit avoir la forme exacte de `fr`
+  (`NoInfer`), le typecheck signale toute clé manquante. Pas de bibliothèque d'i18n.
+- Données : `parts.ts` reste la référence en français ; toute structure ajoutée doit l'être aussi dans `parts.en.ts`
+  (sinon le typecheck échoue). Les tests vérifient que chaque définition est traduite et qu'aucun nom ou synonyme n'est
+  partagé par deux structures d'une même planche, dans chaque langue.
+- Anglais : pluriels latins en synonymes (*femur/femora*, *coxa/coxae*), termes de AntWiki.
+
 ## Stack
 
 React 19 + TypeScript (strict) + Vite. CSS natif, sans framework ni CSS-in-JS. Pas de routeur :
@@ -31,6 +45,8 @@ la navigation est un état `Screen` dans `src/App.tsx`.
 
 - `src/assets/ant.svg` (ouvrière) et `src/assets/wing.svg` (aile) : **sources uniques des dessins**. Importés en `?raw`
   et injectés par `AntPlate` selon la planche (`PlateId`).
+- `src/i18n.ts` : langue de la page (`LANG`, lue dans `<html lang>`), helper `t(fr, en)`, URLs des langues.
+- `src/data/parts.en.ts` : traduction anglaise des planches, régions et structures (`Record` par id).
 - `src/data/parts.ts` : planches, régions (chacune rattachée à une planche), structures (nom, région, définition,
   synonymes). Source unique des données. Les id de structures et de régions sont uniques toutes planches confondues.
 - `src/lib/answers.ts` : normalisation et validation des réponses tapées.
@@ -47,8 +63,8 @@ Les règles ci-dessous valent pour la planche de l'ouvrière. La planche de l'ai
 l'utilisateur, sans crédit à afficher, qu'on peut retoucher. Ses `id` internes sont préfixés `aile-` pour éviter les
 collisions une fois injectés dans la page.
 
-- Deux couches (`LayerId` : `cellules`, `nervures`), portées par les régions. Les paramètres de session choisissent
-  l'une, l'autre ou les deux (`Settings.layers`) ; `playableParts` filtre régions et couches.
+- Deux régions seulement, `cellules` et `nervures`, choisies comme les autres régions dans les paramètres de session
+  (l'une, l'autre ou les deux). Le titre et l'accroche de l'accueil suivent ce choix.
 - Cellules : `data-part` sur des surfaces blanches sans contour, découpées par le `clipPath` du contour. Ptérostigma cliquable.
 - Nervures : nomenclature de la figure de référence de l'utilisateur (aile antérieure de reine d'*Odontomachus* sp. :
   costa, sous-costale, radius, secteur radial et ses branches, média 1-4, cubitus 1-3, anales, transverses 2r-rs, 3r-rs,
@@ -91,8 +107,8 @@ collisions une fois injectés dans la page.
 
 ## Conventions de contenu
 
-- Textes d'interface en français, tutoiement.
-- **Pas de tiret cadratin (—) dans les textes** : utiliser un point, une virgule, deux-points ou « · » selon le contexte.
+- Textes d'interface en français (tutoiement) et en anglais.
+- **Pas de tiret cadratin (—) dans les textes**, dans les deux langues : utiliser un point, une virgule, deux-points ou « · » selon le contexte.
 - Noms de taxons en italique (*Formicidae*, *Myrmicinae*).
 - Les définitions doivent rester exactes du point de vue myrmécologique. Le dessin n'a qu'un pétiole
   (pas de postpétiole) ; le gastre est découpé en tergites, sternites, pygidium et aiguillon.

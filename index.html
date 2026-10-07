@@ -6,6 +6,17 @@
     <meta name="description" content="Atlas anatomique interactif de la fourmi : repère puis nomme les structures d’une ouvrière et d’une aile de reine, de la mandibule aux nervures." />
     <meta name="theme-color" content="#1d3557" />
     <title>Atlas anatomique Formicidae</title>
+    <link rel="alternate" hreflang="fr" href="https://ant-anatomy.anathos.me/" />
+    <link rel="alternate" hreflang="en" href="https://ant-anatomy.anathos.me/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://ant-anatomy.anathos.me/" />
+    <script>
+      // Version anglaise si elle a été choisie, ou si le navigateur n'est pas en français et qu'aucun choix n'est mémorisé.
+      try {
+        var pref = localStorage.getItem('lang');
+        var nav = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+        if (pref === 'en' || (!pref && !/^fr\b/i.test(nav))) location.replace('en/' + location.search + location.hash);
+      } catch (e) {}
+    </script>
 
     <!-- Aperçu des liens (Discord, réseaux sociaux, messageries) -->
     <meta property="og:type" content="website" />
