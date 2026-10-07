@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Footer } from './components/Footer';
 import { Header, type NavTarget } from './components/Header';
-import { REGIONS, partsInRegions, type PartId } from './data/parts';
-import { buildQuestions, shuffle, type Answer, type Settings } from './lib/session';
+import { layersOf, regionsOf, type PartId } from './data/parts';
+import { buildQuestions, playableParts, shuffle, type Answer, type Settings } from './lib/session';
 import { FindMode } from './screens/FindMode';
 import { Home } from './screens/Home';
 import { NameMode } from './screens/NameMode';
@@ -15,7 +15,9 @@ type Screen =
   | { name: 'results'; log: Answer[]; durationMs: number };
 
 const DEFAULT_SETTINGS: Settings = {
-  regions: REGIONS.map((r) => r.id),
+  plate: 'ouvriere',
+  regions: regionsOf('ouvriere').map((r) => r.id),
+  layers: layersOf('ouvriere'),
   questionCount: 10,
   ignoreAccents: true,
 };
@@ -29,7 +31,7 @@ export function App() {
     window.scrollTo(0, 0);
   }, [screen]);
 
-  const canPlay = partsInRegions(settings.regions).length > 0;
+  const canPlay = playableParts(settings).length > 0;
 
   const startFind = (questions: PartId[] = buildQuestions(settings)) => {
     if (questions.length === 0) return setScreen({ name: 'home' });
@@ -62,6 +64,7 @@ export function App() {
       {screen.name === 'find' && (
         <FindMode
           key={screen.run}
+          plate={settings.plate}
           questions={screen.questions}
           onFinish={(log, durationMs) => setScreen({ name: 'results', log, durationMs })}
         />
@@ -69,6 +72,7 @@ export function App() {
       {screen.name === 'name' && <NameMode key={screen.run} settings={settings} />}
       {screen.name === 'results' && (
         <Results
+          plate={settings.plate}
           log={screen.log}
           durationMs={screen.durationMs}
           onReplay={(missed) => startFind(shuffle(missed))}

@@ -112,6 +112,11 @@ main.container {
   gap: 6px;
 }
 
+/* Sur mobile, les modes se lancent depuis l'accueil : pas de navigation dans l'en-tête. */
+@media (max-width: 640px) {
+  .site-nav { display: none; }
+}
+
 .nav-link {
   min-height: 44px;
   padding: 0 20px;
@@ -268,15 +273,37 @@ main.container {
   outline: none;
 }
 
+/* Pas de surbrillance bleue du navigateur au toucher : les états de la planche suffisent. */
+.ant-plate,
+.ant-plate * { -webkit-tap-highlight-color: transparent; }
+
 .ant-plate[data-interactive='true'] [data-part]:not([data-locked]) { cursor: pointer; }
 
-.ant-plate [data-part][data-hover]:not([data-locked])[data-state='rest'] { fill: var(--amber-pale) !important; }
-.ant-plate [data-state='sel'] { fill: var(--amber) !important; }
-.ant-plate [data-state='ok'] { fill: var(--moss-light) !important; }
-.ant-plate [data-state='ko'] { fill: var(--terra-light) !important; }
-.ant-plate [data-state='done'] { fill: var(--moss-done) !important; }
+.ant-plate [data-part]:not(.nerv)[data-hover]:not([data-locked])[data-state='rest'] { fill: var(--amber-pale) !important; }
+.ant-plate [data-state='sel']:not(.nerv) { fill: var(--amber) !important; }
+.ant-plate [data-state='ok']:not(.nerv) { fill: var(--moss-light) !important; }
+.ant-plate [data-state='ko']:not(.nerv) { fill: var(--terra-light) !important; }
+.ant-plate [data-state='done']:not(.nerv) { fill: var(--moss-done) !important; }
+
+/* Nervures de l'aile : des traits. Les états colorent et épaississent le cœur du trait (.nerv-core),
+   en teintes soutenues pour rester lisibles sur un trait fin. Le halo
+   (.nerv-halo) assombrit le pourtour des nervures en trait simple, la zone de clic (.nerv-hit) reste invisible. */
+.ant-plate .nerv { transition: stroke 0.15s ease; }
+.ant-plate .nerv-core[data-hover]:not([data-locked])[data-state='rest'] { stroke: var(--amber) !important; stroke-width: 4px !important; }
+.ant-plate .nerv-core[data-state='sel'] { stroke: var(--amber) !important; stroke-width: 4px !important; }
+.ant-plate .nerv-core[data-state='ok'] { stroke: var(--moss) !important; stroke-width: 4px !important; }
+.ant-plate .nerv-core[data-state='ko'] { stroke: var(--terra) !important; stroke-width: 4px !important; }
+.ant-plate .nerv-core[data-state='done'] { stroke: var(--moss-light) !important; stroke-width: 4px !important; }
+.ant-plate .nerv-halo[data-hover]:not([data-locked])[data-state='rest'],
+.ant-plate .nerv-halo:is([data-state='sel'], [data-state='ok'], [data-state='ko'], [data-state='done']) { stroke: var(--ink) !important; }
+.ant-plate .nerv[data-state='off'] { opacity: 1; }
+.ant-plate .nerv-hit[data-state='off'],
+.ant-plate .nerv-halo[data-state='off'] { pointer-events: none; }
 
 .ant-plate [data-part]:focus-visible { stroke-width: 2.5px; }
+
+/* Aile : les cellules n'ont pas de contour, le focus clavier en dessine un. */
+.ant-plate[data-plate='aile'] [data-part]:focus-visible { stroke: var(--prusse) !important; stroke-width: 4px !important; }
 
 .ant-plate [data-state='off'] {
   opacity: 0.25;
@@ -335,6 +362,66 @@ main.container {
 }
 
 .hero__plate { flex: 1.6 1 560px; }
+
+.hero--top { align-items: flex-start; }
+
+.hero__plate {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Planche de l'accueil : cadre au ratio de la fourmi pour que changer de planche ne fasse rien bouger. */
+.hero__plate .ant-plate {
+  aspect-ratio: 747 / 596;
+  display: flex;
+  align-items: center;
+}
+
+.hero__plate .plate__caption { min-height: 136px; }
+
+.plate-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding-left: 12px;
+}
+
+/* Menu déroulant discret : texte seul, chevron dessiné en CSS. */
+.select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.select select {
+  appearance: none;
+  min-height: 44px;
+  padding: 0 22px 0 0;
+  border: 0;
+  background: transparent;
+  color: var(--slate);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.select select:hover,
+.select select:focus-visible { color: var(--prusse); }
+
+.select::after {
+  content: '';
+  position: absolute;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  color: var(--slate);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
 
 .display {
   font-size: clamp(40px, 5.5vw, 64px);

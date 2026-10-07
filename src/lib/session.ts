@@ -1,9 +1,12 @@
-import { partsInRegions, type PartId, type RegionId } from '../data/parts';
+import { partsInRegions, type LayerId, type Part, type PartId, type PlateId, type RegionId } from '../data/parts';
 
 export type QuestionCount = 10 | 20 | 'all';
 
 export interface Settings {
+  plate: PlateId;
   regions: RegionId[];
+  /** Couches jouées sur les planches qui en ont (aile : cellules, nervures). */
+  layers: LayerId[];
   questionCount: QuestionCount;
   ignoreAccents: boolean;
 }
@@ -31,8 +34,12 @@ export function shuffle<T>(items: readonly T[], random: () => number = Math.rand
   return out;
 }
 
+export function playableParts(settings: Settings): Part[] {
+  return partsInRegions(settings.regions, settings.layers);
+}
+
 export function buildQuestions(settings: Settings, random: () => number = Math.random): PartId[] {
-  const pool = shuffle(partsInRegions(settings.regions).map((p) => p.id), random);
+  const pool = shuffle(playableParts(settings).map((p) => p.id), random);
   return settings.questionCount === 'all' ? pool : pool.slice(0, settings.questionCount);
 }
 

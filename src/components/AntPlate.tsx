@@ -1,15 +1,19 @@
 import { useEffect, useRef, type KeyboardEvent, type MouseEvent } from 'react';
 import antSvg from '../assets/ant.svg?raw';
-import type { PartId } from '../data/parts';
+import wingSvg from '../assets/wing.svg?raw';
+import type { PartId, PlateId } from '../data/parts';
 
 export type Mark = 'sel' | 'ok' | 'ko' | 'done' | 'off';
 export type Marks = Partial<Record<PartId, Mark>>;
 
 interface AntPlateProps {
+  plate: PlateId;
   marks?: Marks;
   onPick?: (id: PartId) => void;
   locked?: readonly PartId[];
 }
+
+const SVG_BY_PLATE: Record<PlateId, string> = { ouvriere: antSvg, aile: wingSvg };
 
 const EMPTY_MARKS: Marks = {};
 const EMPTY_LOCKED: readonly PartId[] = [];
@@ -17,9 +21,9 @@ const EMPTY_LOCKED: readonly PartId[] = [];
 const partOf = (target: EventTarget | null): PartId | null =>
   target instanceof Element ? ((target.closest('[data-part]')?.getAttribute('data-part') as PartId | null) ?? null) : null;
 
-// The SVG file is the single source of truth for the drawing. A structure can span several
+// Each plate's SVG file is the single source of truth for its drawing. A structure can span several
 // elements (both antennae, six legs); states are applied as data attributes on every one of them.
-export function AntPlate({ marks = EMPTY_MARKS, onPick, locked = EMPTY_LOCKED }: AntPlateProps) {
+export function AntPlate({ plate, marks = EMPTY_MARKS, onPick, locked = EMPTY_LOCKED }: AntPlateProps) {
   const ref = useRef<HTMLDivElement>(null);
   const interactive = Boolean(onPick);
   const isPickable = (id: PartId) => marks[id] !== 'off' && !locked.includes(id);
@@ -60,6 +64,7 @@ export function AntPlate({ marks = EMPTY_MARKS, onPick, locked = EMPTY_LOCKED }:
     <div
       ref={ref}
       className="ant-plate"
+      data-plate={plate}
       data-interactive={interactive}
       onClick={(e: MouseEvent) => pick(e.target)}
       onKeyDown={(e: KeyboardEvent) => {
@@ -72,7 +77,7 @@ export function AntPlate({ marks = EMPTY_MARKS, onPick, locked = EMPTY_LOCKED }:
       onMouseLeave={() => highlight(null)}
       onFocus={(e) => highlight(partOf(e.target))}
       onBlur={() => highlight(null)}
-      dangerouslySetInnerHTML={{ __html: antSvg }}
+      dangerouslySetInnerHTML={{ __html: SVG_BY_PLATE[plate] }}
     />
   );
 }

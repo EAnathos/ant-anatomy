@@ -2,15 +2,16 @@ import { useRef, useState } from 'react';
 import { AntPlate, type Marks } from '../components/AntPlate';
 import { ArrowIcon, BulbIcon, CheckIcon, CrossIcon } from '../components/icons';
 import { Legend } from '../components/Legend';
-import { PART_BY_ID, REGION_BY_ID, type PartId } from '../data/parts';
+import { PART_BY_ID, REGION_BY_ID, type PartId, type PlateId } from '../data/parts';
 import type { Answer } from '../lib/session';
 
 interface FindModeProps {
+  plate: PlateId;
   questions: PartId[];
   onFinish: (log: Answer[], durationMs: number) => void;
 }
 
-export function FindMode({ questions, onFinish }: FindModeProps) {
+export function FindMode({ plate, questions, onFinish }: FindModeProps) {
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<PartId | null>(null);
   const [log, setLog] = useState<Answer[]>([]);
@@ -99,13 +100,14 @@ export function FindMode({ questions, onFinish }: FindModeProps) {
           </button>
         ) : (
           <p className="muted play__help">
-            Survole la planche : les structures s’éclairent au passage. Pour une structure présente plusieurs fois (fémur, griffe…), n’importe laquelle compte.
+            Survole la planche : les structures s’éclairent au passage.
+            {plate === 'ouvriere' && ' Pour une structure présente plusieurs fois (fémur, griffe…), n’importe laquelle compte.'}
           </p>
         )}
       </section>
 
       <section className="plate play__plate" aria-label="Planche anatomique">
-        <AntPlate marks={marks} onPick={pick} />
+        <AntPlate plate={plate} marks={marks} onPick={pick} />
         <Legend items={['ok', 'ko', 'hover']} />
       </section>
     </main>

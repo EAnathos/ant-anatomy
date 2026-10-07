@@ -1,6 +1,7 @@
 # CLAUDE.md
 
-Atlas anatomique interactif de la fourmi (ouvrière de *Neoponera verenae*, vue latérale). Deux modes de jeu :
+Atlas anatomique interactif de la fourmi, avec deux planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
+(vue latérale) et aile antérieure de reine d'*Odontomachus* sp. Deux modes de jeu :
 **Trouver** (un nom est donné, on clique la structure) et **Nommer** (on clique une structure, on tape son nom).
 Interface entièrement en français.
 
@@ -28,15 +29,33 @@ la navigation est un état `Screen` dans `src/App.tsx`.
 
 ## Structure
 
-- `src/assets/ant.svg` : **source unique du dessin**. Importé en `?raw` et injecté par `AntPlate`.
-- `src/data/parts.ts` : régions, structures (nom, région, définition, synonymes). Source unique des données.
+- `src/assets/ant.svg` (ouvrière) et `src/assets/wing.svg` (aile) : **sources uniques des dessins**. Importés en `?raw`
+  et injectés par `AntPlate` selon la planche (`PlateId`).
+- `src/data/parts.ts` : planches, régions (chacune rattachée à une planche), structures (nom, région, définition,
+  synonymes). Source unique des données. Les id de structures et de régions sont uniques toutes planches confondues.
 - `src/lib/answers.ts` : normalisation et validation des réponses tapées.
-- `src/lib/session.ts` : réglages, tirage des questions, bilan (score, série, erreurs).
+- `src/lib/session.ts` : réglages (dont la planche choisie), tirage des questions, bilan (score, série, erreurs).
 - `src/components/AntPlate.tsx` : planche interactive (clic, clavier, états visuels).
 - `src/screens/` : `Home`, `FindMode`, `NameMode`, `Results`.
+- `index.html` : balises d'aperçu des liens (Open Graph, Twitter) pointant vers `public/og.png` (1200×630, les deux planches
+  et le titre aux polices de la charte). Régénérer l'image si les planches ou le concept changent.
 - `src/styles/tokens.css` : tokens de la charte. `src/styles/global.css` : tous les styles.
 
 ## Planche SVG : règles
+
+Les règles ci-dessous valent pour la planche de l'ouvrière. La planche de l'aile (`wing.svg`) est un dessin de
+l'utilisateur, sans crédit à afficher, qu'on peut retoucher. Ses `id` internes sont préfixés `aile-` pour éviter les
+collisions une fois injectés dans la page.
+
+- Deux couches (`LayerId` : `cellules`, `nervures`), portées par les régions. Les paramètres de session choisissent
+  l'une, l'autre ou les deux (`Settings.layers`) ; `playableParts` filtre régions et couches.
+- Cellules : `data-part` sur des surfaces blanches sans contour, découpées par le `clipPath` du contour. Ptérostigma cliquable.
+- Nervures : nomenclature de la figure de référence de l'utilisateur (aile antérieure de reine d'*Odontomachus* sp. :
+  costa, sous-costale, radius, secteur radial et ses branches, média 1-4, cubitus 1-3, anales, transverses 2r-rs, 3r-rs,
+  rs-m, m-cu, cu-a). Ce sont des traits, pas des surfaces : chaque segment a une paroi sombre décorative, un cœur
+  `.nerv-core` (porte l'état, colorié via `stroke`), une zone de clic transparente `.nerv-hit`, et pour les nervures en
+  trait simple (costa, radius le long du bord, 3r-rs) un `.nerv-halo` qui s'assombrit au surlignage. Toutes portent la
+  classe `.nerv`, que les règles de remplissage (`fill`) de `global.css` excluent.
 
 - Dessin : « Scheme ant worker anatomy-clean » (LadyofHats et Sophivorus, domaine public,
   https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg), crédité dans le pied de page
@@ -58,8 +77,8 @@ la navigation est un état `Screen` dans `src/App.tsx`.
   postérieur caché derrière le gastre, bande entre le 1er et le 2e tergite) : pas de `data-part`, `pointer-events="none"`.
 - Noms : au pluriel pour les structures présentes plusieurs fois sur la planche (Fémurs, Tergites…). La validation
   des réponses traite singulier et pluriel comme équivalents.
-- Ajouter ou renommer une structure = modifier `ant.svg` **et** `PartId` + `PARTS`.
-  Le test `planche SVG` échoue si les deux divergent.
+- Ajouter ou renommer une structure = modifier le SVG de la planche **et** `PartId` + `PARTS`.
+  Le test `planche SVG` échoue, pour chaque planche, si les deux divergent.
 
 ## Charte graphique « planche cyanotype »
 
@@ -77,6 +96,7 @@ la navigation est un état `Screen` dans `src/App.tsx`.
 - Noms de taxons en italique (*Formicidae*, *Myrmicinae*).
 - Les définitions doivent rester exactes du point de vue myrmécologique. Le dessin n'a qu'un pétiole
   (pas de postpétiole) ; le gastre est découpé en tergites, sternites, pygidium et aiguillon.
+  Sur l'aile, les cellules submarginales et subdiscoïdales sont numérotées de la base vers l'apex.
 
 ## Accessibilité
 

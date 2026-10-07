@@ -9,7 +9,7 @@ export function Footer() {
         sur AntWiki.
       </p>
       <p>
-        Planche :{' '}
+        Planche de l’ouvrière :{' '}
         <a href="https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg" target="_blank" rel="noopener noreferrer">
           Scheme ant worker anatomy
         </a>

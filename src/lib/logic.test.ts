@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { PART_BY_ID, PARTS } from '../data/parts';
+import { PART_BY_ID, PLATES, REGION_BY_ID, partsOf, regionsOf } from '../data/parts';
 import { isCorrectName, normalize } from './answers';
 import { buildQuestions, formatDuration, shuffle, summarize } from './session';
 
@@ -28,6 +28,14 @@ describe('isCorrectName', () => {
     expect(isCorrectName(PART_BY_ID.ommatidies, 'ommatidie', false)).toBe(true);
     expect(isCorrectName(PART_BY_ID.ommatidies, 'Ommatidium', true)).toBe(true);
     expect(isCorrectName(PART_BY_ID.ommatidies, 'œil composé', true)).toBe(false);
+    expect(isCorrectName(PART_BY_ID['submarginale-1'], '1re submarginale', true)).toBe(true);
+    expect(isCorrectName(PART_BY_ID.marginale, 'cellule radiale', true)).toBe(true);
+    expect(isCorrectName(PART_BY_ID['subdiscoidale-2'], 'subdiscoidale 1', true)).toBe(false);
+    expect(isCorrectName(PART_BY_ID['2r-rs'], '2r-rs', true)).toBe(true);
+    expect(isCorrectName(PART_BY_ID['rs-plus-m'], 'Rs + M', true)).toBe(true);
+    expect(isCorrectName(PART_BY_ID['media-3'], 'M3', true)).toBe(true);
+    expect(isCorrectName(PART_BY_ID['m-cu'], 'media-cubitus', true)).toBe(true);
+    expect(isCorrectName(PART_BY_ID['m-plus-cu'], 'media-cubitus', true)).toBe(false);
   });
 
   it('refuse une mauvaise réponse ou une réponse vide', () => {
@@ -48,8 +56,15 @@ describe('sessions', () => {
   });
 
   it('limite les questions aux régions choisies', () => {
-    const qs = buildQuestions({ regions: ['antenne'], questionCount: 10, ignoreAccents: true });
+    const qs = buildQuestions({ plate: 'ouvriere', regions: ['antenne'], layers: [], questionCount: 10, ignoreAccents: true });
     expect(qs.sort()).toEqual(['funicule', 'scape']);
+  });
+
+  it('ne tire que les couches choisies', () => {
+    const regions = regionsOf('aile').map((r) => r.id);
+    const qs = buildQuestions({ plate: 'aile', regions, layers: ['nervures'], questionCount: 'all', ignoreAccents: true });
+    expect(qs).toHaveLength(22);
+    expect(qs.every((id) => REGION_BY_ID[PART_BY_ID[id].region].layer === 'nervures')).toBe(true);
   });
 
   it('calcule score, série et erreurs', () => {
@@ -68,9 +83,11 @@ describe('sessions', () => {
 });
 
 describe('planche SVG', () => {
-  it('contient exactement les structures déclarées', () => {
-    const svg = readFileSync(new URL('../assets/ant.svg', import.meta.url), 'utf8');
-    const inSvg = new Set([...svg.matchAll(/data-part="([a-z]+)"/g)].map((m) => m[1]));
-    expect([...inSvg].sort()).toEqual(PARTS.map((p) => p.id).sort());
+  const FILES = { ouvriere: 'ant.svg', aile: 'wing.svg' } as const;
+
+  it.each(PLATES.map((p) => p.id))('%s : contient exactement les structures déclarées', (plate) => {
+    const svg = readFileSync(new URL(`../assets/${FILES[plate]}`, import.meta.url), 'utf8');
+    const inSvg = new Set([...svg.matchAll(/data-part="([a-z0-9-]+)"/g)].map((m) => m[1]));
+    expect([...inSvg].sort()).toEqual(partsOf(plate).map((p) => p.id).sort());
   });
 });

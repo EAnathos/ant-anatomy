@@ -1,9 +1,10 @@
 import { AntPlate, type Marks } from '../components/AntPlate';
 import { CheckIcon, CrossIcon, ReplayIcon } from '../components/icons';
-import { PART_BY_ID, REGION_BY_ID, type PartId } from '../data/parts';
+import { PART_BY_ID, REGION_BY_ID, type PartId, type PlateId } from '../data/parts';
 import { formatDuration, summarize, type Answer } from '../lib/session';
 
 interface ResultsProps {
+  plate: PlateId;
   log: Answer[];
   durationMs: number;
   onReplay: (questions: PartId[]) => void;
@@ -13,7 +14,7 @@ interface ResultsProps {
 
 const listFormat = new Intl.ListFormat('fr', { type: 'conjunction' });
 
-export function Results({ log, durationMs, onReplay, onRestart, onHome }: ResultsProps) {
+export function Results({ plate, log, durationMs, onReplay, onRestart, onHome }: ResultsProps) {
   const summary = summarize(log);
   const missedNames = summary.missed.map((id) => PART_BY_ID[id].name);
   const marks: Marks = Object.fromEntries(summary.missed.map((id) => [id, 'ko']));
@@ -52,7 +53,7 @@ export function Results({ log, durationMs, onReplay, onRestart, onHome }: Result
           </div>
         </div>
         <figure className="plate hero__plate">
-          <AntPlate marks={marks} />
+          <AntPlate plate={plate} marks={marks} />
           <figcaption className="plate__caption plate__caption--row">
             <span className="swatch swatch--ko" aria-hidden="true" />
             <span className="muted">Structures manquées pendant la session</span>

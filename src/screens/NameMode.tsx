@@ -2,9 +2,9 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { AntPlate, type Marks } from '../components/AntPlate';
 import { CheckIcon, CrossIcon, CursorIcon, ReplayIcon } from '../components/icons';
 import { Legend } from '../components/Legend';
-import { PART_BY_ID, PARTS, partsInRegions, type PartId } from '../data/parts';
+import { PART_BY_ID, PLATE_BY_ID, partsOf, type PartId } from '../data/parts';
 import { isCorrectName } from '../lib/answers';
-import type { Settings } from '../lib/session';
+import { playableParts, type Settings } from '../lib/session';
 
 type Verdict = 'ok' | 'ko' | null;
 
@@ -17,7 +17,7 @@ export function NameMode({ settings }: { settings: Settings }) {
   const [missed, setMissed] = useState<PartId[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const playable = partsInRegions(settings.regions).map((p) => p.id);
+  const playable = playableParts(settings).map((p) => p.id);
   const part = selected ? PART_BY_ID[selected] : null;
   const attempted = found.length + missed.length;
   const finished = playable.length > 0 && attempted === playable.length;
@@ -27,7 +27,7 @@ export function NameMode({ settings }: { settings: Settings }) {
   }, [selected, verdict]);
 
   const marks: Marks = {};
-  for (const p of PARTS) if (!playable.includes(p.id)) marks[p.id] = 'off';
+  for (const p of partsOf(settings.plate)) if (!playable.includes(p.id)) marks[p.id] = 'off';
   for (const id of found) marks[id] = 'done';
   for (const id of missed) marks[id] = 'ko';
   if (selected) marks[selected] = verdict ?? 'sel';
@@ -96,7 +96,7 @@ export function NameMode({ settings }: { settings: Settings }) {
             <span className="icon-disc"><CursorIcon /></span>
             <h1>Clique une structure</h1>
             <p className="muted">
-              Choisis une partie de la fourmi, puis écris son nom. Tu n’as qu’un essai par structure.
+              Choisis une structure de la planche, puis écris son nom. Tu n’as qu’un essai par structure.
               {settings.ignoreAccents ? ' Les accents et les majuscules ne comptent pas.' : ' Les majuscules ne comptent pas, les accents si.'}
             </p>
           </div>
@@ -128,7 +128,7 @@ export function NameMode({ settings }: { settings: Settings }) {
               type="text"
               autoComplete="off"
               spellCheck={false}
-              placeholder="ex. mandibule"
+              placeholder={`ex. ${PLATE_BY_ID[settings.plate].example}`}
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
               disabled={verdict !== null}
@@ -184,7 +184,7 @@ export function NameMode({ settings }: { settings: Settings }) {
       </section>
 
       <section className="plate play__plate" aria-label="Planche anatomique">
-        <AntPlate marks={marks} onPick={pick} locked={[...found, ...missed]} />
+        <AntPlate plate={settings.plate} marks={marks} onPick={pick} locked={[...found, ...missed]} />
         <Legend items={['sel', 'done', 'missed', 'hover']} />
       </section>
     </main>

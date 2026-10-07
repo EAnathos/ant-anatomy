@@ -1,4 +1,12 @@
-export type RegionId = 'tete' | 'antenne' | 'mesosoma' | 'petiole' | 'gastre' | 'pattes';
+export type PlateId = 'ouvriere' | 'aile';
+
+/** Couche de structures d'une planche (l'aile se joue en cellules, en nervures ou les deux). */
+export type LayerId = 'cellules' | 'nervures';
+
+export type RegionId =
+  | 'tete' | 'antenne' | 'mesosoma' | 'petiole' | 'gastre' | 'pattes'
+  | 'bord-costal' | 'submarginales' | 'discoidales' | 'base-aile'
+  | 'nerv-costales' | 'nerv-rs' | 'nerv-media' | 'nerv-cubitus';
 
 export type PartId =
   | 'tete' | 'ommatidies' | 'lobe' | 'clypeus' | 'mandibule'
@@ -6,11 +14,32 @@ export type PartId =
   | 'pronotum' | 'mesonotum' | 'mesopleure' | 'propodeum' | 'spiracle'
   | 'petiole'
   | 'tergite' | 'sternite' | 'pygidium' | 'aiguillon'
-  | 'coxa' | 'femur' | 'tibia' | 'eperon' | 'tarse' | 'griffe';
+  | 'coxa' | 'femur' | 'tibia' | 'eperon' | 'tarse' | 'griffe'
+  | 'pterostigma' | 'costale' | 'marginale'
+  | 'submarginale-1' | 'submarginale-2' | 'submarginale-3'
+  | 'discoidale' | 'subdiscoidale-1' | 'subdiscoidale-2'
+  | 'basale' | 'subbasale' | 'anale'
+  | 'costa' | 'sous-costale' | 'radius' | '2r-rs' | '3r-rs'
+  | 'secteur-radial' | 'rs-plus-m' | 'rs-2-3' | 'rs-4-5' | 'rs-m'
+  | 'media-1' | 'media-2' | 'media-3' | 'media-4' | 'm-plus-cu' | 'm-cu'
+  | 'cubitus-1' | 'cubitus-2' | 'cubitus-3' | 'cu-a' | 'anale-1' | 'anale-2';
+
+export interface Plate {
+  id: PlateId;
+  /** Caste et taxon affichés dans le sélecteur : « Ouvrière » + *Neoponera verenae*. */
+  subject: string;
+  taxon: string;
+  /** Espèce non déterminée : « sp. » ajouté après le genre, hors italique. */
+  sp?: boolean;
+  /** Exemple de saisie en mode Nommer. */
+  example: string;
+}
 
 export interface Region {
   id: RegionId;
   label: string;
+  plate: PlateId;
+  layer?: LayerId;
 }
 
 export interface Part {
@@ -21,13 +50,31 @@ export interface Part {
   synonyms: string[];
 }
 
+export const PLATES: Plate[] = [
+  { id: 'ouvriere', subject: 'Ouvrière', taxon: 'Neoponera verenae', example: 'mandibule' },
+  { id: 'aile', subject: 'Aile de reine', taxon: 'Odontomachus', sp: true, example: 'cellule costale' },
+];
+
+export const LAYERS: { id: LayerId; label: string }[] = [
+  { id: 'cellules', label: 'Cellules' },
+  { id: 'nervures', label: 'Nervures' },
+];
+
 export const REGIONS: Region[] = [
-  { id: 'tete', label: 'Tête' },
-  { id: 'antenne', label: 'Antenne' },
-  { id: 'mesosoma', label: 'Mésosoma' },
-  { id: 'petiole', label: 'Pétiole' },
-  { id: 'gastre', label: 'Gastre' },
-  { id: 'pattes', label: 'Pattes' },
+  { id: 'tete', label: 'Tête', plate: 'ouvriere' },
+  { id: 'antenne', label: 'Antenne', plate: 'ouvriere' },
+  { id: 'mesosoma', label: 'Mésosoma', plate: 'ouvriere' },
+  { id: 'petiole', label: 'Pétiole', plate: 'ouvriere' },
+  { id: 'gastre', label: 'Gastre', plate: 'ouvriere' },
+  { id: 'pattes', label: 'Pattes', plate: 'ouvriere' },
+  { id: 'bord-costal', label: 'Bord costal', plate: 'aile', layer: 'cellules' },
+  { id: 'submarginales', label: 'Submarginales', plate: 'aile', layer: 'cellules' },
+  { id: 'discoidales', label: 'Discoïdales', plate: 'aile', layer: 'cellules' },
+  { id: 'base-aile', label: 'Base de l’aile', plate: 'aile', layer: 'cellules' },
+  { id: 'nerv-costales', label: 'Costa et radius', plate: 'aile', layer: 'nervures' },
+  { id: 'nerv-rs', label: 'Secteur radial', plate: 'aile', layer: 'nervures' },
+  { id: 'nerv-media', label: 'Média', plate: 'aile', layer: 'nervures' },
+  { id: 'nerv-cubitus', label: 'Cubitus et anales', plate: 'aile', layer: 'nervures' },
 ];
 
 export const PARTS: Part[] = [
@@ -54,12 +101,66 @@ export const PARTS: Part[] = [
   { id: 'eperon', name: 'Éperons tibiaux', region: 'pattes', definition: 'Épine articulée à l’extrémité du tibia.', synonyms: ['éperon tibial', 'éperon', 'calcar', 'calcars'] },
   { id: 'tarse', name: 'Tarses', region: 'pattes', definition: 'Extrémité de la patte, formée de cinq articles.', synonyms: [] },
   { id: 'griffe', name: 'Griffes', region: 'pattes', definition: 'Crochet au bout du dernier article du tarse.', synonyms: ['ongle', 'ongles', 'griffe tarsale', 'griffes tarsales'] },
+
+  { id: 'pterostigma', name: 'Ptérostigma', region: 'bord-costal', definition: 'Épaississement sclérifié et pigmenté du bord antérieur de l’aile antérieure, au bout de la cellule costale.', synonyms: ['stigma', 'ptérostigme'] },
+  { id: 'costale', name: 'Cellule costale', region: 'bord-costal', definition: 'Cellule étroite qui longe le bord antérieur de l’aile, de la base jusqu’au ptérostigma.', synonyms: ['costale'] },
+  { id: 'marginale', name: 'Cellule marginale', region: 'bord-costal', definition: 'Cellule allongée qui longe le bord antérieur au-delà du ptérostigma, vers l’apex. On l’appelle aussi cellule radiale.', synonyms: ['marginale', 'cellule radiale', 'radiale'] },
+  { id: 'submarginale-1', name: 'Cellule submarginale 1', region: 'submarginales', definition: 'Cellule submarginale la plus proche de la base, sous le ptérostigma. Le nombre de cellules submarginales varie selon les genres et sert à l’identification.', synonyms: ['submarginale 1', 'première cellule submarginale', 'première submarginale', '1re cellule submarginale', '1re submarginale'] },
+  { id: 'submarginale-2', name: 'Cellule submarginale 2', region: 'submarginales', definition: 'Deuxième cellule submarginale, sous la cellule marginale.', synonyms: ['submarginale 2', 'deuxième cellule submarginale', 'deuxième submarginale', '2e cellule submarginale', '2e submarginale'] },
+  { id: 'submarginale-3', name: 'Cellule submarginale 3', region: 'submarginales', definition: 'Cellule submarginale la plus proche de l’apex, sous la nervure radiale.', synonyms: ['submarginale 3', 'troisième cellule submarginale', 'troisième submarginale', '3e cellule submarginale', '3e submarginale'] },
+  { id: 'discoidale', name: 'Cellule discoïdale', region: 'discoidales', definition: 'Cellule fermée au centre de l’aile, sous la première cellule submarginale.', synonyms: ['discoïdale', 'cellule discale'] },
+  { id: 'subdiscoidale-1', name: 'Cellule subdiscoïdale 1', region: 'discoidales', definition: 'Cellule située sous la cellule discoïdale, vers le bord postérieur de l’aile.', synonyms: ['subdiscoïdale 1', 'première cellule subdiscoïdale', 'première subdiscoïdale', '1re cellule subdiscoïdale', '1re subdiscoïdale'] },
+  { id: 'subdiscoidale-2', name: 'Cellule subdiscoïdale 2', region: 'discoidales', definition: 'Grande cellule ouverte entre la nervure médiane et le bord postérieur, du côté de l’apex.', synonyms: ['subdiscoïdale 2', 'deuxième cellule subdiscoïdale', 'deuxième subdiscoïdale', '2e cellule subdiscoïdale', '2e subdiscoïdale'] },
+  { id: 'basale', name: 'Cellule basale', region: 'base-aile', definition: 'Cellule de la base de l’aile, sous la cellule costale.', synonyms: ['basale'] },
+  { id: 'subbasale', name: 'Cellule subbasale', region: 'base-aile', definition: 'Cellule étroite de la base de l’aile, sous la cellule basale.', synonyms: ['subbasale', 'sub-basale', 'cellule sub-basale'] },
+  { id: 'anale', name: 'Cellule anale', region: 'base-aile', definition: 'Cellule qui longe le bord postérieur de l’aile depuis la base.', synonyms: ['anale'] },
+
+  { id: 'costa', name: 'Costa', region: 'nerv-costales', definition: 'Nervure qui forme le bord antérieur de l’aile, de la base jusqu’au ptérostigma.', synonyms: ['nervure costale'] },
+  { id: 'sous-costale', name: 'Sous-costale', region: 'nerv-costales', definition: 'Nervure longitudinale qui part de la base sous la costa. Chez les fourmis, elle est fusionnée au radius (Sc+R).', synonyms: ['subcosta', 'subcostale', 'nervure sous-costale', 'sc', 'sc+r'] },
+  { id: 'radius', name: 'Radius', region: 'nerv-costales', definition: 'Nervure qui rejoint le ptérostigma puis longe le bord antérieur en bordant la cellule marginale.', synonyms: ['nervure radiale', 'r1'] },
+  { id: '2r-rs', name: 'Transverse 2r-rs', region: 'nerv-costales', definition: 'Nervure transverse qui relie le ptérostigma au secteur radial et ferme la cellule marginale du côté de la base.', synonyms: ['2r-rs', 'nervure 2r-rs', '2 radius radial sector'] },
+  { id: '3r-rs', name: 'Transverse 3r-rs', region: 'nerv-costales', definition: 'Nervure transverse à l’apex de la cellule marginale, qui la referme contre le bord antérieur.', synonyms: ['3r-rs', 'nervure 3r-rs', '3 radius radial sector'] },
+  { id: 'secteur-radial', name: 'Secteur radial', region: 'nerv-rs', definition: 'Branche postérieure du radius : ce court segment descend jusqu’à la média et fusionne avec elle.', synonyms: ['rs', 'radial sector'] },
+  { id: 'rs-plus-m', name: 'Secteur radial + média', region: 'nerv-rs', definition: 'Segment où secteur radial et média sont fusionnés, au bord supérieur de la cellule discoïdale.', synonyms: ['rs+m', 'rs + m', 'radial sector+media', 'radial sector + media', 'secteur radial+média'] },
+  { id: 'rs-2-3', name: 'Secteur radial 2+3', region: 'nerv-rs', definition: 'Branche du secteur radial qui remonte vers le ptérostigma, entre les cellules submarginales 1 et 2.', synonyms: ['rs2+3', 'rs 2+3', 'radial sector 2+3', 'secteur radial 2 3'] },
+  { id: 'rs-4-5', name: 'Secteur radial 4+5', region: 'nerv-rs', definition: 'Branche du secteur radial qui borde la cellule marginale par-dessous, jusqu’à l’apex.', synonyms: ['rs4+5', 'rs 4+5', 'radial sector 4+5', 'radial sector 4 5', 'secteur radial 4 5'] },
+  { id: 'rs-m', name: 'Transverse rs-m', region: 'nerv-rs', definition: 'Nervure transverse qui relie le secteur radial à la média, entre les cellules submarginales 2 et 3.', synonyms: ['rs-m', 'nervure rs-m', 'radial sector media'] },
+  { id: 'media-1', name: 'Média 1', region: 'nerv-media', definition: 'Premier segment de la média : il quitte la tige commune avec le cubitus et remonte jusqu’au secteur radial en bordant la cellule discoïdale.', synonyms: ['media 1', 'm1', 'médiane 1'] },
+  { id: 'media-2', name: 'Média 2', region: 'nerv-media', definition: 'Segment de la média qui longe la cellule discoïdale, entre le secteur radial et la transverse m-cu.', synonyms: ['media 2', 'm2', 'médiane 2'] },
+  { id: 'media-3', name: 'Média 3', region: 'nerv-media', definition: 'Segment de la média entre la transverse m-cu et la transverse rs-m, sous la cellule submarginale 2.', synonyms: ['media 3', 'm3', 'médiane 3'] },
+  { id: 'media-4', name: 'Média 4', region: 'nerv-media', definition: 'Dernier segment de la média, de la transverse rs-m vers l’apex de l’aile.', synonyms: ['media 4', 'm4', 'médiane 4'] },
+  { id: 'm-plus-cu', name: 'Média + cubitus', region: 'nerv-media', definition: 'Tige commune de la média et du cubitus, depuis la base de l’aile jusqu’à leur séparation.', synonyms: ['m+cu', 'm + cu', 'media+cubitus', 'media + cubitus'] },
+  { id: 'm-cu', name: 'Transverse m-cu', region: 'nerv-media', definition: 'Nervure transverse qui relie la média au cubitus, sur le côté de la cellule discoïdale.', synonyms: ['m-cu', 'nervure m-cu', 'media cubitus'] },
+  { id: 'cubitus-1', name: 'Cubitus 1', region: 'nerv-cubitus', definition: 'Premier segment du cubitus, qui borde la cellule discoïdale par-dessous.', synonyms: ['cu1', 'cu 1'] },
+  { id: 'cubitus-2', name: 'Cubitus 2', region: 'nerv-cubitus', definition: 'Segment du cubitus qui descend en oblique vers le bord postérieur, après la transverse m-cu.', synonyms: ['cu2', 'cu 2'] },
+  { id: 'cubitus-3', name: 'Cubitus 3', region: 'nerv-cubitus', definition: 'Dernier segment du cubitus, qui file vers l’apex près du bord postérieur.', synonyms: ['cu3', 'cu 3'] },
+  { id: 'cu-a', name: 'Transverse cu-a', region: 'nerv-cubitus', definition: 'Nervure transverse qui relie la tige média + cubitus à la nervure anale, près de la base.', synonyms: ['cu-a', 'nervure cu-a', 'cubitus anal'] },
+  { id: 'anale-1', name: 'Anale 1', region: 'nerv-cubitus', definition: 'Nervure anale, près du bord postérieur, de la base jusqu’à la transverse cu-a.', synonyms: ['a1', 'anal', 'anal 1', 'nervure anale', 'nervure anale 1'] },
+  { id: 'anale-2', name: 'Anale 2', region: 'nerv-cubitus', definition: 'Prolongement de la nervure anale au-delà de la transverse cu-a, vers l’apex.', synonyms: ['a2', 'anal 2', 'nervure anale 2'] },
 ];
 
 export const PART_BY_ID = Object.fromEntries(PARTS.map((p) => [p.id, p])) as Record<PartId, Part>;
 
+export const PLATE_BY_ID = Object.fromEntries(PLATES.map((p) => [p.id, p])) as Record<PlateId, Plate>;
+
 export const REGION_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r])) as Record<RegionId, Region>;
 
-export function partsInRegions(regions: readonly RegionId[]): Part[] {
-  return PARTS.filter((p) => regions.includes(p.region));
+export function partsInRegions(regions: readonly RegionId[], layers?: readonly LayerId[]): Part[] {
+  return PARTS.filter((p) => {
+    if (!regions.includes(p.region)) return false;
+    const layer = REGION_BY_ID[p.region].layer;
+    return !layers || !layer || layers.includes(layer);
+  });
+}
+
+export function regionsOf(plate: PlateId): Region[] {
+  return REGIONS.filter((r) => r.plate === plate);
+}
+
+export function partsOf(plate: PlateId): Part[] {
+  return PARTS.filter((p) => REGION_BY_ID[p.region].plate === plate);
+}
+
+export function layersOf(plate: PlateId): LayerId[] {
+  return LAYERS.map((l) => l.id).filter((id) => REGIONS.some((r) => r.plate === plate && r.layer === id));
 }
