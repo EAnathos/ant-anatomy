@@ -5,7 +5,7 @@ sur une planche interactive en vue latérale.
 
 ## Fonctionnalités
 
-- **Planche interactive** : 25 structures cliquables réparties en 6 régions (tête, antenne, mésosoma, pétiole, gastre, pattes),
+- **Planche interactive** : 24 structures cliquables réparties en 6 régions (tête, antenne, mésosoma, pétiole, gastre, pattes),
   sur les deux antennes et les six pattes.
   Un clic sur l'accueil affiche le nom, la région et une définition.
 - **Mode Trouver** : un nom s'affiche, il faut cliquer la bonne structure. Indice de région, correction immédiate,

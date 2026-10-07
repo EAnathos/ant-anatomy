@@ -21,6 +21,10 @@ describe('isCorrectName', () => {
     expect(isCorrectName(PART_BY_ID.funicule, 'Funiculus', true)).toBe(true);
     expect(isCorrectName(PART_BY_ID.coxa, 'hanche', true)).toBe(true);
     expect(isCorrectName(PART_BY_ID.mandibule, 'mandibules', true)).toBe(true);
+    expect(isCorrectName(PART_BY_ID.mandibule, 'mandibule', true)).toBe(true);
+    expect(isCorrectName(PART_BY_ID.femur, 'fémur', false)).toBe(true);
+    expect(isCorrectName(PART_BY_ID.eperon, 'éperon tibial', true)).toBe(true);
+    expect(isCorrectName(PART_BY_ID.lobe, 'carène frontale', true)).toBe(true);
     expect(isCorrectName(PART_BY_ID.oeil, 'oeil compose', true)).toBe(true);
     expect(isCorrectName(PART_BY_ID.oeil, 'oeil', true)).toBe(true);
     expect(isCorrectName(PART_BY_ID.oeil, 'Oeuil composé', true)).toBe(true);

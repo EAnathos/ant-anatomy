@@ -6,10 +6,10 @@ export function normalize(input: string, ignoreAccents: boolean): string {
   return s.normalize('NFC').replace(/[-'’]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+const singular = (s: string) => s.replace(/s$/, '');
+
 export function isCorrectName(part: Part, answer: string, ignoreAccents: boolean): boolean {
   const given = normalize(answer, ignoreAccents);
   if (!given) return false;
-  const accepted = [part.name, ...part.synonyms].map((s) => normalize(s, ignoreAccents));
-  if (accepted.includes(given)) return true;
-  return given.endsWith('s') && accepted.includes(given.slice(0, -1));
+  return [part.name, ...part.synonyms].some((s) => singular(normalize(s, ignoreAccents)) === singular(given));
 }

@@ -43,14 +43,17 @@ la navigation est un état `Screen` dans `src/App.tsx`.
 - Chaque tracé cliquable porte `data-part="<id>"`, id identique à un `PartId` de `parts.ts`. Une structure peut
   compter plusieurs tracés (2 antennes, 6 pattes, segments du gastre) : `AntPlate` applique états, survol et focus
   à tous les tracés du même id, et ne rend focusable que le premier.
-- Au repos, la planche garde les couleurs d'origine (style inline). `AntPlate` pose `data-state`
+- Au repos, la planche garde les couleurs d'origine (style inline), sauf le gastre (tergites, sternites, pygidium)
+  passé au même gris que le propodéum (`#d6d6d6`) à la demande de l'utilisateur. `AntPlate` pose `data-state`
   (`rest | sel | ok | ko | done | off`) et `data-hover`, et `global.css` les colore avec `!important`.
 - Griffes : dans l'original, elles forment un seul tracé avec le dernier article du tarse. Chacune est doublée par
   un tracé `data-part="griffe"` (même géométrie, même couleur) plus un contour sans `data-part` posés par-dessus.
-- Petites structures (éperons, stigmate, griffes) : un tracé transparent à contour épais (`stroke:transparent`)
+- Petites structures (éperons, spiracle, griffes) : un tracé transparent à contour épais (`stroke:transparent`)
   avec le même `data-part` élargit la zone cliquable.
-- Éléments décoratifs (ombre de fond, croissants noirs des coxas, trait de la joue, détail du propodéum) :
-  pas de `data-part`, `pointer-events="none"`.
+- Éléments décoratifs (ombre de fond, croissants noirs des coxas, trait de la joue, détail du propodéum, fémur
+  postérieur caché derrière le gastre, bande entre le 1er et le 2e tergite) : pas de `data-part`, `pointer-events="none"`.
+- Noms : au pluriel pour les structures présentes plusieurs fois sur la planche (Fémurs, Tergites…). La validation
+  des réponses traite singulier et pluriel comme équivalents.
 - Ajouter ou renommer une structure = modifier `ant.svg` **et** `PartId` + `PARTS`.
   Le test `planche SVG` échoue si les deux divergent.
 

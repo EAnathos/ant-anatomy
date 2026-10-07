@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { AntPlate } from '../components/AntPlate';
 import { ArrowIcon } from '../components/icons';
 import { SettingsPanel } from '../components/SettingsPanel';
-import { PART_BY_ID, PARTS, REGION_BY_ID, REGIONS, partsInRegions, type PartId } from '../data/parts';
+import { PART_BY_ID, PARTS, REGION_BY_ID, partsInRegions, type PartId } from '../data/parts';
 import type { Settings } from '../lib/session';
 
 interface HomeProps {
@@ -25,11 +25,6 @@ export function Home({ settings, onSettingsChange, onStartFind, onStartName }: H
           <p className="lead">
             {PARTS.length} structures anatomiques, du scape à l’aiguillon. Repère-les sur la planche, puis nomme-les sans aide.
           </p>
-          <dl className="stats">
-            <div><dt>Structures</dt><dd>{PARTS.length}</dd></div>
-            <div><dt>Régions</dt><dd>{REGIONS.length}</dd></div>
-            <div><dt>Modes de jeu</dt><dd>2</dd></div>
-          </dl>
         </div>
         <figure className="plate hero__plate">
           <AntPlate marks={selected ? { [selected]: 'sel' } : undefined} onPick={setSelected} />
