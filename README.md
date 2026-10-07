@@ -5,7 +5,8 @@ sur une planche interactive en vue latérale.
 
 ## Fonctionnalités
 
-- **Planche interactive** : 26 structures cliquables réparties en 6 régions (tête, antenne, mésosoma, pétiole, gastre, pattes).
+- **Planche interactive** : 25 structures cliquables réparties en 6 régions (tête, antenne, mésosoma, pétiole, gastre, pattes),
+  sur les deux antennes et les six pattes.
   Un clic sur l'accueil affiche le nom, la région et une définition.
 - **Mode Trouver** : un nom s'affiche, il faut cliquer la bonne structure. Indice de région, correction immédiate,
   progression et bilan détaillé (score, précision, durée, meilleure série), avec la possibilité de rejouer ses erreurs.
@@ -38,10 +39,13 @@ Puis ouvrir http://localhost:5173.
 
 ## Déploiement
 
-Le site est publié sur https://ant-anatomy.anathos.me via GitHub Pages. À chaque push sur `main`, la CI
-(`.github/workflows/ci.yml`) vérifie les types, lance les tests, construit le site puis le déploie si tout passe.
-Les pull requests ne lancent que les vérifications. Un déploiement manuel est possible depuis l'onglet Actions
-(« Run workflow »).
+Le site est publié sur https://ant-anatomy.anathos.me via GitHub Pages, avec deux workflows :
+
+- **CI** (`.github/workflows/ci.yml`) : sur chaque push vers `main` et chaque pull request, vérifie les types,
+  lance les tests et construit le site.
+- **CD** (`.github/workflows/cd.yml`) : se déclenche quand la CI réussit sur un push vers `main`, reconstruit
+  le site à partir du même commit et le déploie sur GitHub Pages. Un déploiement manuel est possible depuis
+  l'onglet Actions (workflow CD, « Run workflow »).
 
 Le domaine est configuré dans les réglages Pages du dépôt et pointe via un enregistrement DNS
 `CNAME ant-anatomy → eanathos.github.io`.
@@ -61,7 +65,8 @@ src/
 
 ## Ajouter ou modifier une structure
 
-1. Dessiner la forme dans `src/assets/ant.svg` (Inkscape convient) à l'intérieur d'un `<g data-part="mon-id">`.
+1. Dans `src/assets/ant.svg` (Inkscape convient), ajouter `data-part="mon-id"` sur chaque tracé de la structure.
+   Une structure peut avoir plusieurs tracés (par exemple une par patte).
 2. Ajouter `mon-id` au type `PartId` et une entrée dans `PARTS` (`src/data/parts.ts`) avec nom, région, définition et synonymes.
 3. Lancer `npm test` : un test vérifie que le SVG et les données déclarent exactement les mêmes structures.
 
@@ -73,4 +78,6 @@ Polices Hanken Grotesk et DM Mono. Les valeurs sont dans `src/styles/tokens.css`
 
 ## Crédits
 
-Planche redessinée en SVG d'après un schéma anatomique annoté de fourmi en vue latérale.
+Planche : « Scheme ant worker anatomy » de Mariana Ruiz Villarreal (LadyofHats), via Wikimedia Commons.
+Le dessin n'est pas modifié : seuls les noms des structures et des zones cliquables ont été ajoutés,
+et les griffes ont été détourées séparément du tarse.

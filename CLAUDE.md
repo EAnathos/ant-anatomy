@@ -18,8 +18,8 @@ Lancer `npm run typecheck && npm test` avant de considérer un changement termin
 ## Déploiement
 
 Site 100 % statique publié sur GitHub Pages (https://ant-anatomy.anathos.me). Tout push sur `main` qui passe
-la CI est déployé automatiquement (`.github/workflows/ci.yml`, job `deploy`) : ne pousser sur `main` que du code prêt
-à être en ligne. Le domaine est réglé dans les paramètres Pages du dépôt, pas via un fichier `CNAME`.
+la CI (`.github/workflows/ci.yml`) est déployé automatiquement par la CD (`.github/workflows/cd.yml`, déclenchée par
+`workflow_run` sur la réussite de la CI) : ne pousser sur `main` que du code prêt à être en ligne. Le domaine est réglé dans les paramètres Pages du dépôt, pas via un fichier `CNAME`.
 
 ## Stack
 
@@ -38,14 +38,20 @@ la navigation est un état `Screen` dans `src/App.tsx`.
 
 ## Planche SVG : règles
 
-- Chaque structure est un `<g data-part="<id>">` dont l'id correspond exactement à un `PartId` de `parts.ts`.
-  Une structure répétée (fémur, tibia, griffe…) reste **un seul** `<g>` contenant plusieurs formes.
-- Les couleurs des états ne sont jamais dans le SVG : `AntPlate` pose `data-state`
-  (`rest | sel | ok | ko | done | off`) et `global.css` colore via `[data-state]`.
-- Petites structures : ajouter dans le même `<g>` un tracé `class="hit"` avec `fill="none" stroke="transparent" stroke-width="7"`
-  pour agrandir la zone cliquable.
-- Les éléments décoratifs (sutures du gastre) n'ont pas de `data-part` et ont `pointer-events="none"`.
-- Ajouter une structure = la dessiner dans `ant.svg` **et** l'ajouter à `PartId` + `PARTS`.
+- Dessin : « Scheme ant worker anatomy » (LadyofHats, Wikimedia Commons). **Ne pas modifier le dessin** :
+  seuls des attributs (`data-part`, `pointer-events`) et des tracés invisibles ou superposés à l'identique sont ajoutés.
+- Chaque tracé cliquable porte `data-part="<id>"`, id identique à un `PartId` de `parts.ts`. Une structure peut
+  compter plusieurs tracés (2 antennes, 6 pattes, segments du gastre) : `AntPlate` applique états, survol et focus
+  à tous les tracés du même id, et ne rend focusable que le premier.
+- Au repos, la planche garde les couleurs d'origine (style inline). `AntPlate` pose `data-state`
+  (`rest | sel | ok | ko | done | off`) et `data-hover`, et `global.css` les colore avec `!important`.
+- Griffes : dans l'original, elles forment un seul tracé avec le dernier article du tarse. Chacune est doublée par
+  un tracé `data-part="griffe"` (même géométrie, même couleur) plus un contour sans `data-part` posés par-dessus.
+- Petites structures (éperons, stigmate, griffes) : un tracé transparent à contour épais (`stroke:transparent`)
+  avec le même `data-part` élargit la zone cliquable.
+- Éléments décoratifs (ombre de fond, croissants noirs des coxas, trait de la joue, détail du propodéum) :
+  pas de `data-part`, `pointer-events="none"`.
+- Ajouter ou renommer une structure = modifier `ant.svg` **et** `PartId` + `PARTS`.
   Le test `planche SVG` échoue si les deux divergent.
 
 ## Charte graphique « planche cyanotype »
@@ -62,8 +68,8 @@ la navigation est un état `Screen` dans `src/App.tsx`.
 - Textes d'interface en français, tutoiement.
 - **Pas de tiret cadratin (—) dans les textes** : utiliser un point, une virgule, deux-points ou « · » selon le contexte.
 - Noms de taxons en italique (*Formicidae*, *Myrmicinae*).
-- Les définitions doivent rester exactes du point de vue myrmécologique. La région « Pétiole » regroupe
-  pédoncule, nœud du pétiole, processus subpétiolaire et postpétiole.
+- Les définitions doivent rester exactes du point de vue myrmécologique. Le dessin n'a qu'un pétiole
+  (pas de postpétiole) ; le gastre est découpé en tergites, sternites, pygidium et aiguillon.
 
 ## Accessibilité
 
