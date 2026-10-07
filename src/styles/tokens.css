@@ -1,0 +1,39 @@
+/* Charte graphique « planche cyanotype ». Toute couleur de l'app vient d'ici. */
+:root {
+  --prusse: #1d3557;
+  --prusse-dark: #0f1f36;
+  --ink: #1b2433;
+  --slate: #5a6678;
+  --mist: #f3f6fa;
+  --line: #e1e7ef;
+  --line-strong: #c9d3e0;
+  --paper: #ffffff;
+
+  --amber: #f2a93b;
+  --amber-pale: #fce3b5;
+  --amber-tint: #fdf1dc;
+  --amber-ink: #7a4e00;
+
+  --moss: #2e7d5b;
+  --moss-light: #a8dcc0;
+  --moss-done: #d4ecdd;
+  --moss-tint: #e5f4ec;
+  --moss-ink: #1f5e43;
+
+  --terra: #b5462a;
+  --terra-light: #f6b9a3;
+  --terra-tint: #fce9e2;
+  --terra-ink: #5a4a44;
+
+  --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
+
+  --radius-field: 16px;
+  --radius-verdict: 24px;
+  --radius-card: 28px;
+  --radius-pill: 999px;
+
+  --gutter: clamp(16px, 5vw, 48px);
+  --card-pad: clamp(28px, 4vw, 44px);
+  --section-gap: clamp(64px, 8vw, 96px);
+}
