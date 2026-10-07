@@ -243,25 +243,22 @@ main.container {
   height: auto;
 }
 
+/* Au repos, la planche garde les couleurs du dessin d'origine. Les états les remplacent
+   (!important nécessaire : les couleurs d'origine sont en style inline dans le SVG). */
 .ant-plate [data-part] {
-  fill: var(--paper);
   transition: fill 0.15s ease, opacity 0.15s ease;
   outline: none;
 }
 
 .ant-plate[data-interactive='true'] [data-part]:not([data-locked]) { cursor: pointer; }
 
-.ant-plate[data-interactive='true'] [data-part]:not([data-locked])[data-state='rest']:hover,
-.ant-plate [data-part]:focus-visible {
-  fill: var(--amber-pale);
-}
+.ant-plate [data-part][data-hover]:not([data-locked])[data-state='rest'] { fill: var(--amber-pale) !important; }
+.ant-plate [data-state='sel'] { fill: var(--amber) !important; }
+.ant-plate [data-state='ok'] { fill: var(--moss-light) !important; }
+.ant-plate [data-state='ko'] { fill: var(--terra-light) !important; }
+.ant-plate [data-state='done'] { fill: var(--moss-done) !important; }
 
-.ant-plate [data-part]:focus-visible > * { stroke-width: 2.2; }
-
-.ant-plate [data-state='sel'] { fill: var(--amber); }
-.ant-plate [data-state='ok'] { fill: var(--moss-light); }
-.ant-plate [data-state='ko'] { fill: var(--terra-light); }
-.ant-plate [data-state='done'] { fill: var(--moss-done); }
+.ant-plate [data-part]:focus-visible { stroke-width: 2.5px; }
 
 .ant-plate [data-state='off'] {
   opacity: 0.25;

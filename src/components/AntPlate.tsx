@@ -14,35 +14,46 @@ interface AntPlateProps {
 const EMPTY_MARKS: Marks = {};
 const EMPTY_LOCKED: readonly PartId[] = [];
 
-// The SVG file is the single source of truth for the drawing; states are applied as data attributes.
+const partOf = (target: EventTarget | null): PartId | null =>
+  target instanceof Element ? ((target.closest('[data-part]')?.getAttribute('data-part') as PartId | null) ?? null) : null;
+
+// The SVG file is the single source of truth for the drawing. A structure can span several
+// elements (both antennae, six legs); states are applied as data attributes on every one of them.
 export function AntPlate({ marks = EMPTY_MARKS, onPick, locked = EMPTY_LOCKED }: AntPlateProps) {
   const ref = useRef<HTMLDivElement>(null);
   const interactive = Boolean(onPick);
   const isPickable = (id: PartId) => marks[id] !== 'off' && !locked.includes(id);
 
+  const elements = () => Array.from(ref.current?.querySelectorAll<SVGElement>('[data-part]') ?? []);
+
   useEffect(() => {
-    const parts = ref.current?.querySelectorAll<SVGGElement>('[data-part]') ?? [];
-    parts.forEach((el, i) => {
-      const id = el.dataset.part as PartId;
-      el.dataset.state = marks[id] ?? 'rest';
+    const seen = new Set<string>();
+    for (const el of elements()) {
+      const id = el.getAttribute('data-part') as PartId;
+      el.setAttribute('data-state', marks[id] ?? 'rest');
       el.toggleAttribute('data-locked', locked.includes(id));
-      if (interactive && marks[id] !== 'off' && !locked.includes(id)) {
+      const focusable = interactive && marks[id] !== 'off' && !locked.includes(id) && !seen.has(id);
+      seen.add(id);
+      if (focusable) {
         el.setAttribute('tabindex', '0');
         el.setAttribute('role', 'button');
-        el.setAttribute('aria-label', `Structure ${i + 1}`);
+        el.setAttribute('aria-label', `Structure ${seen.size}`);
       } else {
         el.removeAttribute('tabindex');
         el.removeAttribute('role');
         el.removeAttribute('aria-label');
       }
-    });
-  }, [marks, interactive, locked]);
+    }
+  });
 
-  const pickFrom = (target: EventTarget) => {
-    if (!onPick || !(target instanceof Element)) return;
-    const el = target.closest<SVGGElement>('[data-part]');
-    const id = el?.dataset.part as PartId | undefined;
-    if (id && isPickable(id)) onPick(id);
+  const highlight = (id: PartId | null) => {
+    const active = interactive && id !== null && isPickable(id) ? id : null;
+    for (const el of elements()) el.toggleAttribute('data-hover', el.getAttribute('data-part') === active);
+  };
+
+  const pick = (target: EventTarget) => {
+    const id = partOf(target);
+    if (onPick && id && isPickable(id)) onPick(id);
   };
 
   return (
@@ -50,13 +61,17 @@ export function AntPlate({ marks = EMPTY_MARKS, onPick, locked = EMPTY_LOCKED }:
       ref={ref}
       className="ant-plate"
       data-interactive={interactive}
-      onClick={(e: MouseEvent) => pickFrom(e.target)}
+      onClick={(e: MouseEvent) => pick(e.target)}
       onKeyDown={(e: KeyboardEvent) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          pickFrom(e.target);
+          pick(e.target);
         }
       }}
+      onMouseOver={(e: MouseEvent) => highlight(partOf(e.target))}
+      onMouseLeave={() => highlight(null)}
+      onFocus={(e) => highlight(partOf(e.target))}
+      onBlur={() => highlight(null)}
       dangerouslySetInnerHTML={{ __html: antSvg }}
     />
   );
