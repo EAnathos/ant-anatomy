@@ -1,12 +1,12 @@
 export type RegionId = 'tete' | 'antenne' | 'mesosoma' | 'petiole' | 'gastre' | 'pattes';
 
 export type PartId =
-  | 'tete' | 'oeil' | 'lobe' | 'clypeus' | 'mandibule'
+  | 'tete' | 'ommatidies' | 'lobe' | 'clypeus' | 'mandibule'
   | 'scape' | 'funicule'
   | 'pronotum' | 'mesonotum' | 'mesopleure' | 'propodeum' | 'spiracle'
   | 'petiole'
   | 'tergite' | 'sternite' | 'pygidium' | 'aiguillon'
-  | 'coxa' | 'trochanter' | 'femur' | 'tibia' | 'eperon' | 'tarse' | 'griffe';
+  | 'coxa' | 'femur' | 'tibia' | 'eperon' | 'tarse' | 'griffe';
 
 export interface Region {
   id: RegionId;
@@ -32,7 +32,7 @@ export const REGIONS: Region[] = [
 
 export const PARTS: Part[] = [
   { id: 'tete', name: 'Tête', region: 'tete', definition: 'Capsule céphalique portant les yeux, les antennes et les pièces buccales.', synonyms: ['capsule céphalique'] },
-  { id: 'oeil', name: 'Œil composé', region: 'tete', definition: 'Œil formé de nombreuses ommatidies, sur le côté de la tête.', synonyms: ['œil', 'oeuil', 'oeuil composé', 'yeux', 'yeux composés'] },
+  { id: 'ommatidies', name: 'Ommatidies', region: 'tete', definition: 'Unités optiques en forme de facettes hexagonales qui, réunies, forment l’œil composé.', synonyms: ['ommatidie', 'ommatidium', 'ommatidia', 'facettes'] },
   { id: 'lobe', name: 'Lobe frontal', region: 'tete', definition: 'Lame de la capsule céphalique, prolongée par la carène frontale, qui borde et protège l’insertion de l’antenne (torulus).', synonyms: ['lobe', 'lobes frontaux', 'carène frontale', 'torulus'] },
   { id: 'clypeus', name: 'Clypéus', region: 'tete', definition: 'Plaque antérieure de la tête, juste au-dessus des mandibules.', synonyms: [] },
   { id: 'mandibule', name: 'Mandibules', region: 'tete', definition: 'Pièces buccales paires servant à saisir, couper et transporter.', synonyms: [] },
@@ -49,7 +49,6 @@ export const PARTS: Part[] = [
   { id: 'pygidium', name: 'Pygidium', region: 'gastre', definition: 'Dernier tergite visible, à l’extrémité du gastre.', synonyms: [] },
   { id: 'aiguillon', name: 'Aiguillon', region: 'gastre', definition: 'Dard venimeux à l’extrémité du gastre.', synonyms: ['dard'] },
   { id: 'coxa', name: 'Coxas', region: 'pattes', definition: 'Premier article de la patte, articulé au mésosoma.', synonyms: ['coxae', 'hanche', 'hanches'] },
-  { id: 'trochanter', name: 'Trochanters', region: 'pattes', definition: 'Petit article entre la coxa et le fémur.', synonyms: [] },
   { id: 'femur', name: 'Fémurs', region: 'pattes', definition: 'Article le plus robuste de la patte.', synonyms: [] },
   { id: 'tibia', name: 'Tibias', region: 'pattes', definition: 'Long article entre le fémur et le tarse.', synonyms: [] },
   { id: 'eperon', name: 'Éperons tibiaux', region: 'pattes', definition: 'Épine articulée à l’extrémité du tibia.', synonyms: ['éperon tibial', 'éperon', 'calcar', 'calcars'] },

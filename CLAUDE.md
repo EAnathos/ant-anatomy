@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Atlas anatomique interactif de la fourmi (ouvrière, vue latérale). Deux modes de jeu :
+Atlas anatomique interactif de la fourmi (ouvrière de *Neoponera verenae*, vue latérale). Deux modes de jeu :
 **Trouver** (un nom est donné, on clique la structure) et **Nommer** (on clique une structure, on tape son nom).
 Interface entièrement en français.
 
@@ -48,11 +48,13 @@ la navigation est un état `Screen` dans `src/App.tsx`.
 - Au repos, la planche garde les couleurs d'origine (style inline), sauf le gastre (tergites, sternites, pygidium)
   passé au même gris que le propodéum (`#d6d6d6`) à la demande de l'utilisateur. `AntPlate` pose `data-state`
   (`rest | sel | ok | ko | done | off`) et `data-hover`, et `global.css` les colore avec `!important`.
+- Ajouts au dessin d'origine : une grille hexagonale d'ommatidies dans l'œil (découpée par `clipPath`, sans
+  `pointer-events`) et une marge de 6 unités dans le `viewBox` pour que l'antenne gauche ne soit pas rognée.
 - Griffes : dans l'original, elles forment un seul tracé avec le dernier article du tarse. Chacune est doublée par
   un tracé `data-part="griffe"` (même géométrie, même couleur) plus un contour sans `data-part` posés par-dessus.
 - Petites structures (éperons, spiracle, griffes) : un tracé transparent à contour épais (`stroke:transparent`)
   avec le même `data-part` élargit la zone cliquable.
-- Éléments décoratifs (ombre de fond, croissants noirs des coxas, trait de la joue, détail du propodéum, fémur
+- Éléments décoratifs (ombre de fond, croissants noirs des coxas, trait de la joue, détail du propodéum, trochanters, fémur
   postérieur caché derrière le gastre, bande entre le 1er et le 2e tergite) : pas de `data-part`, `pointer-events="none"`.
 - Noms : au pluriel pour les structures présentes plusieurs fois sur la planche (Fémurs, Tergites…). La validation
   des réponses traite singulier et pluriel comme équivalents.

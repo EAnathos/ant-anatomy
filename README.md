@@ -3,16 +3,20 @@
 Application web pour apprendre l'anatomie externe de la fourmi ouvrière, structure par structure,
 sur une planche interactive en vue latérale.
 
+La planche représente une ouvrière de *Neoponera verenae* (*Ponerinae*).
+L'anatomie varie selon les fourmis : certaines structures manquent chez d'autres espèces (l'aiguillon chez les
+*Formicinae*, par exemple) et d'autres s'ajoutent (le postpétiole chez les *Myrmicinae*).
+
 ## Fonctionnalités
 
-- **Planche interactive** : 24 structures cliquables réparties en 6 régions (tête, antenne, mésosoma, pétiole, gastre, pattes),
+- **Planche interactive** : 23 structures cliquables réparties en 6 régions (tête, antenne, mésosoma, pétiole, gastre, pattes),
   sur les deux antennes et les six pattes.
   Un clic sur l'accueil affiche le nom, la région et une définition.
 - **Mode Trouver** : un nom s'affiche, il faut cliquer la bonne structure. Indice de région, correction immédiate,
   progression et bilan détaillé (score, précision, durée, meilleure série), avec la possibilité de rejouer ses erreurs.
 - **Mode Nommer** : on clique une structure et on tape son nom, avec un seul essai par structure. Une structure ratée
   reste en rouge et ne peut plus être choisie. Les majuscules, les accents (réglable) et les synonymes courants sont
-  acceptés (« hanche » pour coxa, « épinotum » pour propodéum, « oeuil » pour œil…).
+  acceptés (« hanche » pour coxa, « épinotum » pour propodéum, « ommatidie » pour ommatidies…).
 - **Paramètres de session** : choix des régions, nombre de questions (10, 20 ou toutes), tolérance aux accents.
 - Utilisable au clavier et sur mobile.
 

@@ -351,6 +351,13 @@ main.container {
   max-width: 40ch;
 }
 
+.note {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--slate);
+  max-width: 46ch;
+}
+
 .stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

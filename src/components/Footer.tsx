@@ -13,7 +13,7 @@ export function Footer() {
         <a href="https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg" target="_blank" rel="noopener noreferrer">
           Scheme ant worker anatomy
         </a>
-        , par LadyofHats et Sophivorus, domaine public, via Wikimedia Commons.
+        , ouvrière de <em>Neoponera verenae</em> par LadyofHats et Sophivorus, domaine public, via Wikimedia Commons.
       </p>
     </footer>
   );

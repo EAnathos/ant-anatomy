@@ -25,6 +25,10 @@ export function Home({ settings, onSettingsChange, onStartFind, onStartName }: H
           <p className="lead">
             {PARTS.length} structures anatomiques, du scape à l’aiguillon. Repère-les sur la planche, puis nomme-les sans aide.
           </p>
+          <p className="note">
+            La planche représente une ouvrière de <em>Neoponera verenae</em>, une <em>Ponerinae</em>. D’une fourmi à l’autre, l’anatomie varie : certaines structures manquent, comme l’aiguillon
+            chez les <em>Formicinae</em>, et d’autres s’ajoutent, comme le postpétiole chez les <em>Myrmicinae</em>.
+          </p>
         </div>
         <figure className="plate hero__plate">
           <AntPlate marks={selected ? { [selected]: 'sel' } : undefined} onPick={setSelected} />
