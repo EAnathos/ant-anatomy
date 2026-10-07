@@ -15,6 +15,12 @@ npm test           # tests Vitest (logique + cohérence SVG/données)
 
 Lancer `npm run typecheck && npm test` avant de considérer un changement terminé.
 
+## Déploiement
+
+Site 100 % statique publié sur GitHub Pages (https://ant-anatomy.anathos.me). Tout push sur `main` qui passe
+la CI est déployé automatiquement (`.github/workflows/ci.yml`, job `deploy`) : ne pousser sur `main` que du code prêt
+à être en ligne. Le domaine est réglé dans les paramètres Pages du dépôt, pas via un fichier `CNAME`.
+
 ## Stack
 
 React 19 + TypeScript (strict) + Vite. CSS natif, sans framework ni CSS-in-JS. Pas de routeur :

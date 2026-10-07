@@ -36,6 +36,16 @@ Puis ouvrir http://localhost:5173.
 | `npm run typecheck` | Vérification TypeScript |
 | `npm test` | Tests unitaires (Vitest) |
 
+## Déploiement
+
+Le site est publié sur https://ant-anatomy.anathos.me via GitHub Pages. À chaque push sur `main`, la CI
+(`.github/workflows/ci.yml`) vérifie les types, lance les tests, construit le site puis le déploie si tout passe.
+Les pull requests ne lancent que les vérifications. Un déploiement manuel est possible depuis l'onglet Actions
+(« Run workflow »).
+
+Le domaine est configuré dans les réglages Pages du dépôt et pointe via un enregistrement DNS
+`CNAME ant-anatomy → eanathos.github.io`.
+
 ## Organisation du code
 
 ```
