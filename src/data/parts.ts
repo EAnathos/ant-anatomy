@@ -18,7 +18,7 @@ export type PartId =
   | 'pterostigma' | 'costale' | 'marginale'
   | 'submarginale-1' | 'submarginale-2' | 'submarginale-3'
   | 'discoidale' | 'subdiscoidale-1' | 'subdiscoidale-2'
-  | 'basale' | 'subbasale' | 'anale'
+  | 'basale' | 'subbasale'
   | 'costa' | 'sous-costale' | 'radius' | '2r-rs' | '3r-rs'
   | 'secteur-radial' | 'rs-plus-m' | 'rs-2-3' | 'rs-4-5' | 'rs-m'
   | 'media-1' | 'media-2' | 'media-3' | 'media-4' | 'm-plus-cu' | 'm-cu'
@@ -113,7 +113,6 @@ export const PARTS: Part[] = [
   { id: 'subdiscoidale-2', name: 'Cellule subdiscoïdale 2', region: 'discoidales', definition: 'Grande cellule ouverte entre la nervure médiane et le bord postérieur, du côté de l’apex.', synonyms: ['subdiscoïdale 2', 'deuxième cellule subdiscoïdale', 'deuxième subdiscoïdale', '2e cellule subdiscoïdale', '2e subdiscoïdale'] },
   { id: 'basale', name: 'Cellule basale', region: 'base-aile', definition: 'Cellule de la base de l’aile, sous la cellule costale.', synonyms: ['basale'] },
   { id: 'subbasale', name: 'Cellule subbasale', region: 'base-aile', definition: 'Cellule étroite de la base de l’aile, sous la cellule basale.', synonyms: ['subbasale', 'sub-basale', 'cellule sub-basale'] },
-  { id: 'anale', name: 'Cellule anale', region: 'base-aile', definition: 'Cellule qui longe le bord postérieur de l’aile depuis la base.', synonyms: ['anale'] },
 
   { id: 'costa', name: 'Costa', region: 'nerv-costales', definition: 'Nervure qui forme le bord antérieur de l’aile, de la base jusqu’au ptérostigma.', synonyms: ['nervure costale'] },
   { id: 'sous-costale', name: 'Sous-costale', region: 'nerv-costales', definition: 'Nervure longitudinale qui part de la base sous la costa. Chez les fourmis, elle est fusionnée au radius (Sc+R).', synonyms: ['subcosta', 'subcostale', 'nervure sous-costale', 'sc', 'sc+r'] },

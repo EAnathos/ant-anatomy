@@ -4,6 +4,9 @@
   box-sizing: border-box;
 }
 
+/* Pas de surbrillance bleue du navigateur au toucher (boutons, planche) : les états visuels suffisent. */
+html { -webkit-tap-highlight-color: transparent; }
+
 body {
   margin: 0;
   background: var(--paper);
@@ -20,6 +23,8 @@ h1, h2, h3, p, figure, dl, dd {
 
 button {
   font: inherit;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 :focus-visible {
@@ -273,9 +278,6 @@ main.container {
   outline: none;
 }
 
-/* Pas de surbrillance bleue du navigateur au toucher : les états de la planche suffisent. */
-.ant-plate,
-.ant-plate * { -webkit-tap-highlight-color: transparent; }
 
 .ant-plate[data-interactive='true'] [data-part]:not([data-locked]) { cursor: pointer; }
 

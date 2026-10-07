@@ -37,7 +37,7 @@ const INTROS: Record<PlateId, PlateIntro> = {
         layers.length !== 1
           ? 'structures de l’aile antérieure, cellules et nervures'
           : layers[0] === 'cellules'
-            ? 'structures de l’aile antérieure, du ptérostigma à la cellule anale'
+            ? 'structures de l’aile antérieure, du ptérostigma aux cellules de la base'
             : 'nervures de l’aile antérieure, de la costa aux nervures anales'
       }. Repère-les sur la planche, puis nomme-les sans aide.`,
     note: (

@@ -21,7 +21,6 @@
     <path data-part="subbasale" style="fill:#ffffff;stroke:none" d="M510 220 C600 212 700 202 762 197 L820 197 L820 203 L766 203 C700 214 600 240 518 262 C513 250 512 235 510 220 Z"/>
     <path data-part="subdiscoidale-1" style="fill:#ffffff;stroke:none" d="M438 228 L493 215 L510 220 C512 235 513 250 518 262 C480 277 430 290 383 299 L390 288 C400 265 420 243 438 228 Z"/>
     <path data-part="subdiscoidale-2" style="fill:#ffffff;stroke:none" d="M75 207 C150 203 240 198 314 193 C340 202 380 206 428 205 C430 213 434 222 438 228 C420 243 400 265 390 288 C375 282 368 278 355 280 C325 285 270 292 220 298 L150 340 L0 340 L0 207 Z"/>
-    <path data-part="anale" style="fill:#ffffff;stroke:none" d="M220 298 C270 292 325 285 355 280 C368 278 375 282 390 288 L383 299 C430 290 480 277 518 262 C600 240 700 214 766 203 L820 203 L820 340 L150 340 Z"/>
   </g>
 
   <!-- Nervures tubulaires (même tracé que l'original) : paroi sombre décorative, puis cœur clair cliquable.

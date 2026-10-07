@@ -12,7 +12,7 @@ sur des planches interactives. Deux planches au choix :
 ## Fonctionnalités
 
 - **Planches interactives** : sur l'ouvrière, 23 structures cliquables réparties en 6 régions (tête, antenne, mésosoma,
-  pétiole, gastre, pattes), sur les deux antennes et les six pattes ; sur l'aile, 12 cellules (avec le ptérostigma)
+  pétiole, gastre, pattes), sur les deux antennes et les six pattes ; sur l'aile, 10 cellules et le ptérostigma
   et 22 nervures, chacune réparties en 4 régions.
   Un clic sur l'accueil affiche le nom, la région et une définition.
 - **Mode Trouver** : un nom s'affiche, il faut cliquer la bonne structure. Indice de région, correction immédiate,
