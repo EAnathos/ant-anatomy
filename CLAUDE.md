@@ -89,7 +89,7 @@ collisions une fois injectés dans la page.
   un tracé `data-part="griffe"` (même géométrie, même couleur) plus un contour sans `data-part` posés par-dessus.
 - Petites structures (éperons, spiracle, griffes) : un tracé transparent à contour épais (`stroke:transparent`)
   avec le même `data-part` élargit la zone cliquable.
-- Éléments décoratifs (ombre de fond, croissants noirs des coxas, trait de la joue, détail du propodéum, trochanters, fémur
+- Éléments décoratifs (ombre de fond, croissants noirs des coxas, trait de la joue, détail du propodéum, fémur
   postérieur caché derrière le gastre, bande entre le 1er et le 2e tergite) : pas de `data-part`, `pointer-events="none"`.
 - Noms : au pluriel pour les structures présentes plusieurs fois sur la planche (Fémurs, Tergites…). La validation
   des réponses traite singulier et pluriel comme équivalents.

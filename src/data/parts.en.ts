@@ -43,6 +43,7 @@ export const PARTS_EN: Record<PartId, PartText> = {
   pygidium: { name: 'Pygidium', definition: 'Last visible tergite, at the tip of the gaster.', synonyms: [] },
   aiguillon: { name: 'Sting', definition: 'Venomous stinger at the tip of the gaster.', synonyms: ['stinger', 'aculeus'] },
   coxa: { name: 'Coxae', definition: 'First segment of the leg, jointed to the mesosoma.', synonyms: ['coxa', 'coxas'] },
+  trochanter: { name: 'Trochanters', definition: 'Second segment of the leg, short, between the coxa and the femur.', synonyms: ['trochanter'] },
   femur: { name: 'Femora', definition: 'The stoutest segment of the leg.', synonyms: ['femur', 'femurs'] },
   tibia: { name: 'Tibiae', definition: 'Long segment between the femur and the tarsus.', synonyms: ['tibia', 'tibias'] },
   eperon: { name: 'Tibial spurs', definition: 'Articulated spine at the tip of the tibia.', synonyms: ['tibial spur', 'spur', 'spurs', 'calcar', 'calcars'] },

@@ -13,7 +13,7 @@ export type PartId =
   | 'pronotum' | 'mesonotum' | 'mesopleure' | 'propodeum' | 'spiracle'
   | 'petiole'
   | 'tergite' | 'sternite' | 'pygidium' | 'aiguillon'
-  | 'coxa' | 'femur' | 'tibia' | 'eperon' | 'tarse' | 'griffe'
+  | 'coxa' | 'trochanter' | 'femur' | 'tibia' | 'eperon' | 'tarse' | 'griffe'
   | 'pterostigma' | 'costale' | 'marginale'
   | 'submarginale-1' | 'submarginale-2' | 'submarginale-3'
   | 'discoidale' | 'subdiscoidale-1' | 'subdiscoidale-2'
@@ -85,6 +85,7 @@ const PARTS_FR: Part[] = [
   { id: 'pygidium', name: 'Pygidium', region: 'gastre', definition: 'Dernier tergite visible, à l’extrémité du gastre.', synonyms: [] },
   { id: 'aiguillon', name: 'Aiguillon', region: 'gastre', definition: 'Dard venimeux à l’extrémité du gastre.', synonyms: ['dard'] },
   { id: 'coxa', name: 'Coxas', region: 'pattes', definition: 'Premier article de la patte, articulé au mésosoma.', synonyms: ['coxae', 'hanche', 'hanches'] },
+  { id: 'trochanter', name: 'Trochanters', region: 'pattes', definition: 'Deuxième article de la patte, court, entre la coxa et le fémur.', synonyms: ['trochanter'] },
   { id: 'femur', name: 'Fémurs', region: 'pattes', definition: 'Article le plus robuste de la patte.', synonyms: [] },
   { id: 'tibia', name: 'Tibias', region: 'pattes', definition: 'Long article entre le fémur et le tarse.', synonyms: [] },
   { id: 'eperon', name: 'Éperons tibiaux', region: 'pattes', definition: 'Épine articulée à l’extrémité du tibia.', synonyms: ['éperon tibial', 'éperon', 'calcar', 'calcars'] },

@@ -11,7 +11,7 @@ sur des planches interactives. Deux planches au choix :
 
 ## Fonctionnalités
 
-- **Planches interactives** : sur l'ouvrière, 23 structures cliquables réparties en 6 régions (tête, antenne, mésosoma,
+- **Planches interactives** : sur l'ouvrière, 24 structures cliquables réparties en 6 régions (tête, antenne, mésosoma,
   pétiole, gastre, pattes), sur les deux antennes et les six pattes ; sur l'aile, 2 régions : cellules (10 cellules et le
   ptérostigma) et nervures (22).
   Un clic sur l'accueil affiche le nom, la région et une définition.
