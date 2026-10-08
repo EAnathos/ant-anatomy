@@ -41,8 +41,9 @@ button {
   white-space: nowrap;
 }
 
+/* Large, pour que les planches occupent l'écran ; les textes gardent leur propre largeur de lecture. */
 .container {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
   padding-inline: var(--gutter);
 }
@@ -50,6 +51,16 @@ button {
 main.container {
   padding-bottom: 96px;
 }
+
+/* Pied de page en bas de la fenêtre quand le contenu est court (mode Trouver, Nommer…). */
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root > .container { width: 100%; }
+#root > main { flex: 1 0 auto; }
 
 .mono { font-family: var(--font-mono); }
 .muted { color: var(--slate); }
@@ -401,9 +412,12 @@ main.container {
   gap: 28px;
 }
 
-.hero__plate { flex: 1.6 1 560px; }
+.hero__plate { flex: 2.2 1 560px; }
 
-.hero--top { align-items: flex-start; }
+.hero--top {
+  align-items: flex-start;
+  padding-top: clamp(32px, 5vw, 56px);
+}
 
 .hero__plate {
   display: flex;
@@ -413,9 +427,22 @@ main.container {
 
 /* Planche de l'accueil : cadre au ratio de la fourmi pour que changer de planche ne fasse rien bouger. */
 .hero__plate .ant-plate {
+  /* Largeur explicite : sans elle, Firefox réduit aussi la largeur quand max-height limite la hauteur,
+     et le cadre se colle à gauche de la carte. */
+  width: 100%;
   aspect-ratio: 747 / 596;
-  display: flex;
-  align-items: center;
+  /* Pas plus haut que la fenêtre, pour que la définition reste visible sous la planche.
+     L'aile, très large, en occupe toute la largeur. */
+  max-height: max(290px, calc(100dvh - 440px));
+  position: relative;
+}
+
+/* Le SVG remplit le cadre ; son viewBox (xMidYMid meet) centre le dessin sur les deux axes. */
+.hero__plate .ant-plate svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .hero__plate .plate__caption { min-height: 136px; }
@@ -705,7 +732,18 @@ main.container {
   gap: 20px;
 }
 
-.play__plate { flex: 2.4 1 600px; }
+.play__plate {
+  flex: 3 1 600px;
+  padding: clamp(16px, 2vw, 28px);
+}
+
+/* La planche tient dans la fenêtre (en-tête, marges et légende déduits) : la fourmi
+   ne déborde pas en hauteur, l'aile, très large, profite de toute la largeur. */
+.play__plate .ant-plate svg {
+  max-height: max(320px, calc(100dvh - 280px));
+  /* Si le navigateur réduit la largeur pour garder les proportions, le dessin reste centré. */
+  margin-inline: auto;
+}
 
 .play__help {
   padding: 0 4px;
