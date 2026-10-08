@@ -330,6 +330,12 @@ main.container {
 .ant-plate .nerv-core[data-state='done'] { stroke: var(--moss-light) !important; stroke-width: 4px !important; }
 .ant-plate .nerv-halo[data-hover]:not([data-locked])[data-state='rest'],
 .ant-plate .nerv-halo:is([data-state='sel'], [data-state='ok'], [data-state='ko'], [data-state='done']) { stroke: var(--ink) !important; }
+/* Bande du radius (.nerv-fill) : une surface, colorée comme le cœur du trait. */
+.ant-plate .nerv-fill[data-hover]:not([data-locked])[data-state='rest'],
+.ant-plate .nerv-fill[data-state='sel'] { fill: var(--amber) !important; }
+.ant-plate .nerv-fill[data-state='ok'] { fill: var(--moss) !important; }
+.ant-plate .nerv-fill[data-state='ko'] { fill: var(--terra) !important; }
+.ant-plate .nerv-fill[data-state='done'] { fill: var(--moss-light) !important; }
 .ant-plate .nerv[data-state='off'] { opacity: 1; }
 .ant-plate .nerv-hit[data-state='off'],
 .ant-plate .nerv-halo[data-state='off'] { pointer-events: none; }
