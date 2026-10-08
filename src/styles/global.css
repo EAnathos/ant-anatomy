@@ -321,7 +321,6 @@ main.container {
   outline: none;
 }
 
-
 .ant-plate[data-interactive='true'] [data-part]:not([data-locked]) { cursor: pointer; }
 
 .ant-plate [data-part]:not(.nerv)[data-hover]:not([data-locked])[data-state='rest'] { fill: var(--amber-pale) !important; }
@@ -445,13 +444,102 @@ main.container {
   height: 100%;
 }
 
-.hero__plate .plate__caption { min-height: 136px; }
+.hero__plate .plate__caption { min-height: 88px; }
 
 .plate-picker {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
   gap: 4px 16px;
   padding-left: 12px;
+}
+
+/* Outils de la planche d'accueil : structure au hasard, vue légendée. */
+.plate-tools {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--prusse);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.icon-btn:hover { background: var(--mist); }
+.icon-btn:focus-visible { outline: 2px solid var(--prusse); outline-offset: 2px; }
+.icon-btn[aria-pressed='true'] {
+  background: var(--prusse);
+  border-color: var(--prusse);
+  color: var(--paper);
+}
+
+/* Vue légendée (src/lib/plateLabels.ts) : traits fins à l'encre, nom de la structure choisie en ambre. */
+.plate-label__line {
+  fill: none;
+  stroke: var(--prusse);
+  stroke-width: 0.75px;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.plate-label__dot { fill: var(--prusse); pointer-events: none; }
+.plate-label__dot--sel { fill: var(--amber); }
+
+.plate-label__text {
+  font-family: var(--font-sans);
+  fill: var(--prusse);
+  cursor: pointer;
+}
+
+.plate-label__text--sel { font-weight: 700; fill: var(--amber-ink); }
+
+/* Écran étroit : numéros sur la planche, liste numérotée en dessous. */
+.plate-label__badge { cursor: pointer; }
+.plate-label__badge circle { fill: var(--prusse); }
+.plate-label__badge text { fill: var(--paper); font-family: var(--font-mono); }
+.plate-label__badge--sel circle { fill: var(--amber); }
+.plate-label__badge--sel text { fill: var(--prusse); }
+
+.plate-legend { display: none; }
+
+@media (max-width: 640px) {
+  .plate-legend {
+    display: block;
+    columns: 2;
+    column-gap: 16px;
+    margin: 0;
+    padding: 16px 0 0 22px;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+    color: var(--slate);
+  }
+
+  .plate-legend li { break-inside: avoid; }
+  .plate-legend li::marker { font-family: var(--font-mono); font-size: 12px; color: var(--prusse); }
+
+  .plate-legend button {
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .plate-legend__item--sel button { color: var(--amber-ink); font-weight: 600; }
 }
 
 /* Menu déroulant discret : texte seul, chevron dessiné en CSS. */
@@ -993,13 +1081,21 @@ main.container {
   gap: 20px;
 }
 
-.table-scroll { overflow-x: auto; }
+/* Tableau du bilan : les cellules ne passent pas à la ligne, le tableau défile à l'horizontale
+   quand il est plus large que l'écran. */
+.table-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
 
 .results-table {
-  width: 100%;
-  min-width: 560px;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
 }
+
+.results-table th,
+.results-table td { white-space: nowrap; }
 
 .results-table th {
   text-align: left;
@@ -1024,6 +1120,58 @@ main.container {
 .results-table__asked {
   font-weight: 600;
   color: var(--prusse);
+}
+
+.results-table__label { display: none; }
+
+/* Sur mobile, chaque réponse devient une fiche : numéro, structure demandée et verdict sur la première ligne,
+   région puis clic (seulement si raté) en dessous. Tout tient dans la largeur, sans défilement. */
+@media (max-width: 640px) {
+  .results-table,
+  .results-table tbody {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .results-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .results-table tr {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "num asked tag"
+      "num region tag"
+      "num click click";
+    column-gap: 12px;
+    row-gap: 2px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .results-table td,
+  .results-table td:first-child {
+    display: block;
+    width: auto;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+  }
+
+  .results-table td:nth-child(1) { grid-area: num; }
+  .results-table td:nth-child(2) { grid-area: asked; }
+  .results-table td:nth-child(3) { grid-area: region; font-size: 14px; }
+  .results-table td:nth-child(4) { grid-area: click; font-size: 14px; margin-top: 4px; }
+  .results-table td:nth-child(5) { grid-area: tag; align-self: start; }
+
+  .results-table__click--same { display: none !important; }
+  .results-table__label { display: inline; color: var(--slate); }
 }
 
 .tag {

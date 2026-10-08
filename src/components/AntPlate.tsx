@@ -1,8 +1,9 @@
-import { useEffect, useRef, type KeyboardEvent, type MouseEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, type KeyboardEvent, type MouseEvent } from 'react';
 import antSvg from '../assets/ant.svg?raw';
 import wingSvg from '../assets/wing.svg?raw';
-import type { PartId, PlateId } from '../data/parts';
+import { partsOf, type PartId, type PlateId } from '../data/parts';
 import { t } from '../i18n';
+import { clearLabels, drawLabels } from '../lib/plateLabels';
 
 export type Mark = 'sel' | 'ok' | 'ko' | 'done' | 'off';
 export type Marks = Partial<Record<PartId, Mark>>;
@@ -12,6 +13,8 @@ interface AntPlateProps {
   marks?: Marks;
   onPick?: (id: PartId) => void;
   locked?: readonly PartId[];
+  /** Vue légendée : le nom de chaque structure autour du dessin, relié par un trait. */
+  labels?: boolean;
 }
 
 const LABELS = t<Record<PlateId, string>>(
@@ -29,12 +32,15 @@ const SVG_BY_PLATE: Record<PlateId, string> = {
 const EMPTY_MARKS: Marks = {};
 const EMPTY_LOCKED: readonly PartId[] = [];
 
-const partOf = (target: EventTarget | null): PartId | null =>
-  target instanceof Element ? ((target.closest('[data-part]')?.getAttribute('data-part') as PartId | null) ?? null) : null;
+// Une étiquette de la vue légendée (data-label-for) compte comme sa structure.
+const partOf = (target: EventTarget | null): PartId | null => {
+  const el = target instanceof Element ? target.closest('[data-part], [data-label-for]') : null;
+  return ((el?.getAttribute('data-part') ?? el?.getAttribute('data-label-for')) as PartId | null) ?? null;
+};
 
 // Each plate's SVG file is the single source of truth for its drawing. A structure can span several
 // elements (both antennae, six legs); states are applied as data attributes on every one of them.
-export function AntPlate({ plate, marks = EMPTY_MARKS, onPick, locked = EMPTY_LOCKED }: AntPlateProps) {
+export function AntPlate({ plate, marks = EMPTY_MARKS, onPick, locked = EMPTY_LOCKED, labels = false }: AntPlateProps) {
   const ref = useRef<HTMLDivElement>(null);
   const interactive = Boolean(onPick);
   const isPickable = (id: PartId) => marks[id] !== 'off' && !locked.includes(id);
@@ -60,6 +66,31 @@ export function AntPlate({ plate, marks = EMPTY_MARKS, onPick, locked = EMPTY_LO
       }
     }
   });
+
+  const selected = (Object.keys(marks) as PartId[]).find((id) => marks[id] === 'sel') ?? null;
+
+  useLayoutEffect(() => {
+    const svg = ref.current?.querySelector('svg');
+    if (!svg) return;
+    if (!labels) {
+      clearLabels(svg);
+      return;
+    }
+    const names = Object.fromEntries(partsOf(plate).map((p) => [p.id, p.name]));
+    const draw = () => drawLabels(svg, names, selected);
+    draw();
+    // La taille du texte dépend de la place à l'écran : on recalcule quand le cadre change de taille.
+    let width = ref.current?.clientWidth ?? 0;
+    const observer = new ResizeObserver(() => {
+      const w = ref.current?.clientWidth ?? 0;
+      if (Math.abs(w - width) > 1) {
+        width = w;
+        draw();
+      }
+    });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [plate, labels, selected]);
 
   const highlight = (id: PartId | null) => {
     const active = interactive && id !== null && isPickable(id) ? id : null;

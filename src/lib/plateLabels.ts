@@ -1,0 +1,217 @@
+// Vue légendée d'une planche : le nom de chaque structure dans une colonne à gauche ou à droite du dessin,
+// relié par un trait à un point posé sur la structure. Calculé dans le DOM (boîtes, points dans le remplissage),
+// donc après l'injection du SVG. Le viewBox d'origine est gardé dans data-base-view-box et rétabli au retrait.
+
+const NS = 'http://www.w3.org/2000/svg';
+const LAYER = 'plate-labels';
+/** Taille visée du texte des étiquettes, en pixels à l'écran. */
+const TARGET_PX = 12;
+const MIN_PX = 9;
+
+interface Box { x: number; y: number; w: number; h: number }
+interface Anchor { id: string; x: number; y: number }
+
+const parseBox = (s: string): Box => {
+  const [x, y, w, h] = s.trim().split(/[\s,]+/).map(Number);
+  return { x, y, w, h };
+};
+
+function baseBox(svg: SVGSVGElement): Box {
+  if (!svg.dataset.baseViewBox) svg.dataset.baseViewBox = svg.getAttribute('viewBox') ?? '0 0 100 100';
+  return parseBox(svg.dataset.baseViewBox);
+}
+
+export function clearLabels(svg: SVGSVGElement) {
+  svg.querySelector(`:scope > g.${LAYER}`)?.remove();
+  if (svg.dataset.baseViewBox) svg.setAttribute('viewBox', svg.dataset.baseViewBox);
+}
+
+/** Passe d'un point du repère d'un élément au repère du SVG racine (celui du viewBox). */
+function toRoot(svg: SVGSVGElement, el: SVGGraphicsElement, x: number, y: number) {
+  const m = svg.getScreenCTM()?.inverse().multiply(el.getScreenCTM() ?? new DOMMatrix());
+  return new DOMPoint(x, y).matrixTransform(m);
+}
+
+const isVisibleFill = (el: SVGGraphicsElement) => {
+  const fill = getComputedStyle(el).fill;
+  return fill !== 'none' && fill !== 'transparent' && fill !== 'rgba(0, 0, 0, 0)';
+};
+
+/** Un point à l'intérieur de la surface, le plus près possible du centre de sa boîte. */
+function insidePoint(svg: SVGSVGElement, el: SVGGeometryElement, clip: SVGGeometryElement | null) {
+  const b = el.getBBox();
+  const inside = (x: number, y: number) => {
+    if (!el.isPointInFill(new DOMPoint(x, y))) return false;
+    if (!clip) return true;
+    const p = toRoot(svg, el, x, y);
+    return clip.isPointInFill(new DOMPoint(p.x, p.y));
+  };
+  const cx = b.x + b.width / 2;
+  const cy = b.y + b.height / 2;
+  if (inside(cx, cy)) return toRoot(svg, el, cx, cy);
+  let best: { x: number; y: number; d: number } | null = null;
+  const n = 12;
+  for (let i = 0; i <= n; i++) {
+    for (let j = 0; j <= n; j++) {
+      const x = b.x + (b.width * i) / n;
+      const y = b.y + (b.height * j) / n;
+      const d = (x - cx) ** 2 + (y - cy) ** 2;
+      if ((!best || d < best.d) && inside(x, y)) best = { x, y, d };
+    }
+  }
+  return best ? toRoot(svg, el, best.x, best.y) : toRoot(svg, el, cx, cy);
+}
+
+function anchorOf(svg: SVGSVGElement, id: string, clip: SVGGeometryElement | null): Anchor | null {
+  const els = Array.from(svg.querySelectorAll<SVGGeometryElement>(`[data-part="${CSS.escape(id)}"]`)).filter(
+    (el) => !el.classList.contains('nerv-hit') && !el.classList.contains('nerv-halo'),
+  );
+  // Surfaces : la plus grande. Nervures (traits) : le milieu du plus long cœur.
+  const surfaces = els.filter((el) => !el.classList.contains('nerv') && isVisibleFill(el));
+  if (surfaces.length > 0) {
+    const area = (el: SVGGeometryElement) => {
+      const b = el.getBBox();
+      return b.width * b.height;
+    };
+    const el = surfaces.reduce((a, b) => (area(b) > area(a) ? b : a));
+    const p = insidePoint(svg, el, clip);
+    return { id, x: p.x, y: p.y };
+  }
+  const cores = els.filter((el) => el.classList.contains('nerv-core'));
+  if (cores.length === 0) return null;
+  const el = cores.reduce((a, b) => (b.getTotalLength() > a.getTotalLength() ? b : a));
+  const mid = el.getPointAtLength(el.getTotalLength() / 2);
+  const p = toRoot(svg, el, mid.x, mid.y);
+  return { id, x: p.x, y: p.y };
+}
+
+/** Ordonnées des étiquettes d'une colonne : à mi-chemin entre leur point et une répartition régulière sur
+ *  toute la hauteur (les traits restent courts sans que les noms se tassent), puis sans chevauchement. */
+function spread(ys: number[], gap: number, top: number, bottom: number) {
+  const step = (bottom - top) / Math.max(ys.length, 1);
+  const out = ys.map((y, i) => (y + top + step * (i + 0.5)) / 2);
+  for (let i = 0; i < out.length; i++) out[i] = Math.max(out[i], top, i > 0 ? out[i - 1] + gap : top);
+  for (let i = out.length - 1; i >= 0; i--) out[i] = Math.min(out[i], bottom, i < out.length - 1 ? out[i + 1] - gap : bottom);
+  return out;
+}
+
+/** Écran étroit : pas de place pour des colonnes de noms. Les structures portent un numéro, dans l'ordre
+ *  de `names`, et la liste numérotée s'affiche sous la planche (`.plate-legend` dans Home). */
+export const COMPACT_LABELS = '(max-width: 640px)';
+
+export function drawLabels(svg: SVGSVGElement, names: Record<string, string>, selected: string | null) {
+  clearLabels(svg);
+  const base = baseBox(svg);
+  const clip = svg.querySelector<SVGGeometryElement>('#aile-contour');
+
+  const ids = [...new Set(Array.from(svg.querySelectorAll('[data-part]'), (el) => el.getAttribute('data-part') ?? ''))].filter(
+    (id) => id in names,
+  );
+  const anchors = ids.map((id) => anchorOf(svg, id, clip)).filter((a): a is Anchor => a !== null);
+
+  if (window.matchMedia(COMPACT_LABELS).matches) {
+    drawNumbers(svg, base, anchors, Object.keys(names), selected);
+    return;
+  }
+
+  // Côté : celui du point par rapport au milieu du dessin, puis équilibrage des deux colonnes.
+  const mid = base.x + base.w / 2;
+  const left = anchors.filter((a) => a.x < mid).sort((a, b) => a.x - b.x);
+  const right = anchors.filter((a) => a.x >= mid).sort((a, b) => b.x - a.x);
+  while (left.length > right.length + 1) right.push(left.pop()!);
+  while (right.length > left.length + 1) left.push(right.pop()!);
+  left.sort((a, b) => a.y - b.y);
+  right.sort((a, b) => a.y - b.y);
+
+  const layer = document.createElementNS(NS, 'g');
+  layer.setAttribute('class', LAYER);
+  layer.setAttribute('aria-hidden', 'true');
+  svg.appendChild(layer);
+
+  const rect = svg.getBoundingClientRect();
+  const texts = new Map<string, SVGTextElement>();
+  for (const a of anchors) {
+    const text = document.createElementNS(NS, 'text');
+    text.textContent = names[a.id];
+    text.setAttribute('class', `plate-label__text${a.id === selected ? ' plate-label__text--sel' : ''}`);
+    texts.set(a.id, text);
+    layer.appendChild(text);
+  }
+
+  // Taille du texte en unités du viewBox : on vise TARGET_PX à l'écran une fois les marges ajoutées,
+  // ce qui demande quelques itérations (les marges dépendent de la largeur du texte, et l'échelle des marges).
+  let fs = TARGET_PX * (base.w / Math.max(rect.width, 1));
+  let box = base;
+  for (let k = 0; k < 4; k++) {
+    for (const t of texts.values()) t.setAttribute('font-size', String(fs));
+    const width = Math.max(0, ...Array.from(texts.values(), (t) => t.getComputedTextLength()));
+    const margin = width + fs * 2.2;
+    const gap = fs * 1.55;
+    const h = Math.max(base.h, Math.max(left.length, right.length) * gap + fs * 2);
+    box = { x: base.x - margin, y: base.y - (h - base.h) / 2, w: base.w + 2 * margin, h };
+    const scale = Math.min(rect.width / box.w, rect.height / box.h) || 1;
+    const next = TARGET_PX / scale;
+    if (Math.abs(next - fs) < fs * 0.02) break;
+    // Sur un cadre étroit, les marges mangent le dessin : on accepte un texte plus petit, jusqu'à MIN_PX.
+    fs = Math.min(next, (TARGET_PX / MIN_PX) * fs);
+  }
+
+  const gap = fs * 1.55;
+  const top = box.y + fs;
+  const bottom = box.y + box.h - fs * 0.5;
+  const place = (column: Anchor[], side: 'left' | 'right') => {
+    const ys = spread(column.map((a) => a.y), gap, top, bottom);
+    const edge = side === 'left' ? base.x - fs * 0.6 : base.x + base.w + fs * 0.6;
+    column.forEach((a, i) => {
+      const y = ys[i];
+      const line = document.createElementNS(NS, 'polyline');
+      line.setAttribute('points', `${a.x},${a.y} ${edge},${y}`);
+      line.setAttribute('class', 'plate-label__line');
+      const dot = document.createElementNS(NS, 'circle');
+      dot.setAttribute('cx', String(a.x));
+      dot.setAttribute('cy', String(a.y));
+      dot.setAttribute('r', String(fs * 0.22));
+      dot.setAttribute('class', `plate-label__dot${a.id === selected ? ' plate-label__dot--sel' : ''}`);
+      layer.insertBefore(line, layer.firstChild);
+      layer.appendChild(dot);
+      const text = texts.get(a.id)!;
+      text.setAttribute('x', String(side === 'left' ? edge - fs * 0.4 : edge + fs * 0.4));
+      text.setAttribute('y', String(y));
+      text.setAttribute('dominant-baseline', 'middle');
+      text.setAttribute('text-anchor', side === 'left' ? 'end' : 'start');
+      text.setAttribute('data-label-for', a.id);
+    });
+  };
+  place(left, 'left');
+  place(right, 'right');
+  svg.setAttribute('viewBox', `${box.x} ${box.y} ${box.w} ${box.h}`);
+}
+
+function drawNumbers(svg: SVGSVGElement, base: Box, anchors: Anchor[], order: string[], selected: string | null) {
+  const rect = svg.getBoundingClientRect();
+  const scale = Math.min(rect.width / base.w, rect.height / base.h) || 1;
+  const fs = 9 / scale;
+  const layer = document.createElementNS(NS, 'g');
+  layer.setAttribute('class', LAYER);
+  layer.setAttribute('aria-hidden', 'true');
+  for (const a of anchors) {
+    const sel = a.id === selected;
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', `plate-label__badge${sel ? ' plate-label__badge--sel' : ''}`);
+    g.setAttribute('data-label-for', a.id);
+    const circle = document.createElementNS(NS, 'circle');
+    circle.setAttribute('cx', String(a.x));
+    circle.setAttribute('cy', String(a.y));
+    circle.setAttribute('r', String(fs * 0.85));
+    const text = document.createElementNS(NS, 'text');
+    text.textContent = String(order.indexOf(a.id) + 1);
+    text.setAttribute('x', String(a.x));
+    text.setAttribute('y', String(a.y));
+    text.setAttribute('font-size', String(fs));
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'central');
+    g.append(circle, text);
+    layer.appendChild(g);
+  }
+  svg.appendChild(layer);
+}

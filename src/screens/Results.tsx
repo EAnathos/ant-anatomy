@@ -8,7 +8,6 @@ const T = t(
   {
     perfect: 'Sans faute. Toutes les structures demandées ont été trouvées.',
     missed: (n: number, names: string) => `${n === 1 ? 'Une structure te résiste' : `${n} structures te résistent`} encore : ${names}.`,
-    eyebrow: 'Bilan · Trouver',
     accuracy: 'Précision',
     accuracyValue: (n: number) => `${n} %`,
     duration: 'Durée',
@@ -21,6 +20,7 @@ const T = t(
     asked: 'Demandé',
     region: 'Région',
     yourClick: 'Ton clic',
+    yourClickLabel: 'Ton clic : ',
     result: 'Résultat',
     correct: 'Correct',
     wrong: 'Raté',
@@ -28,7 +28,6 @@ const T = t(
   {
     perfect: 'Flawless. Every structure asked was found.',
     missed: (n: number, names: string) => `${n === 1 ? 'One structure still eludes you' : `${n} structures still elude you`}: ${names}.`,
-    eyebrow: 'Results · Find',
     accuracy: 'Accuracy',
     accuracyValue: (n: number) => `${n}%`,
     duration: 'Time',
@@ -41,6 +40,7 @@ const T = t(
     asked: 'Asked',
     region: 'Region',
     yourClick: 'Your click',
+    yourClickLabel: 'Your click: ',
     result: 'Result',
     correct: 'Correct',
     wrong: 'Missed',
@@ -72,7 +72,6 @@ export function Results({ plate, log, durationMs, onReplay, onRestart, onHome }:
     <main className="container">
       <section className="hero">
         <div className="hero__text">
-          <span className="eyebrow">{T.eyebrow}</span>
           <h1 className="big-score">
             <span>{summary.score}</span>
             <span className="big-score__total">/ {summary.total}</span>
@@ -124,7 +123,10 @@ export function Results({ plate, log, durationMs, onReplay, onRestart, onHome }:
                   <td className="mono muted">{String(i + 1).padStart(2, '0')}</td>
                   <td className="results-table__asked">{PART_BY_ID[a.asked].name}</td>
                   <td className="muted">{REGION_BY_ID[PART_BY_ID[a.asked].region].label}</td>
-                  <td>{PART_BY_ID[a.picked].name}</td>
+                  <td className={a.correct ? 'results-table__click results-table__click--same' : 'results-table__click'}>
+                    <span className="results-table__label">{T.yourClickLabel}</span>
+                    {PART_BY_ID[a.picked].name}
+                  </td>
                   <td>
                     {a.correct ? (
                       <span className="tag tag--ok"><CheckIcon size={14} /> {T.correct}</span>

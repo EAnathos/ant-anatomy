@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { AntPlate } from '../components/AntPlate';
-import { ArrowIcon } from '../components/icons';
+import { ArrowIcon, DiceIcon, MagnifierIcon } from '../components/icons';
 import { SettingsPanel } from '../components/SettingsPanel';
 import { PART_BY_ID, PLATES, REGION_BY_ID, partsInRegions, partsOf, regionsOf, type PartId, type PlateId, type RegionId } from '../data/parts';
 import { t } from '../i18n';
@@ -127,6 +127,9 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
 const T = t(
   {
     plate: 'Planche',
+    random: 'Structure au hasard',
+    showLabels: 'Afficher tous les noms sur la planche',
+    legend: 'Structures numérotées sur la planche',
     pickHint: 'Clique une structure de la planche pour l’identifier.',
     chooseMode: 'Choisis un mode',
     find: 'Trouver',
@@ -139,6 +142,9 @@ const T = t(
   },
   {
     plate: 'Plate',
+    random: 'Random structure',
+    showLabels: 'Show every name on the plate',
+    legend: 'Structures numbered on the plate',
     pickHint: 'Click a structure on the plate to identify it.',
     chooseMode: 'Choose a mode',
     find: 'Find',
@@ -153,6 +159,7 @@ const T = t(
 
 export function Home({ settings, onSettingsChange, onStartFind, onStartName }: HomeProps) {
   const [selected, setSelected] = useState<PartId | null>(null);
+  const [labels, setLabels] = useState(false);
   const part = selected ? PART_BY_ID[selected] : null;
   const canPlay = playableParts(settings).length > 0;
   const intro = INTROS[settings.plate];
@@ -160,6 +167,12 @@ export function Home({ settings, onSettingsChange, onStartFind, onStartName }: H
   const checked = plateRegions.filter((r) => settings.regions.includes(r));
   const active = checked.length > 0 ? checked : plateRegions;
   const shown = partsInRegions(active).length;
+
+  // Une structure tirée au hasard parmi celles des régions affichées, jamais deux fois la même d'affilée.
+  const pickRandom = () => {
+    const pool = partsInRegions(active).filter((p) => p.id !== selected);
+    if (pool.length > 0) setSelected(pool[Math.floor(Math.random() * pool.length)].id);
+  };
 
   const choosePlate = (plate: PlateId) => {
     if (plate === settings.plate) return;
@@ -188,9 +201,24 @@ export function Home({ settings, onSettingsChange, onStartFind, onStartName }: H
                 ))}
               </select>
             </label>
+            <div className="plate-tools">
+              <button type="button" className="icon-btn" onClick={pickRandom} aria-label={T.random} title={T.random}>
+                <DiceIcon />
+              </button>
+              <button
+                type="button"
+                className="icon-btn"
+                onClick={() => setLabels((v) => !v)}
+                aria-pressed={labels}
+                aria-label={T.showLabels}
+                title={T.showLabels}
+              >
+                <MagnifierIcon />
+              </button>
+            </div>
           </div>
           <figure className="plate">
-          <AntPlate plate={settings.plate} marks={selected ? { [selected]: 'sel' } : undefined} onPick={setSelected} />
+          <AntPlate plate={settings.plate} marks={selected ? { [selected]: 'sel' } : undefined} onPick={setSelected} labels={labels} />
           <figcaption className="plate__caption" aria-live="polite">
             {part ? (
               <>
@@ -204,6 +232,15 @@ export function Home({ settings, onSettingsChange, onStartFind, onStartName }: H
               <span className="muted">{T.pickHint}</span>
             )}
           </figcaption>
+          {labels && (
+            <ol className="plate-legend" aria-label={T.legend}>
+              {partsOf(settings.plate).map((p) => (
+                <li key={p.id} className={p.id === selected ? 'plate-legend__item--sel' : undefined}>
+                  <button type="button" onClick={() => setSelected(p.id)}>{p.name}</button>
+                </li>
+              ))}
+            </ol>
+          )}
           </figure>
         </div>
       </section>
