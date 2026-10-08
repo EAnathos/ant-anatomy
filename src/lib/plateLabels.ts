@@ -190,7 +190,7 @@ export function drawLabels(svg: SVGSVGElement, names: Record<string, string>, se
 function drawNumbers(svg: SVGSVGElement, base: Box, anchors: Anchor[], order: string[], selected: string | null) {
   const rect = svg.getBoundingClientRect();
   const scale = Math.min(rect.width / base.w, rect.height / base.h) || 1;
-  const fs = 9 / scale;
+  const fs = 8 / scale;
   const layer = document.createElementNS(NS, 'g');
   layer.setAttribute('class', LAYER);
   layer.setAttribute('aria-hidden', 'true');
@@ -202,7 +202,7 @@ function drawNumbers(svg: SVGSVGElement, base: Box, anchors: Anchor[], order: st
     const circle = document.createElementNS(NS, 'circle');
     circle.setAttribute('cx', String(a.x));
     circle.setAttribute('cy', String(a.y));
-    circle.setAttribute('r', String(fs * 0.85));
+    circle.setAttribute('r', String(fs * 0.8));
     const text = document.createElementNS(NS, 'text');
     text.textContent = String(order.indexOf(a.id) + 1);
     text.setAttribute('x', String(a.x));

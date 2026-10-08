@@ -234,9 +234,12 @@ export function Home({ settings, onSettingsChange, onStartFind, onStartName }: H
           </figcaption>
           {labels && (
             <ol className="plate-legend" aria-label={T.legend}>
-              {partsOf(settings.plate).map((p) => (
+              {partsOf(settings.plate).map((p, i) => (
                 <li key={p.id} className={p.id === selected ? 'plate-legend__item--sel' : undefined}>
-                  <button type="button" onClick={() => setSelected(p.id)}>{p.name}</button>
+                  <button type="button" onClick={() => setSelected(p.id)}>
+                    <span className="plate-legend__num" aria-hidden="true">{i + 1}</span>
+                    {p.name}
+                  </button>
                 </li>
               ))}
             </ol>

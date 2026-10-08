@@ -519,24 +519,36 @@ main.container {
     columns: 2;
     column-gap: 16px;
     margin: 0;
-    padding: 16px 0 0 22px;
+    padding: 16px 0 0;
     border-top: 1px solid var(--line);
+    list-style: none;
     font-size: 14px;
     color: var(--slate);
   }
 
   .plate-legend li { break-inside: avoid; }
-  .plate-legend li::marker { font-family: var(--font-mono); font-size: 12px; color: var(--prusse); }
 
+  /* Numéro dans sa propre colonne : un nom long passe à la ligne sous son texte, sans déborder sur l'autre colonne. */
   .plate-legend button {
+    display: grid;
+    grid-template-columns: 2.2em minmax(0, 1fr);
+    align-items: baseline;
+    width: 100%;
     min-height: 44px;
-    padding: 0;
+    padding: 6px 0;
     border: 0;
     background: none;
     color: inherit;
     font: inherit;
+    line-height: 1.35;
     text-align: left;
     cursor: pointer;
+  }
+
+  .plate-legend__num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--prusse);
   }
 
   .plate-legend__item--sel button { color: var(--amber-ink); font-weight: 600; }
