@@ -1,0 +1,50 @@
+name: Erreur d'anatomie / Anatomy error
+description: Une définition, un nom, un synonyme ou une zone de la planche est inexact. A definition, name, synonym or plate area is wrong.
+title: "[Anatomie] "
+labels: ["anatomie"]
+body:
+  - type: dropdown
+    id: plate
+    attributes:
+      label: Planche / Plate
+      options:
+        - Ouvrière Neoponera verenae / Worker
+        - Aile de reine Odontomachus sp. / Queen wing
+    validations:
+      required: true
+  - type: input
+    id: structure
+    attributes:
+      label: Structure concernée / Structure concerned
+      placeholder: ex. Propodéum, Média 3
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Type d'erreur / Kind of error
+      options:
+        - Définition / Definition
+        - Nom ou synonyme / Name or synonym
+        - Zone cliquable mal placée / Clickable area misplaced
+        - Structure manquante / Missing structure
+        - Autre / Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Ce qui ne va pas / What is wrong
+    validations:
+      required: true
+  - type: textarea
+    id: fix
+    attributes:
+      label: Correction proposée / Suggested fix
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: Publication, ouvrage, page AntWiki… Paper, book, AntWiki page…
+    validations:
+      required: true

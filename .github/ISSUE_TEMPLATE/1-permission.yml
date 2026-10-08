@@ -1,0 +1,79 @@
+name: Demande d'autorisation / Permission request
+description: Demander l'autorisation de réutiliser une partie du projet. Ask permission to reuse part of the project.
+title: "[Autorisation] "
+labels: ["permission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Le contenu de ce dépôt est **tous droits réservés** (voir [LICENSE](https://github.com/EAnathos/ant-anatomy/blob/main/LICENSE)). Utilise ce formulaire pour demander une autorisation écrite.
+        The content of this repository is **all rights reserved** (see [LICENSE](https://github.com/EAnathos/ant-anatomy/blob/main/LICENSE)). Use this form to ask for written permission.
+
+        **Pas besoin de demander pour / No request needed for :**
+        - la planche de l'aile utilisée **sans but commercial, en citant l'auteur** (CC BY-NC 4.0) · the wing plate used **non-commercially, with credit** (CC BY-NC 4.0) ;
+        - le dessin d'origine de l'ouvrière, dans le domaine public, à récupérer [sur Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg) · the original worker drawing, public domain, available [on Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg).
+
+        ⚠️ Les issues sont publiques : n'indique ni adresse, ni téléphone, ni information confidentielle. Issues are public: do not share any address, phone number or confidential information.
+  - type: input
+    id: requester
+    attributes:
+      label: Qui fait la demande ? / Who is asking?
+      description: Nom, structure ou projet (école, association, entreprise, particulier…). Name, organisation or project.
+    validations:
+      required: true
+  - type: checkboxes
+    id: content
+    attributes:
+      label: Contenu concerné / Content concerned
+      options:
+        - label: Code source / Source code
+        - label: Textes, définitions, traductions / Texts, definitions, translations
+        - label: Planche de l'ouvrière telle qu'adaptée ici (zones, ommatidies, couleurs) / Worker plate as adapted here
+        - label: Planche de l'aile pour un usage commercial / Wing plate for commercial use
+        - label: Design, charte graphique, images d'aperçu / Design, visual identity, preview images
+        - label: Le site entier (copie, hébergement, intégration) / The whole site (copy, hosting, embedding)
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Précisions / Details
+      description: Quels fichiers ou quelles parties exactement ? Which files or parts exactly?
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Usage prévu / Intended use
+      description: Pour quoi faire, où sera-ce publié, auprès de quel public, pour combien de temps ? What for, where will it be published, for which audience, for how long?
+    validations:
+      required: true
+  - type: dropdown
+    id: commercial
+    attributes:
+      label: Usage commercial ? / Commercial use?
+      options:
+        - Non / No
+        - Oui / Yes
+        - Je ne sais pas / Not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: modification
+    attributes:
+      label: Le contenu sera-t-il modifié ? / Will the content be modified?
+      options:
+        - Non, utilisé tel quel / No, used as is
+        - Oui / Yes
+    validations:
+      required: true
+  - type: input
+    id: credit
+    attributes:
+      label: Mention prévue / Planned credit
+      description: Comment l'auteur et la source seront-ils cités ? How will the author and source be credited?
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Engagement / Commitment
+      options:
+        - label: Je n'utiliserai pas le contenu avant d'avoir reçu une autorisation écrite dans cette issue. I will not use the content before written permission is given in this issue.
+          required: true

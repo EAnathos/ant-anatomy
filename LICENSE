@@ -25,7 +25,8 @@ Exceptions :
   Le dessin d'origine reste dans le domaine public. Les ajouts propres à ce dépôt (attributs, zones cliquables,
   grille d'ommatidies, retouches de couleur) sont couverts par la réserve de droits ci-dessus.
 
-Pour toute demande d'autorisation, ouvrir une issue sur le dépôt.
+Pour toute demande d'autorisation, ouvrir une issue avec le formulaire « Demande d'autorisation » :
+https://github.com/EAnathos/ant-anatomy/issues/new?template=1-permission.yml
 
 
 ENGLISH
@@ -49,4 +50,5 @@ Exceptions:
   The original drawing remains in the public domain. The additions made in this repository (attributes, clickable
   areas, ommatidia grid, colour changes) are covered by the reservation of rights above.
 
-For any permission request, open an issue on the repository.
+For any permission request, open an issue with the "Permission request" form:
+https://github.com/EAnathos/ant-anatomy/issues/new?template=1-permission.yml

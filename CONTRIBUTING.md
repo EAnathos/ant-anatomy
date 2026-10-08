@@ -5,13 +5,16 @@ Merci de l'intérêt porté à l'Atlas anatomique *Formicidae*. Le projet n'est 
 
 ## Signaler un problème
 
-Les issues sont bienvenues, en français ou en anglais, pour :
+Les issues sont bienvenues, en français ou en anglais. Un formulaire est prévu pour chaque cas :
 
 - une erreur anatomique ou de terminologie (définition, nom, synonyme, région) : préciser la source
   (publication, [AntWiki](https://antwiki.org/wiki/Morphology_and_Terminology)…) ;
+- une [nouvelle planche](https://github.com/EAnathos/ant-anatomy/issues/new?template=3-planche.yml) sur une structure
+  anatomique précise (vue, caste, taxon, structures à nommer, image de référence avec sa licence) ;
 - une erreur de traduction ;
 - un bug d'affichage ou d'accessibilité : indiquer le navigateur, l'appareil et les étapes pour le reproduire ;
-- une idée d'amélioration ou une demande d'autorisation de réutilisation.
+- une idée d'amélioration ;
+- une [demande d'autorisation de réutilisation](https://github.com/EAnathos/ant-anatomy/issues/new?template=1-permission.yml).
 
 ## Proposer une modification
 

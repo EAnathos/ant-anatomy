@@ -1,0 +1,32 @@
+name: Bug
+description: Quelque chose ne fonctionne pas sur le site. Something does not work on the site.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: steps
+    attributes:
+      label: Étapes pour reproduire / Steps to reproduce
+      placeholder: |
+        1. Choisir la planche de l'aile
+        2. Mode Nommer
+        3. …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Résultat attendu et obtenu / Expected and actual result
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Appareil et navigateur / Device and browser
+      placeholder: ex. iPhone 15, Safari · Windows 11, Firefox 131
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Captures d'écran / Screenshots

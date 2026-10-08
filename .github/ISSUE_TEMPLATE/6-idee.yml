@@ -1,0 +1,15 @@
+name: Idée / Suggestion
+description: Proposer une amélioration, une planche ou un mode de jeu. Suggest an improvement, a plate or a game mode.
+title: "[Idée] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idée / Idea
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Pourquoi ce serait utile / Why it would help

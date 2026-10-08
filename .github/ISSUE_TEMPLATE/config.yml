@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Le site / The site
+    url: https://ant-anatomy.anathos.me
+    about: Atlas anatomique Formicidae · Formicidae anatomy atlas
+  - name: Morphology and Terminology (AntWiki)
+    url: https://antwiki.org/wiki/Morphology_and_Terminology
+    about: Référence de terminologie avant de signaler une erreur. Terminology reference before reporting an error.

@@ -1,0 +1,68 @@
+name: Nouvelle planche / New plate
+description: Demander une planche sur une structure anatomique précise. Request a plate on a specific anatomical structure.
+title: "[Planche] "
+labels: ["planche"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Chaque planche est un dessin dont les structures deviennent cliquables. Plus la demande est précise (vue, caste, taxon, structures à nommer), plus elle est facile à réaliser.
+        Each plate is a drawing whose structures become clickable. The more precise the request (view, caste, taxon, structures to name), the easier it is to build.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Partie du corps / Body part
+      options:
+        - Tête de face / Head, frontal view
+        - Pièces buccales / Mouthparts
+        - Antenne / Antenna
+        - Mésosoma (dorsal ou latéral) / Mesosoma (dorsal or lateral)
+        - Pétiole et postpétiole / Petiole and postpetiole
+        - Gastre, aiguillon ou acidopore / Gaster, sting or acidopore
+        - Patte / Leg
+        - Aile postérieure / Hind wing
+        - Genitalia du mâle / Male genitalia
+        - Fourmi entière, autre vue ou autre caste / Whole ant, other view or caste
+        - Autre / Other
+    validations:
+      required: true
+  - type: dropdown
+    id: caste
+    attributes:
+      label: Caste / Caste
+      options:
+        - Ouvrière / Worker
+        - Reine / Queen
+        - Mâle / Male
+        - Indifférent / No preference
+    validations:
+      required: true
+  - type: input
+    id: taxon
+    attributes:
+      label: Taxon souhaité / Preferred taxon
+      description: Espèce, genre ou sous-famille, si tu en as un en tête. Species, genus or subfamily, if any.
+      placeholder: ex. Myrmica rubra, Camponotus, Myrmicinae
+  - type: textarea
+    id: structures
+    attributes:
+      label: Structures à faire apparaître / Structures to include
+      description: Une par ligne, avec leur nom usuel. One per line, with their usual name.
+      placeholder: |
+        Clypéus
+        Carènes frontales
+        Scrobe antennaire
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: Image de référence / Reference image
+      description: |
+        Lien vers une figure, une photo ou un dessin, avec sa licence. Seules les images du domaine public, sous licence libre compatible, ou dont tu es l'auteur peuvent servir de base à une planche.
+        Link to a figure, photo or drawing, with its licence. Only public-domain images, images under a compatible open licence, or your own work can be used as a base for a plate.
+  - type: textarea
+    id: why
+    attributes:
+      label: Pourquoi cette planche ? / Why this plate?
+      description: Usage visé, intérêt pour l'identification ou l'apprentissage. Intended use, value for identification or learning.

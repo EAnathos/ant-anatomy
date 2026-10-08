@@ -1,0 +1,26 @@
+name: Erreur de traduction / Translation error
+description: Un texte est mal traduit ou manque dans une langue. A text is mistranslated or missing in one language.
+title: "[Traduction] "
+labels: ["traduction"]
+body:
+  - type: dropdown
+    id: lang
+    attributes:
+      label: Langue / Language
+      options:
+        - Français
+        - English
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Texte actuel et où il apparaît / Current text and where it appears
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Proposition / Suggestion
+    validations:
+      required: true
