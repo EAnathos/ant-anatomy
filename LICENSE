@@ -1,0 +1,52 @@
+Atlas anatomique Formicidae
+Copyright (c) 2026 EAnathos. Tous droits réservés.
+
+FRANÇAIS
+
+Le code source, les textes, les traductions, les données, la mise en forme et les autres contenus de ce dépôt sont
+la propriété exclusive de l'auteur. Aucune licence n'est accordée : il est interdit de les copier, modifier,
+redistribuer, publier, héberger ailleurs ou réutiliser, en tout ou en partie, à quelque fin que ce soit, sans
+l'autorisation écrite préalable de l'auteur.
+
+Seules sont permises la consultation du dépôt et sa duplication (fork) sur GitHub, dans la mesure où les conditions
+d'utilisation de GitHub l'exigent pour un dépôt public. Elles ne donnent aucun droit d'utiliser le contenu en dehors
+de GitHub.
+
+Exceptions :
+
+- Planche de l'aile (src/assets/wing.svg) : dessin d'EAnathos, sous licence Creative Commons
+  Attribution - Pas d'utilisation commerciale 4.0 International (CC BY-NC 4.0),
+  https://creativecommons.org/licenses/by-nc/4.0/deed.fr
+  Réutilisation permise à des fins non commerciales, en citant l'auteur. Cette licence ne s'étend à aucun autre
+  fichier du dépôt.
+
+- Planche de l'ouvrière (src/assets/ant.svg) : « Scheme ant worker anatomy-clean », par LadyofHats et Sophivorus,
+  domaine public, https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg
+  Le dessin d'origine reste dans le domaine public. Les ajouts propres à ce dépôt (attributs, zones cliquables,
+  grille d'ommatidies, retouches de couleur) sont couverts par la réserve de droits ci-dessus.
+
+Pour toute demande d'autorisation, ouvrir une issue sur le dépôt.
+
+
+ENGLISH
+
+The source code, texts, translations, data, design and other content of this repository are the exclusive property
+of the author. No licence is granted: copying, modifying, redistributing, publishing, hosting elsewhere or reusing
+them, in whole or in part, for any purpose, is prohibited without the author's prior written permission.
+
+Only viewing the repository and forking it on GitHub are permitted, to the extent GitHub's Terms of Service require
+it for a public repository. This grants no right to use the content outside GitHub.
+
+Exceptions:
+
+- Wing plate (src/assets/wing.svg): drawing by EAnathos, licensed under Creative Commons
+  Attribution-NonCommercial 4.0 International (CC BY-NC 4.0), https://creativecommons.org/licenses/by-nc/4.0/
+  Reuse is permitted for non-commercial purposes, with credit to the author. This licence does not extend to any
+  other file in the repository.
+
+- Worker plate (src/assets/ant.svg): "Scheme ant worker anatomy-clean" by LadyofHats and Sophivorus, public domain,
+  https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg
+  The original drawing remains in the public domain. The additions made in this repository (attributes, clickable
+  areas, ommatidia grid, colour changes) are covered by the reservation of rights above.
+
+For any permission request, open an issue on the repository.

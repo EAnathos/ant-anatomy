@@ -101,3 +101,13 @@ réutilisation libre à des fins non commerciales, en citant l'auteur.
 Les deux mentions sont affichées sur l'accueil, sous le texte de la planche choisie.
 
 Pour aller plus loin : [Morphology and Terminology](https://antwiki.org/wiki/Morphology_and_Terminology) sur AntWiki.
+
+## Licence
+
+Tous droits réservés : le code, les textes et les données de ce dépôt ne peuvent pas être réutilisés sans
+autorisation. Seule la planche de l'aile est réutilisable, sous licence CC BY-NC 4.0, et le dessin d'origine de
+l'ouvrière reste dans le domaine public. Détails dans [LICENSE](LICENSE).
+
+## Contribuer
+
+Les signalements d'erreurs (anatomie, traduction, bugs) sont bienvenus. Voir [CONTRIBUTING.md](CONTRIBUTING.md).
