@@ -95,4 +95,9 @@ par LadyofHats (original) et Sophivorus (version sans légende), domaine public,
 Le tracé n'est pas modifié : les noms des structures et des zones cliquables ont été ajoutés, les griffes détourées
 séparément du tarse, et le gastre passé au même gris que le propodéum.
 
+Planche de l'aile : dessin d'EAnathos, sous licence [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.fr) :
+réutilisation libre à des fins non commerciales, en citant l'auteur.
+
+Les deux mentions sont affichées sur l'accueil, sous le texte de la planche choisie.
+
 Pour aller plus loin : [Morphology and Terminology](https://antwiki.org/wiki/Morphology_and_Terminology) sur AntWiki.

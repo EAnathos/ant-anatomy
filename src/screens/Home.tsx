@@ -18,6 +18,8 @@ interface PlateIntro {
   title: (regions: readonly RegionId[]) => string;
   lead: (count: number, regions: readonly RegionId[]) => string;
   note: ReactNode;
+  /** Source et licence du dessin, sous le texte. */
+  credit: ReactNode;
 }
 
 const WORKER_COUNT = partsOf('ouvriere').length;
@@ -32,6 +34,15 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         <>
           La planche représente une ouvrière de <em>Neoponera verenae</em>, une <em>Ponerinae</em>. D’une fourmi à l’autre, l’anatomie varie : certaines structures manquent, comme
           l’aiguillon chez les <em>Formicinae</em>, et d’autres s’ajoutent, comme le postpétiole chez les <em>Myrmicinae</em>.
+        </>
+      ),
+      credit: (
+        <>
+          Planche :{' '}
+          <a href="https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg" target="_blank" rel="noopener noreferrer">
+            Scheme ant worker anatomy
+          </a>
+          , par LadyofHats et Sophivorus, domaine public, via Wikimedia Commons.
         </>
       ),
     },
@@ -53,6 +64,15 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
           de celles des reines. Les ouvrières, elles, n’ont jamais d’ailes.
         </>
       ),
+      credit: (
+        <>
+          Planche : dessin d’EAnathos, sous licence{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          {' '}: réutilisation libre à des fins non commerciales, en citant l’auteur.
+        </>
+      ),
     },
   },
   {
@@ -63,6 +83,15 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         <>
           The plate shows a worker of <em>Neoponera verenae</em>, a member of the <em>Ponerinae</em>. Anatomy varies from one ant to another: some structures are missing, such as
           the sting in <em>Formicinae</em>, and others are added, such as the postpetiole in <em>Myrmicinae</em>.
+        </>
+      ),
+      credit: (
+        <>
+          Plate:{' '}
+          <a href="https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg" target="_blank" rel="noopener noreferrer">
+            Scheme ant worker anatomy
+          </a>
+          , by LadyofHats and Sophivorus, public domain, via Wikimedia Commons.
         </>
       ),
     },
@@ -80,6 +109,15 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         <>
           The plate shows the forewing of an <em>Odontomachus</em> sp. queen, a different <em>Ponerinae</em> from the worker on the first plate. Venation is not the same in every
           ant: depending on the genus, veins disappear and cells merge or stay open, and the wings of males often differ from those of queens. Workers never have wings.
+        </>
+      ),
+      credit: (
+        <>
+          Plate: drawing by EAnathos, licensed under{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          : free to reuse for non-commercial purposes, with credit to the author.
         </>
       ),
     },
@@ -136,6 +174,7 @@ export function Home({ settings, onSettingsChange, onStartFind, onStartName }: H
           <h1 className="display">{intro.title(active)}</h1>
           <p className="lead">{intro.lead(shown, active)}</p>
           <p className="note">{intro.note}</p>
+          <p className="plate-credit">{intro.credit}</p>
         </div>
         <div className="hero__plate">
           <div className="plate-picker">

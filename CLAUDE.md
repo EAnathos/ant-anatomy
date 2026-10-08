@@ -60,7 +60,7 @@ la navigation est un état `Screen` dans `src/App.tsx`.
 ## Planche SVG : règles
 
 Les règles ci-dessous valent pour la planche de l'ouvrière. La planche de l'aile (`wing.svg`) est un dessin de
-l'utilisateur, sans crédit à afficher, qu'on peut retoucher. Ses `id` internes sont préfixés `aile-` pour éviter les
+l'utilisateur (EAnathos), sous licence CC BY-NC 4.0 affichée sous le texte de l'accueil, qu'on peut retoucher. Ses `id` internes sont préfixés `aile-` pour éviter les
 collisions une fois injectés dans la page.
 
 - Deux régions seulement, `cellules` et `nervures`, choisies comme les autres régions dans les paramètres de session
@@ -74,8 +74,8 @@ collisions une fois injectés dans la page.
   classe `.nerv`, que les règles de remplissage (`fill`) de `global.css` excluent.
 
 - Dessin : « Scheme ant worker anatomy-clean » (LadyofHats et Sophivorus, domaine public,
-  https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg), crédité dans le pied de page
-  (`Footer.tsx`) et le README. **Ne pas modifier le dessin** :
+  https://commons.wikimedia.org/wiki/File:Scheme_ant_worker_anatomy-clean.svg), crédité sous le texte de
+  l'accueil (`Home.tsx`, champ `credit`) et dans le README. **Ne pas modifier le dessin** :
   seuls des attributs (`data-part`, `pointer-events`) et des tracés invisibles ou superposés à l'identique sont ajoutés.
 - Chaque tracé cliquable porte `data-part="<id>"`, id identique à un `PartId` de `parts.ts`. Une structure peut
   compter plusieurs tracés (2 antennes, 6 pattes, segments du gastre) : `AntPlate` applique états, survol et focus
