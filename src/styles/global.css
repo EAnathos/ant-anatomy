@@ -581,10 +581,12 @@ main.container {
   font-size: 17px;
   line-height: 1.65;
   color: var(--slate);
-  max-width: 46ch;
+  text-align: justify;
+  hyphens: auto;
 }
 
-.mode-card .btn { margin-top: 8px; }
+/* Boutons alignés en bas des deux cartes, même si les textes n'ont pas la même longueur. */
+.mode-card .btn { margin-top: auto; }
 
 /* Paramètres */
 .settings {
@@ -730,6 +732,16 @@ main.container {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+/* Trouver, Nommer et texte à gauche de la planche (accueil, bilan) : texte courant justifié sur la largeur
+   du bloc, césuré pour éviter les grands blancs. */
+.hero__text p { max-width: none; }
+
+.play p,
+.hero__text p {
+  text-align: justify;
+  hyphens: auto;
 }
 
 .play__plate {

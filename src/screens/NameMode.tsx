@@ -29,7 +29,7 @@ const T = t(
     notQuite: 'Pas tout à fait',
     youWrote: (text: string) => `Tu as écrit « ${text} ». `,
     expected: 'Réponse attendue : ',
-    staysRed: '. Elle reste en rouge sur la planche.',
+    staysRed: 'Elle reste en rouge sur la planche.',
     another: 'Choisir une autre structure',
     named: 'Nommées',
     none: 'Aucune pour l’instant.',
@@ -58,7 +58,7 @@ const T = t(
     notQuite: 'Not quite',
     youWrote: (text: string) => `You wrote “${text}”. `,
     expected: 'Expected answer: ',
-    staysRed: '. It stays red on the plate.',
+    staysRed: 'It stays red on the plate.',
     another: 'Pick another structure',
     named: 'Named',
     none: 'None yet.',
@@ -217,7 +217,7 @@ export function NameMode({ settings }: { settings: Settings }) {
               <div className="verdict__title"><CrossIcon size={20} /> {T.notQuite}</div>
               <p>
                 {typed ? T.youWrote(typed) : ''}
-                {T.expected}<strong>{part.name}</strong>{T.staysRed}
+                {T.expected}<strong>{part.name}</strong><br />{T.staysRed}
               </p>
               <p className="verdict__def">{part.definition}</p>
               <button type="button" className="btn btn--ghost" onClick={clear}>{T.another}</button>
