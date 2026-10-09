@@ -13,7 +13,7 @@ export type TermId =
   | 'scape' | 'funicule'
   | 'pronotum' | 'mesonotum' | 'mesopleure' | 'propodeum' | 'spiracle'
   | 'petiole'
-  | 'tergite' | 'sternite' | 'pygidium' | 'aiguillon'
+  | 'tergite' | 'sternite' | 'pygidium' | 'hypopygium' | 'aiguillon'
   | 'coxa' | 'trochanter' | 'femur' | 'tibia' | 'eperon' | 'tarse' | 'griffe'
   | 'pterostigma' | 'costale' | 'marginale'
   | 'submarginale-1' | 'submarginale-2' | 'submarginale-3'
@@ -33,7 +33,7 @@ export type TermId =
   | 'sillon-metanotal' | 'propleure' | 'metapleure' | 'anepisterne' | 'katepisterne' | 'orifice-metapleural'
   | 'bulle-metapleurale' | 'lobe-propodeal' | 'declivite-propodeale' | 'epines-propodeales'
   | 'processus-metasternal' | 'fossette-endophragmale' | 'angles-humeraux' | 'abdomen' | 'metasoma' | 'gastre'
-  | 'taille' | 'postpetiole' | 'helcium' | 'pedoncule' | 'processus-subpetiolaire' | 'presclerite' | 'hypopygium'
+  | 'taille' | 'postpetiole' | 'helcium' | 'pedoncule' | 'processus-subpetiolaire' | 'presclerite'
   | 'acidopore' | 'constriction' | 'appareil-stridulatoire' | 'basitarse' | 'pretarse' | 'strigile' | 'soie'
   | 'pubescence' | 'psammophore' | 'lobe-torulaire' | 'sillon-paraoculo-clypeal' | 'ocelles' | 'arolium' | 'suture'
   | 'sulcus';
@@ -111,6 +111,7 @@ const TERMS_FR: Term[] = [
   { id: 'tergite', name: 'Tergites', definition: 'Sclérites dorsaux des segments du gastre.', synonyms: [] },
   { id: 'sternite', name: 'Sternites', definition: 'Sclérites ventraux des segments du gastre.', synonyms: [] },
   { id: 'pygidium', name: 'Pygidium', definition: 'Tergite du septième segment abdominal : le dernier tergite visible, à l’extrémité du gastre.', synonyms: [] },
+  { id: 'hypopygium', name: 'Hypopygium', definition: 'Sternite du septième segment abdominal : le dernier sternite visible du gastre.', synonyms: [] },
   { id: 'aiguillon', name: 'Aiguillon', definition: 'Dard venimeux à l’extrémité du gastre.', synonyms: ['dard'] },
   { id: 'coxa', name: 'Coxas', definition: 'Premier article de la patte, le plus basal, articulé au mésosoma.', synonyms: ['hanche'], variants: ['coxa', 'coxae', 'hanches'] },
   { id: 'trochanter', name: 'Trochanters', definition: 'Deuxième article de la patte, petit, entre la coxa et le fémur.', synonyms: [], variants: ['trochanter'] },
@@ -214,7 +215,6 @@ const TERMS_FR: Term[] = [
   { id: 'pedoncule', name: 'Pédoncule', definition: 'Partie antérieure étroite du pétiole, entre l’articulation avec le propodéum et le nœud ou l’écaille. Un pétiole sans pédoncule est dit sessile.', synonyms: [], variants: ['pédoncule du pétiole'] },
   { id: 'processus-subpetiolaire', name: 'Processus subpétiolaire', definition: 'Projection antéroventrale du pétiole ou de son pédoncule, de forme très variable, parfois absente.', synonyms: [] },
   { id: 'presclerite', name: 'Présclérite', definition: 'Partie antérieure d’un sclérite abdominal, tergite ou sternite, recouverte par le segment précédent. Elle se reconnaît à sa sculpture fine et lisse, sans pilosité, parfois aussi à une crête ou un étranglement. On parle de prétergite et de présternite.', synonyms: [] },
-  { id: 'hypopygium', name: 'Hypopygium', definition: 'Sternite du septième segment abdominal : le dernier sternite visible du gastre.', synonyms: [] },
   { id: 'acidopore', name: 'Acidopore', definition: 'Orifice par lequel les Formicinae projettent l’acide formique, propre à cette sous-famille. Formé par l’apex de l’hypopygium, il prend souvent la forme d’une courte buse bordée de soies.', synonyms: [] },
   { id: 'constriction', name: 'Étranglement annulaire', definition: 'Rétrécissement brusque qui fait le tour d’un segment abdominal, à la jonction entre présclérite et postsclérite. Par commodité, les clés le placent entre deux segments.', synonyms: ['constriction annulaire'] },
   { id: 'appareil-stridulatoire', name: 'Appareil stridulatoire', definition: 'Organe sonore : une râpe (plectre), sur le bord postérieur du troisième segment abdominal, frotte sur une aire finement striée (stridulitrum) à l’avant du quatrième.', synonyms: [] },
@@ -239,7 +239,7 @@ const LAYOUT: Record<RegionId, TermId[]> = {
   antenne: ['scape', 'funicule'],
   mesosoma: ['pronotum', 'mesonotum', 'mesopleure', 'propodeum', 'spiracle'],
   petiole: ['petiole'],
-  gastre: ['tergite', 'sternite', 'pygidium', 'aiguillon'],
+  gastre: ['tergite', 'sternite', 'pygidium', 'hypopygium', 'aiguillon'],
   pattes: ['coxa', 'trochanter', 'femur', 'tibia', 'eperon', 'tarse', 'griffe'],
   cellules: [
     'pterostigma', 'costale', 'marginale', 'submarginale-1', 'submarginale-2', 'submarginale-3',

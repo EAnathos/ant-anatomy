@@ -97,7 +97,7 @@ collisions une fois injectés dans la page.
 - Chaque tracé cliquable porte `data-part="<id>"`, id identique à un `PartId` de `parts.ts`. Une structure peut
   compter plusieurs tracés (2 antennes, 6 pattes, segments du gastre) : `AntPlate` applique états, survol et focus
   à tous les tracés du même id, et ne rend focusable que le premier.
-- Au repos, la planche garde les couleurs d'origine (style inline), sauf le gastre (tergites, sternites, pygidium)
+- Au repos, la planche garde les couleurs d'origine (style inline), sauf le gastre (tergites, sternites, pygidium, hypopygium)
   passé au même gris que le propodéum (`#d6d6d6`) à la demande de l'utilisateur. `AntPlate` pose `data-state`
   (`rest | sel | ok | ko | done | off`) et `data-hover`, et `global.css` les colore avec `!important`.
 - Ajouts au dessin d'origine : une grille hexagonale d'ommatidies dans l'œil (découpée par `clipPath`, sans
@@ -134,7 +134,7 @@ collisions une fois injectés dans la page.
   terminologie plus récente et plus stricte (sulcus/suture, lobe torulaire, aire supraclypéale…), citée dans les
   définitions quand elle diffère de Bolton. Noms de genres et d'espèces entre astérisques (`*Eciton*`) dans les données : `Rich`
   les rend en italique. Le dessin n'a qu'un pétiole
-  (pas de postpétiole) ; le gastre est découpé en tergites, sternites, pygidium et aiguillon.
+  (pas de postpétiole) ; le gastre est découpé en tergites, sternites, pygidium, hypopygium et aiguillon.
   Sur l'aile, les cellules submarginales et subdiscoïdales sont numérotées de la base vers l'apex.
 
 ## Accessibilité
