@@ -1,11 +1,10 @@
 # Atlas anatomique *Formicidae*
 
 Application web pour apprendre l'anatomie externe de la fourmi, structure par structure,
-sur des planches interactives. Six planches au choix :
+sur des planches interactives. Huit planches au choix :
 
-- **Ouvrière *Neoponera verenae*** (Ponerinae), en vue latérale. L'anatomie varie selon les fourmis : certaines
-  structures manquent chez d'autres espèces (l'aiguillon chez les Formicinae, par exemple) et d'autres s'ajoutent
-  (le postpétiole chez les Myrmicinae).
+- **Ouvrière *Neoponera verenae*** (Ponerinae), en vue latérale : la structure générale du corps, point d'entrée vers
+  les planches composites détaillées de chaque partie (tête, mandibules, antennes, mésosoma, gastre, pattes).
 - **Tête**, vue composite de deux têtes de face d'après les figures 523 à 526 de Bolton (1994) : l'une entière avec
   lobes frontaux et scrobes, l'autre sans lobes, montrant l'insertion des antennes.
 - **Mandibule**, vue composite d'une mandibule gauche triangulaire grande ouverte, d'après la figure 527 de
@@ -24,11 +23,11 @@ sur des planches interactives. Six planches au choix :
 
 ## Fonctionnalités
 
-- **Planches interactives** : 11 structures sur l'ouvrière (sur les deux antennes et les six pattes), 16 sur la tête,
+- **Planches interactives** : 7 structures sur l'ouvrière (sur les deux antennes et les six pattes), 16 sur la tête,
   11 sur la mandibule, 6 sur l'antenne, 15 sur le mésosoma, 11 sur le gastre, 10 sur la patte, et sur l'aile 2 régions au choix : cellules (10 cellules et le
   ptérostigma) et nervures (22).
-  La tête, les mandibules, les antennes, le mésosoma et les pattes de l'ouvrière ouvrent leur planche détaillée, de même
-  que le pétiole et les sclérites du gastre.
+  La tête, les mandibules, les antennes, le mésosoma, le gastre et les pattes de l'ouvrière ouvrent leur planche
+  détaillée ; le pétiole ouvre celle du gastre.
   Un clic sur l'accueil affiche le nom et une définition.
 - **Mode Trouver** : un nom s'affiche, il faut cliquer la bonne structure. Indice de région sur l'aile, correction immédiate,
   progression et bilan détaillé (score, précision, durée, meilleure série), avec la possibilité de rejouer ses erreurs.

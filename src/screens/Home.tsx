@@ -34,11 +34,11 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
   {
     ouvriere: {
       title: () => 'Anatomie de la fourmi',
-      lead: () => `${WORKER_COUNT} structures anatomiques, des antennes à l’aiguillon. Repère-les sur la planche, puis nomme-les sans aide.`,
+      lead: () => `${WORKER_COUNT} grandes parties du corps, de la tête au gastre. Repère-les sur la planche, puis nomme-les sans aide.`,
       note: (
         <>
-          La planche représente une ouvrière de <em>Neoponera verenae</em>, une Ponerinae. D’une fourmi à l’autre, l’anatomie varie : certaines structures manquent, comme
-          l’aiguillon chez les Formicinae, et d’autres s’ajoutent, comme le postpétiole chez les Myrmicinae.
+          La planche représente une ouvrière de <em>Neoponera verenae</em>, une Ponerinae, dans sa structure générale. Elle sert de point d’entrée : chaque
+          partie (tête, mandibules, antennes, mésosoma, gastre, pattes) ouvre une planche composite détaillée, où l’on retrouve ses structures une à une.
         </>
       ),
       credit: (
@@ -203,11 +203,11 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
   {
     ouvriere: {
       title: () => 'Ant anatomy',
-      lead: () => `${WORKER_COUNT} anatomical structures, from antennae to sting. Find them on the plate, then name them unaided.`,
+      lead: () => `${WORKER_COUNT} main body parts, from head to gaster. Find them on the plate, then name them unaided.`,
       note: (
         <>
-          The plate shows a worker of <em>Neoponera verenae</em>, a member of the Ponerinae. Anatomy varies from one ant to another: some structures are missing, such as
-          the sting in Formicinae, and others are added, such as the postpetiole in Myrmicinae.
+          The plate shows a worker of <em>Neoponera verenae</em>, a member of the Ponerinae, in its general structure. It is the entry point: each part (head,
+          mandibles, antennae, mesosoma, gaster, legs) opens a detailed composite plate, where its structures can be found one by one.
         </>
       ),
       credit: (

@@ -73,8 +73,7 @@ moment. Animations coupées si `prefers-reduced-motion`.
     terme propre à une planche (singulier ou pluriel selon le nombre d'exemplaires dessinés). Une planche sans taxon
     (dessin composite) a un `detail` en romain à la place ; `PlateName` / `plateText` affichent son libellé.
   - `DETAIL_PLATES` : planche détaillée d'une structure de la vue d'ensemble (`tete` → planche `tete`,
-    `mandibule` → planche `mandibule`, `antenne` → planche `antenne`, `patte` → planche `patte`, `mesosoma` → planche `mesosoma`, `petiole`, `tergite`, `sternite`, `pygidium`, `hypopygium`,
-    `aiguillon` → planche `gastre`).
+    `mandibule` → planche `mandibule`, `antenne` → planche `antenne`, `patte` → planche `patte`, `mesosoma` → planche `mesosoma`, `gastre` et `petiole` → planche `gastre`).
     Sur l'accueil, la légende de la structure propose « Voir en détail », qui ouvre cette planche avec la structure
     sélectionnée et un zoom (`.plate-focus`) parti de l'endroit où elle se trouvait. À compléter à chaque planche détaillée. Les id de régions sont uniques toutes planches
     confondues.
@@ -116,14 +115,15 @@ collisions une fois injectés dans la page.
 - Chaque tracé cliquable porte `data-part="<id>"`, id identique à un `PartId` de `parts.ts`. Une structure peut
   compter plusieurs tracés (2 antennes, 6 pattes, segments du gastre) : `AntPlate` applique états, survol et focus
   à tous les tracés du même id, et ne rend focusable que le premier.
-- Au repos, la planche garde les couleurs d'origine (style inline), sauf le gastre (tergites, sternites, pygidium, hypopygium)
+- Au repos, la planche garde les couleurs d'origine (style inline), sauf le gastre (ses tergites, sternites, pygidium et hypopygium)
   passé au même gris que le propodéum (`#d6d6d6`) à la demande de l'utilisateur. `AntPlate` pose `data-state`
   (`rest | sel | ok | ko | done | off`) et `data-hover`, et `global.css` les colore avec `!important`.
 - Ajouts au dessin d'origine : une grille hexagonale d'ommatidies dans l'œil (découpée par `clipPath`, sans
   `pointer-events`) et une marge de 6 unités dans le `viewBox` pour que l'antenne gauche ne soit pas rognée.
 - Structures fondues : sur cette vue d'ensemble, tête (avec lobe frontal, clypéus et œil), antennes, mésosoma (pronotum,
-  mésonotum, mésopleure, propodéum) et pattes (coxa à griffes) ne sont chacune qu'une structure (`tete`, `antenne`,
-  `mesosoma`, `patte`) qui ouvre sa planche détaillée. Le spiracle propodéal y reste dessiné, en décor. Les tracés
+  mésonotum, mésopleure, propodéum), gastre (tergites, sternites, pygidium, hypopygium, aiguillon) et pattes (coxa à
+  griffes) ne sont chacune qu'une structure (`tete`, `antenne`, `mesosoma`, `gastre`, `patte`) qui ouvre sa planche
+  détaillée ; le pétiole reste une structure et ouvre la planche du gastre. Le spiracle propodéal y reste dessiné, en décor. Les tracés
   d'origine (griffes doublées par-dessus le tarse, zones de clic élargies des éperons et griffes) portent tous
   `data-part="patte"`.
 - Petites structures : un tracé transparent à contour épais (`stroke:transparent`) avec le même
@@ -213,7 +213,7 @@ dans les deux surfaces qu'elle sépare.
 figure 530 de Bolton (1994) (CC BY-NC 4.0). Même méthode que le mésosoma : points relevés sur la figure (image de
 785 × 787), frontières partagées entre surfaces, silhouette grise dessous.
 - Structures : pétiole, processus subpétiolaire, helcium, tergites (A3 à A6), sternites (A3 à A6), présclérite,
-  étranglement annulaire, spiracles abdominaux (pétiole, A3, A4), pygidium, hypopygium, aiguillon.
+  étranglement annulaire, spiracles (« Spiracles » : pétiole, A3, A4), pygidium, hypopygium, aiguillon.
 - Présclérite : emprunt à la figure 531. Le bord postérieur de l'A3 est reculé pour mettre à nu, devant
   l'étranglement annulaire, le présclérite de l'A4 (tergal et sternal), rempli du motif pointillé `gastre-pointille`.
 - Helcium et étranglement annulaire (bandes tergale et sternale) : surfaces hachurées, hachures en décor.
@@ -254,7 +254,7 @@ fémur presque horizontal, tibia descendant, tarse étalé vers l'avant ; articl
   terminologie plus récente et plus stricte (sulcus/suture, lobe torulaire, aire supraclypéale…), citée dans les
   définitions quand elle diffère de Bolton. Noms de genres et d'espèces entre astérisques (`*Eciton*`) dans les données : `Rich`
   les rend en italique. Le dessin n'a qu'un pétiole
-  (pas de postpétiole) ; le gastre est découpé en tergites, sternites, pygidium, hypopygium et aiguillon.
+  (pas de postpétiole) ; sur la planche du gastre, il est découpé en tergites, sternites, pygidium, hypopygium et aiguillon.
   Sur l'aile, les cellules submarginales et subdiscoïdales sont numérotées de la base vers l'apex.
 
 ## Accessibilité

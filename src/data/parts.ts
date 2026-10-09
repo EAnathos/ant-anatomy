@@ -243,7 +243,7 @@ const TERMS_FR: Term[] = [
   { id: 'ocelles', name: 'Ocelles', definition: 'Petits yeux simples sur le dessus de la tête, au nombre de trois. Toujours présents chez les mâles et les reines, ils manquent chez la plupart des ouvrières mais existent dans certains groupes, surtout chez les Formicinae.', synonyms: [], variants: ['ocelle'] },
   { id: 'arolium', name: 'Arolium', definition: 'Petite pelote adhésive membraneuse du prétarse, entre les griffes. Bien développée chez certaines fourmis, notamment arboricoles, elle est vestigiale ou absente chez d’autres.', synonyms: [], variants: ['arolia'] },
   { id: 'suture', name: 'Suture', definition: 'Ligne de jonction entre deux sclérites. Au sens strict (Keller 2011), sillon né de la soudure de deux sclérites autrefois distincts, par opposition à une articulation, qui reste mobile.', synonyms: [], variants: ['sutures'] },
-  { id: 'spiracles-abdominaux', name: 'Spiracles abdominaux', definition: 'Orifices respiratoires des segments de l’abdomen, une paire par segment. Le premier est le spiracle propodéal ; ceux du pétiole et des premiers segments du gastre s’ouvrent sur les côtés, ceux des segments 5 à 7 sont en général cachés sous le bord du tergite précédent.', synonyms: ['stigmates abdominaux'], variants: ['spiracle abdominal', 'spiracles', 'spiracle', 'stigmates', 'stigmate'] },
+  { id: 'spiracles-abdominaux', name: 'Spiracle', definition: 'Orifice respiratoire sur le côté d’un segment, un de chaque côté. Sur l’abdomen, le premier est le spiracle propodéal ; ceux du pétiole et des premiers segments du gastre s’ouvrent sur les côtés, ceux des segments 5 à 7 sont en général cachés sous le bord du tergite précédent.', synonyms: ['stigmate'], variants: ['spiracles', 'stigmates', 'spiracle abdominal', 'spiracles abdominaux'] },
   { id: 'sulcus', name: 'Sillon', definition: 'Rainure externe de la cuticule qui correspond à une crête interne. On le distingue d’une suture, qui sépare deux sclérites soudés, et d’une ligne, simple marque sans repli interne (Keller 2011).', synonyms: ['sulcus'], variants: ['sulci'] },
 ];
 
@@ -251,8 +251,7 @@ const TERMS_FR: Term[] = [
 // Un même terme peut figurer sur plusieurs planches (une fois par planche).
 const LAYOUT: Record<RegionId, TermId[]> = {
   ouvriere: [
-    'tete', 'mandibule', 'antenne', 'mesosoma', 'petiole',
-    'tergite', 'sternite', 'pygidium', 'hypopygium', 'aiguillon', 'patte',
+    'tete', 'mandibule', 'antenne', 'mesosoma', 'petiole', 'gastre', 'patte',
   ],
   tete: [
     'bord-occipital', 'coins-occipitaux', 'ocelles', 'oeil', 'ommatidies', 'gena', 'scrobe', 'carene-frontale', 'lobe',
@@ -298,6 +297,7 @@ const PLATE_NAMES_FR: Partial<Record<PlateId, Partial<Record<TermId, string>>>> 
   mandibule: { mandibule: 'Mandibule', denticule: 'Denticules' },
   antenne: { massue: 'Massue' },
   mesosoma: { coxa: 'Coxas' },
+  gastre: { 'spiracles-abdominaux': 'Spiracles' },
 };
 
 // Planche détaillée d'une structure : depuis la vue d'ensemble (l'ouvrière), un lien ouvre la planche dédiée.
@@ -307,11 +307,7 @@ const DETAIL_PLATES: Partial<Record<TermId, PlateId>> = {
   antenne: 'antenne',
   mesosoma: 'mesosoma',
   petiole: 'gastre',
-  tergite: 'gastre',
-  sternite: 'gastre',
-  pygidium: 'gastre',
-  hypopygium: 'gastre',
-  aiguillon: 'gastre',
+  gastre: 'gastre',
   patte: 'patte',
 };
 
