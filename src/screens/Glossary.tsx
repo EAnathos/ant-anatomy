@@ -13,6 +13,7 @@ const T = t(
     sourceAfter: ', pour le corps, complétées par Keller (2011), ',
     sourceEnd: '.',
     notOnPlate: 'Pas encore sur une planche',
+    quiz: 'Quiz : relier mots et définitions',
     search: 'Chercher un terme',
     placeholder: 'Nom ou synonyme',
     synonyms: 'Synonymes : ',
@@ -28,6 +29,7 @@ const T = t(
     sourceAfter: ', for the body, supplemented by Keller (2011), ',
     sourceEnd: '.',
     notOnPlate: 'Not on a plate yet',
+    quiz: 'Quiz: match words and definitions',
     search: 'Search a term',
     placeholder: 'Name or synonym',
     synonyms: 'Synonyms: ',
@@ -48,7 +50,12 @@ const letterOf = (p: Term) => normalize(p.name, true).charAt(0).toUpperCase();
 const matches = (p: Term, query: string) =>
   [p.name, ...p.synonyms].some((s) => normalize(s, true).includes(query));
 
-export function Glossary({ onShowPart }: { onShowPart: (plate: PlateId, id: PartId) => void }) {
+interface GlossaryProps {
+  onShowPart: (plate: PlateId, id: PartId) => void;
+  onStartMatch: () => void;
+}
+
+export function Glossary({ onShowPart, onStartMatch }: GlossaryProps) {
   const [query, setQuery] = useState('');
   const q = normalize(query, true);
   const found = q ? SORTED.filter((p) => matches(p, q)) : SORTED;
@@ -72,16 +79,21 @@ export function Glossary({ onShowPart }: { onShowPart: (plate: PlateId, id: Part
           <em>A phylogenetic analysis of ant morphology</em>
           {T.sourceEnd}
         </p>
-        <label className="glossary__search">
-          <span className="sr-only">{T.search}</span>
-          <input
-            type="search"
-            className="field"
-            value={query}
-            placeholder={T.placeholder}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </label>
+        <div className="glossary__tools">
+          <label className="glossary__search">
+            <span className="sr-only">{T.search}</span>
+            <input
+              type="search"
+              className="field"
+              value={query}
+              placeholder={T.placeholder}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </label>
+          <button type="button" className="btn btn--secondary" onClick={onStartMatch}>
+            {T.quiz} <ArrowIcon />
+          </button>
+        </div>
         <p className="sr-only" aria-live="polite">
           {q ? T.count(found.length) : ''}
         </p>

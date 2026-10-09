@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { Footer } from './components/Footer';
 import { Header, type NavTarget } from './components/Header';
-import { partIn, regionsOf, type PartId, type PlateId } from './data/parts';
-import { GLOSSARY_HASH, isGlossaryHash } from './i18n';
+import { Launch } from './components/Launch';
+import { PLATE_BY_ID, partIn, regionsOf, type PartId, type PlateId } from './data/parts';
+import { GLOSSARY_HASH, isGlossaryHash, t } from './i18n';
 import { buildQuestions, playableParts, shuffle, type Answer, type Settings } from './lib/session';
 import { FindMode } from './screens/FindMode';
 import { Glossary } from './screens/Glossary';
 import { Home } from './screens/Home';
+import { MatchMode, matchPool, type MatchSource } from './screens/MatchMode';
 import { NameMode } from './screens/NameMode';
 import { Results } from './screens/Results';
 
@@ -15,6 +17,7 @@ type Screen =
   | { name: 'glossary' }
   | { name: 'find'; questions: PartId[]; run: number }
   | { name: 'name'; run: number }
+  | { name: 'match'; run: number }
   | { name: 'results'; log: Answer[]; durationMs: number };
 
 const DEFAULT_SETTINGS: Settings = {
@@ -24,10 +27,25 @@ const DEFAULT_SETTINGS: Settings = {
   ignoreAccents: true,
 };
 
+const T = t(
+  { find: 'Trouver', name: 'Nommer', match: 'Relier', glossary: 'Tout le glossaire' },
+  { find: 'Find', name: 'Name', match: 'Match', glossary: 'The whole glossary' },
+);
+
+type GameScreen = 'find' | 'name' | 'match';
+
 export function App() {
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [screen, setScreen] = useState<Screen>(() => (isGlossaryHash(location.hash) ? { name: 'glossary' } : { name: 'home' }));
   const [run, setRun] = useState(0);
+  const [matchSource, setMatchSource] = useState<MatchSource>('plate');
+  /** Écran de lancement affiché avant de monter le jeu. */
+  const [launching, setLaunching] = useState<{ title: string; subtitle: ReactNode } | null>(null);
+  /** Le jeu et le pied de page sont montés quand l'écran de lancement commence à s'effacer. */
+  const [revealed, setRevealed] = useState(true);
+  const revealGame = useCallback(() => setRevealed(true), []);
+  const endLaunch = useCallback(() => setLaunching(null), []);
+  const hidden = launching !== null && !revealed;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -49,21 +67,46 @@ export function App() {
 
   const canPlay = playableParts(settings).length > 0;
 
+  const plateLabel = (plate: PlateId) => {
+    const p = PLATE_BY_ID[plate];
+    return (
+      <>
+        {p.subject} · <em>{p.taxon}</em>
+        {p.sp ? ' sp.' : ''}
+      </>
+    );
+  };
+
+  const launch = (game: GameScreen, subtitle: ReactNode = plateLabel(settings.plate)) => {
+    setLaunching({ title: T[game], subtitle });
+    setRevealed(false);
+    setRun((r) => r + 1);
+  };
+
   const startFind = (questions: PartId[] = buildQuestions(settings)) => {
     if (questions.length === 0) return setScreen({ name: 'home' });
-    setRun((r) => r + 1);
+    launch('find');
     setScreen({ name: 'find', questions, run: run + 1 });
   };
 
   const startName = () => {
     if (!canPlay) return setScreen({ name: 'home' });
-    setRun((r) => r + 1);
+    launch('name');
     setScreen({ name: 'name', run: run + 1 });
+  };
+
+  // Relier : les structures de la planche, ou tout le glossaire s'il y en a trop peu (ou si on vient du glossaire).
+  const startMatch = (source: MatchSource = matchSource) => {
+    const usable = source === 'plate' && matchPool(settings, 'plate').length >= 2 ? 'plate' : 'glossary';
+    setMatchSource(usable);
+    launch('match', usable === 'plate' ? plateLabel(settings.plate) : T.glossary);
+    setScreen({ name: 'match', run: run + 1 });
   };
 
   const navigate = (target: NavTarget) => {
     if (target === 'find') startFind();
     else if (target === 'name') startName();
+    else if (target === 'match') startMatch();
     else if (target === 'glossary') setScreen({ name: 'glossary' });
     else setScreen({ name: 'home' });
   };
@@ -77,7 +120,7 @@ export function App() {
     setScreen({ name: 'home', selected: id });
   };
 
-  const current: NavTarget | null = screen.name === 'find' || screen.name === 'name' || screen.name === 'glossary' ? screen.name : null;
+  const current: NavTarget | null = screen.name === 'home' || screen.name === 'results' ? null : screen.name;
 
   return (
     <>
@@ -85,9 +128,17 @@ export function App() {
         <Header current={current} onNavigate={navigate} />
       </div>
       {screen.name === 'home' && (
-        <Home initialSelected={screen.selected} settings={settings} onSettingsChange={setSettings} onStartFind={() => startFind()} onStartName={startName} />
+        <Home
+          initialSelected={screen.selected}
+          settings={settings}
+          onSettingsChange={setSettings}
+          onStartFind={() => startFind()}
+          onStartName={startName}
+          onStartMatch={() => startMatch('plate')}
+        />
       )}
-      {screen.name === 'find' && (
+      {launching && <Launch title={launching.title} subtitle={launching.subtitle} onReveal={revealGame} onDone={endLaunch} />}
+      {!hidden && screen.name === 'find' && (
         <FindMode
           key={screen.run}
           plate={settings.plate}
@@ -95,8 +146,11 @@ export function App() {
           onFinish={(log, durationMs) => setScreen({ name: 'results', log, durationMs })}
         />
       )}
-      {screen.name === 'glossary' && <Glossary onShowPart={showPart} />}
-      {screen.name === 'name' && <NameMode key={screen.run} settings={settings} />}
+      {screen.name === 'glossary' && <Glossary onShowPart={showPart} onStartMatch={() => startMatch('glossary')} />}
+      {!hidden && screen.name === 'name' && <NameMode key={screen.run} settings={settings} />}
+      {!hidden && screen.name === 'match' && (
+        <MatchMode key={screen.run} settings={settings} source={matchSource} onSourceChange={setMatchSource} />
+      )}
       {screen.name === 'results' && (
         <Results
           plate={settings.plate}
@@ -107,9 +161,12 @@ export function App() {
           onHome={() => setScreen({ name: 'home' })}
         />
       )}
-      <div className="container">
-        <Footer onGlossary={() => navigate('glossary')} />
-      </div>
+      {/* Remonté à chaque écran pour entrer en fondu avec lui, plutôt que d'apparaître avant. */}
+      {!hidden && (
+        <div key={'run' in screen ? `${screen.name}-${screen.run}` : screen.name} className="container page-footer">
+          <Footer onGlossary={() => navigate('glossary')} />
+        </div>
+      )}
     </>
   );
 }

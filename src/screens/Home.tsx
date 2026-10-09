@@ -14,6 +14,7 @@ interface HomeProps {
   onSettingsChange: (settings: Settings) => void;
   onStartFind: () => void;
   onStartName: () => void;
+  onStartMatch: () => void;
 }
 
 /** `regions` : régions de la planche cochées dans les paramètres (toutes si aucune). */
@@ -142,6 +143,8 @@ const T = t(
     acceptedAccents: 'Accents, majuscules et synonymes courants sont acceptés.',
     accepted: 'Majuscules et synonymes courants sont acceptés.',
     start: 'Commencer',
+    match: 'Relier',
+    matchText: 'Des mots et des définitions mélangés. Relie chaque mot à la sienne, par séries de cinq, avec les structures de la planche ou tout le glossaire.',
   },
   {
     plate: 'Plate',
@@ -157,10 +160,12 @@ const T = t(
     acceptedAccents: 'Accents, capitals and common synonyms are accepted.',
     accepted: 'Capitals and common synonyms are accepted.',
     start: 'Start',
+    match: 'Match',
+    matchText: 'Words and definitions, shuffled. Match each word to its own, five at a time, with the structures of the plate or the whole glossary.',
   },
 );
 
-export function Home({ initialSelected, settings, onSettingsChange, onStartFind, onStartName }: HomeProps) {
+export function Home({ initialSelected, settings, onSettingsChange, onStartFind, onStartName, onStartMatch }: HomeProps) {
   const [selected, setSelected] = useState<PartId | null>(initialSelected ?? null);
   const [labels, setLabels] = useState(false);
   const part = selected ? partIn(settings.plate, selected) : null;
@@ -267,6 +272,13 @@ export function Home({ initialSelected, settings, onSettingsChange, onStartFind,
               {T.nameText} {settings.ignoreAccents ? T.acceptedAccents : T.accepted}
             </p>
             <button type="button" className="btn btn--primary" onClick={onStartName} disabled={!canPlay}>
+              {T.start} <ArrowIcon />
+            </button>
+          </article>
+          <article className="card mode-card">
+            <h3>{T.match}</h3>
+            <p>{T.matchText}</p>
+            <button type="button" className="btn btn--primary" onClick={onStartMatch}>
               {T.start} <ArrowIcon />
             </button>
           </article>

@@ -1,8 +1,9 @@
 # CLAUDE.md
 
 Atlas anatomique interactif de la fourmi, avec deux planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
-(vue latérale) et aile antérieure de reine d'*Odontomachus* sp. Deux modes de jeu :
-**Trouver** (un nom est donné, on clique la structure) et **Nommer** (on clique une structure, on tape son nom).
+(vue latérale) et aile antérieure de reine d'*Odontomachus* sp. Trois modes de jeu :
+**Trouver** (un nom est donné, on clique la structure), **Nommer** (on clique une structure, on tape son nom) et
+**Relier** (associer des mots à leur définition, par séries de 5, avec les structures de la planche ou tout le glossaire).
 Interface bilingue : français sur `/`, anglais sur `/en/`.
 
 ## Commandes
@@ -39,7 +40,10 @@ la CI (`.github/workflows/ci.yml`) est déployé automatiquement par la CD (`.gi
 ## Stack
 
 React 19 + TypeScript (strict) + Vite. CSS natif, sans framework ni CSS-in-JS. Pas de routeur :
-la navigation est un état `Screen` dans `src/App.tsx`.
+la navigation est un état `Screen` dans `src/App.tsx`. Chaque écran entre en fondu avec le pied de page (`#root > main`,
+`.page-footer`, remonté à chaque écran) ; une partie commence par l'écran de lancement `Launch` (nom du mode, barre
+ambre), le jeu et le pied de page n'étant montés qu'au début de son effacement, pour que le chronomètre parte au bon
+moment. Animations coupées si `prefers-reduced-motion`.
 
 ## Structure
 
@@ -58,8 +62,9 @@ la navigation est un état `Screen` dans `src/App.tsx`.
 - `src/lib/answers.ts` : normalisation et validation des réponses tapées.
 - `src/lib/session.ts` : réglages (dont la planche choisie), tirage des questions, bilan (score, série, erreurs).
 - `src/components/AntPlate.tsx` : planche interactive (clic, clavier, états visuels).
-- `src/screens/` : `Home`, `FindMode`, `NameMode`, `Results`, `Glossary` (tous les termes du dictionnaire par ordre
-  alphabétique, avec définition, synonymes, recherche et lien « voir sur la planche » ; adresse `#glossaire` /
+- `src/screens/` : `Home`, `FindMode`, `NameMode`, `MatchMode` (Relier ; le terme est masqué dans sa définition par
+  `maskTerm` de `src/lib/quiz.ts`), `Results`, `Glossary` (tous les termes du dictionnaire par ordre
+  alphabétique, avec définition, synonymes, recherche et lien « voir sur la planche » et bouton Quiz qui lance Relier sur tout le glossaire ; adresse `#glossaire` /
   `#glossary`, liens dans l'en-tête et le pied de page).
 - `index.html` : balises d'aperçu des liens (Open Graph, Twitter) pointant vers `public/og.png` (1200×630, les deux planches
   et le titre aux polices de la charte). Régénérer l'image si les planches ou le concept changent.

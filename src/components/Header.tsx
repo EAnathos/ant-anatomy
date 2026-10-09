@@ -1,6 +1,6 @@
 import { GLOSSARY_HASH, GLOSSARY_HASHES, LANG, LANG_URLS, rememberLang, t, type Lang } from '../i18n';
 
-export type NavTarget = 'home' | 'find' | 'name' | 'glossary';
+export type NavTarget = 'home' | 'find' | 'name' | 'match' | 'glossary';
 
 interface HeaderProps {
   current: NavTarget | null;
@@ -8,8 +8,8 @@ interface HeaderProps {
 }
 
 const T = t(
-  { modes: 'Navigation', find: 'Trouver', name: 'Nommer', glossary: 'Glossaire', language: 'Langue' },
-  { modes: 'Navigation', find: 'Find', name: 'Name', glossary: 'Glossary', language: 'Language' },
+  { modes: 'Navigation', find: 'Trouver', name: 'Nommer', match: 'Relier', glossary: 'Glossaire', language: 'Langue' },
+  { modes: 'Navigation', find: 'Find', name: 'Name', match: 'Match', glossary: 'Glossary', language: 'Language' },
 );
 
 const LANGS: { id: Lang; short: string; label: string }[] = [
@@ -40,6 +40,14 @@ export function Header({ current, onNavigate }: HeaderProps) {
             onClick={() => onNavigate('name')}
           >
             {T.name}
+          </button>
+          <button
+            type="button"
+            className="nav-link"
+            aria-current={current === 'match' ? 'page' : undefined}
+            onClick={() => onNavigate('match')}
+          >
+            {T.match}
           </button>
           <a
             href={GLOSSARY_HASH}

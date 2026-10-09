@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { PLATES, TERM_BY_ID, partIn, partsFor, partsOf, regionsOf, termsFor } from '../data/parts';
 import { isCorrectName, normalize } from './answers';
+import { maskTerm, pickPairs } from './quiz';
 import { buildQuestions, formatDuration, shuffle, summarize } from './session';
 
 describe('normalize', () => {
@@ -103,6 +104,23 @@ describe('dictionnaire', () => {
 
   it('rattache chaque région à la planche de ses structures', () => {
     for (const p of partsFor('fr')) expect(regionsOf(p.plate).map((r) => r.id), p.id).toContain(p.region);
+  });
+});
+
+describe('quiz du glossaire', () => {
+  it('tire des termes distincts', () => {
+    const picked = pickPairs(termsFor('fr'), 5);
+    expect(new Set(picked.map((t) => t.id)).size).toBe(5);
+  });
+
+  it('masque le terme dans sa définition, au singulier comme au pluriel', () => {
+    const term = { ...TERM_BY_ID.tibia, name: 'Tibias', definition: 'Le tibia porte un éperon ; les tibias sont longs.' };
+    expect(maskTerm(term)).toBe('Le … porte un éperon ; les … sont longs.');
+  });
+
+  it('ne masque pas un mot qui contient le terme', () => {
+    const term = { ...TERM_BY_ID.tibia, definition: 'Voir la métatibia.' };
+    expect(maskTerm(term)).toBe('Voir la métatibia.');
   });
 });
 
