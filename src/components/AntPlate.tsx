@@ -1,10 +1,6 @@
-import { useEffect, useLayoutEffect, useRef, type KeyboardEvent, type MouseEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent } from 'react';
 import antSvg from '../assets/ant.svg?raw';
-import antennaSvg from '../assets/antenna.svg?raw';
-import headSvg from '../assets/head.svg?raw';
-import mandibleSvg from '../assets/mandible.svg?raw';
-import wingSvg from '../assets/wing.svg?raw';
-import { partsOf, type PartId, type PlateId } from '../data/parts';
+import { PLATES, partsOf, type PartId, type PlateId } from '../data/parts';
 import { t } from '../i18n';
 import { clearLabels, drawLabels } from '../lib/plateLabels';
 
@@ -33,13 +29,39 @@ const LABELS = t<Record<PlateId, string>>(
 
 const withLabel = (svg: string, label: string) => svg.replace(/aria-label="[^"]*"/, `aria-label="${label}"`);
 
-const SVG_BY_PLATE: Record<PlateId, string> = {
-  ouvriere: withLabel(antSvg, LABELS.ouvriere),
-  aile: withLabel(wingSvg, LABELS.aile),
-  tete: withLabel(headSvg, LABELS.tete),
-  mandibule: withLabel(mandibleSvg, LABELS.mandibule),
-  antenne: withLabel(antennaSvg, LABELS.antenne),
+// Dessins chargés à la demande, chacun dans son propre fichier, pour garder le code principal léger. Seule
+// l'ouvrière, affichée à l'arrivée, est incluse d'office : pas de cadre vide au premier affichage.
+const LOADERS: Record<Exclude<PlateId, 'ouvriere'>, () => Promise<{ default: string }>> = {
+  aile: () => import('../assets/wing.svg?raw'),
+  tete: () => import('../assets/head.svg?raw'),
+  mandibule: () => import('../assets/mandible.svg?raw'),
+  antenne: () => import('../assets/antenna.svg?raw'),
 };
+
+const SVG_CACHE = new Map<PlateId, string>([['ouvriere', withLabel(antSvg, LABELS.ouvriere)]]);
+const PENDING = new Map<PlateId, Promise<string>>();
+
+function loadPlate(plate: PlateId): Promise<string> {
+  const cached = SVG_CACHE.get(plate);
+  if (cached) return Promise.resolve(cached);
+  if (plate === 'ouvriere') return Promise.resolve(withLabel(antSvg, LABELS.ouvriere));
+  let pending = PENDING.get(plate);
+  if (!pending) {
+    pending = LOADERS[plate]().then((m) => {
+      const svg = withLabel(m.default, LABELS[plate]);
+      SVG_CACHE.set(plate, svg);
+      return svg;
+    });
+    PENDING.set(plate, pending);
+  }
+  return pending;
+}
+
+// Les autres planches sont préchargées dès que le navigateur est libre : changer de planche reste instantané.
+if (typeof window !== 'undefined') {
+  const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1500));
+  idle(() => PLATES.forEach((p) => void loadPlate(p.id).catch(() => undefined)));
+}
 
 const EMPTY_MARKS: Marks = {};
 const EMPTY_LOCKED: readonly PartId[] = [];
@@ -55,6 +77,17 @@ const partOf = (target: EventTarget | null): PartId | null => {
 export function AntPlate({ plate, marks = EMPTY_MARKS, onPick, locked = EMPTY_LOCKED, labels = false }: AntPlateProps) {
   const ref = useRef<HTMLDivElement>(null);
   const interactive = Boolean(onPick);
+  // Dessin de la planche, chargé si besoin ; en attendant, le cadre reste vide (sa taille ne change pas).
+  const [loaded, setLoaded] = useState<{ plate: PlateId; svg: string } | null>(null);
+  const svg = SVG_CACHE.get(plate) ?? (loaded?.plate === plate ? loaded.svg : null);
+  useEffect(() => {
+    if (SVG_CACHE.has(plate)) return;
+    let live = true;
+    loadPlate(plate).then((s) => live && setLoaded({ plate, svg: s }));
+    return () => {
+      live = false;
+    };
+  }, [plate]);
   const isPickable = (id: PartId) => marks[id] !== 'off' && !locked.includes(id);
 
   const elements = () => Array.from(ref.current?.querySelectorAll<SVGElement>('[data-part]') ?? []);
@@ -106,7 +139,7 @@ export function AntPlate({ plate, marks = EMPTY_MARKS, onPick, locked = EMPTY_LO
     });
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [plate, labels, selected]);
+  }, [plate, labels, selected, svg]);
 
   const highlight = (id: PartId | null) => {
     const active = interactive && id !== null && isPickable(id) ? id : null;
@@ -135,7 +168,8 @@ export function AntPlate({ plate, marks = EMPTY_MARKS, onPick, locked = EMPTY_LO
       onMouseLeave={() => highlight(null)}
       onFocus={(e) => highlight(partOf(e.target))}
       onBlur={() => highlight(null)}
-      dangerouslySetInnerHTML={{ __html: SVG_BY_PLATE[plate] }}
+      aria-busy={svg === null}
+      dangerouslySetInnerHTML={{ __html: svg ?? '' }}
     />
   );
 }

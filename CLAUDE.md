@@ -50,7 +50,9 @@ moment. Animations coupées si `prefers-reduced-motion`.
 - `src/assets/ant.svg` (ouvrière), `src/assets/wing.svg` (aile) et `src/assets/head.svg` (tête), `src/assets/mandible.svg` (mandibule), `src/assets/antenna.svg`
   (antenne) :
   **sources uniques des dessins**. Importés en `?raw`
-  et injectés par `AntPlate` selon la planche (`PlateId`).
+  et injectés par `AntPlate` selon la planche (`PlateId`). L'ouvrière est incluse dans le code principal (planche affichée
+  à l'arrivée) ; les autres sont chargées à la demande (`import()` dans `LOADERS`, un fichier par dessin) et
+  préchargées quand le navigateur est libre. Ajouter une planche = ajouter son chargeur dans `LOADERS`.
 - `src/i18n.ts` : langue de la page (`LANG`, lue dans `<html lang>`), helper `t(fr, en)`, URLs des langues.
 - `src/data/parts.en.ts` : traduction anglaise des planches, régions et termes (`Record` par id).
 - `src/data/parts.ts` : source unique des données, en deux couches. Pas d'abréviations : elles varient d'un auteur à
