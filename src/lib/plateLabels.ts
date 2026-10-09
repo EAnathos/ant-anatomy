@@ -37,29 +37,75 @@ const isVisibleFill = (el: SVGGraphicsElement) => {
   return fill !== 'none' && fill !== 'transparent' && fill !== 'rgba(0, 0, 0, 0)';
 };
 
-/** Un point à l'intérieur de la surface, le plus près possible du centre de sa boîte. */
-function insidePoint(svg: SVGSVGElement, el: SVGGeometryElement, clip: SVGGeometryElement | null) {
-  const b = el.getBBox();
-  const inside = (x: number, y: number) => {
-    if (!el.isPointInFill(new DOMPoint(x, y))) return false;
-    if (!clip) return true;
-    const p = toRoot(svg, el, x, y);
-    return clip.isPointInFill(new DOMPoint(p.x, p.y));
+/** Matrice du repère d'un élément vers celui d'un autre élément du même SVG. */
+function between(from: SVGGraphicsElement, to: SVGGraphicsElement) {
+  return (to.getScreenCTM() ?? new DOMMatrix()).inverse().multiply(from.getScreenCTM() ?? new DOMMatrix());
+}
+
+/** Surfaces peintes dessinées après `el` (donc par-dessus) qui chevauchent sa boîte : elles peuvent le cacher. */
+function coverersOf(svg: SVGSVGElement, el: SVGGeometryElement) {
+  const id = el.getAttribute('data-part');
+  const box = el.getBBox();
+  const toSvg = between(el, svg);
+  const corners = [
+    [box.x, box.y], [box.x + box.width, box.y], [box.x, box.y + box.height], [box.x + box.width, box.y + box.height],
+  ].map(([x, y]) => new DOMPoint(x, y).matrixTransform(toSvg));
+  const r = {
+    x0: Math.min(...corners.map((c) => c.x)), x1: Math.max(...corners.map((c) => c.x)),
+    y0: Math.min(...corners.map((c) => c.y)), y1: Math.max(...corners.map((c) => c.y)),
   };
-  const cx = b.x + b.width / 2;
-  const cy = b.y + b.height / 2;
-  if (inside(cx, cy)) return toRoot(svg, el, cx, cy);
-  let best: { x: number; y: number; d: number } | null = null;
-  const n = 12;
-  for (let i = 0; i <= n; i++) {
-    for (let j = 0; j <= n; j++) {
-      const x = b.x + (b.width * i) / n;
-      const y = b.y + (b.height * j) / n;
-      const d = (x - cx) ** 2 + (y - cy) ** 2;
-      if ((!best || d < best.d) && inside(x, y)) best = { x, y, d };
+  return Array.from(svg.querySelectorAll<SVGGeometryElement>('path, ellipse, circle, rect, polygon')).filter((other) => {
+    if (other === el || other.closest(`.${LAYER}`) || other.getAttribute('data-part') === id) return false;
+    if (other.classList.contains('nerv-hit') || !isVisibleFill(other)) return false;
+    if (!(el.compareDocumentPosition(other) & Node.DOCUMENT_POSITION_FOLLOWING)) return false;
+    const b = other.getBBox();
+    const m = between(other, svg);
+    const pts = [[b.x, b.y], [b.x + b.width, b.y + b.height], [b.x + b.width, b.y], [b.x, b.y + b.height]].map(([x, y]) =>
+      new DOMPoint(x, y).matrixTransform(m),
+    );
+    return Math.max(...pts.map((p) => p.x)) >= r.x0 && Math.min(...pts.map((p) => p.x)) <= r.x1 &&
+      Math.max(...pts.map((p) => p.y)) >= r.y0 && Math.min(...pts.map((p) => p.y)) <= r.y1;
+  });
+}
+
+/** Un point au cœur de la partie visible de la surface : parmi les points d'une grille qui tombent dans son
+ *  remplissage sans être recouverts par une structure dessinée par-dessus (la tête passe sous l'œil et le clypéus, un
+ *  tarse sous une autre patte), celui qui est le plus loin de tout bord. Le centre de la boîte englobante ne suffit pas
+ *  (contre la base d'une dent), ni le barycentre (dans l'œil, pour la tête qui l'entoure). */
+function insidePoint(svg: SVGSVGElement, el: SVGGeometryElement, clip: SVGGeometryElement | null): { p: DOMPoint; area: number } {
+  const b = el.getBBox();
+  const covers = coverersOf(svg, el).map((other) => ({ other, m: between(el, other) }));
+  const visible = (x: number, y: number) => {
+    if (!el.isPointInFill(new DOMPoint(x, y))) return false;
+    if (clip) {
+      const p = toRoot(svg, el, x, y);
+      if (!clip.isPointInFill(new DOMPoint(p.x, p.y))) return false;
+    }
+    return !covers.some(({ other, m }) => other.isPointInFill(new DOMPoint(x, y).matrixTransform(m)));
+  };
+  // Grille sur la boîte : points visibles et points cachés ou hors de la forme (dont un cadre tout autour).
+  const n = 24;
+  const shown: { x: number; y: number }[] = [];
+  const hidden: { x: number; y: number }[] = [];
+  for (let i = -1; i <= n; i++) {
+    for (let j = -1; j <= n; j++) {
+      const x = b.x + (b.width * (i + 0.5)) / n;
+      const y = b.y + (b.height * (j + 0.5)) / n;
+      const border = i < 0 || j < 0 || i === n || j === n;
+      (!border && visible(x, y) ? shown : hidden).push({ x, y });
     }
   }
-  return best ? toRoot(svg, el, best.x, best.y) : toRoot(svg, el, cx, cy);
+  if (shown.length === 0) return { p: toRoot(svg, el, b.x + b.width / 2, b.y + b.height / 2), area: 0 };
+  const area = (shown.length * b.width * b.height) / (n * n);
+  // Le point visible le plus loin de tout point caché : au cœur de la partie visible, même quand elle forme un
+  // croissant (la tête autour de l'œil). À distance égale, le plus proche du barycentre.
+  const cx = shown.reduce((sum, p) => sum + p.x, 0) / shown.length;
+  const cy = shown.reduce((sum, p) => sum + p.y, 0) / shown.length;
+  const depth = (p: { x: number; y: number }) => Math.min(...hidden.map((h) => (h.x - p.x) ** 2 + (h.y - p.y) ** 2));
+  const best = shown
+    .map((p) => ({ p, d: depth(p), c: (p.x - cx) ** 2 + (p.y - cy) ** 2 }))
+    .reduce((a, q) => (q.d > a.d * 1.0001 || (Math.abs(q.d - a.d) <= a.d * 0.0001 && q.c < a.c) ? q : a));
+  return { p: toRoot(svg, el, best.p.x, best.p.y), area };
 }
 
 /** Étendue d'une structure longue (bord masticateur) : segment invisible du SVG (`data-extent-for`), affiché en
@@ -94,16 +140,12 @@ function anchorOf(svg: SVGSVGElement, id: string, clip: SVGGeometryElement | nul
   const els = Array.from(svg.querySelectorAll<SVGGeometryElement>(`[data-part="${CSS.escape(id)}"]`)).filter(
     (el) => !el.classList.contains('nerv-hit') && !el.classList.contains('nerv-halo'),
   );
-  // Surfaces : la plus grande. Nervures et bords (traits) : le milieu du plus long cœur.
+  // Surfaces : la plus visible. Nervures et bords (traits) : le milieu du plus long cœur.
   const surfaces = els.filter((el) => !el.classList.contains('nerv') && isVisibleFill(el));
   if (surfaces.length > 0) {
-    const area = (el: SVGGeometryElement) => {
-      const b = el.getBBox();
-      return b.width * b.height;
-    };
-    const el = surfaces.reduce((a, b) => (area(b) > area(a) ? b : a));
-    const p = insidePoint(svg, el, clip);
-    return { id, x: p.x, y: p.y };
+    // Plusieurs tracés (six pattes) : celui dont la partie visible est la plus grande.
+    const best = surfaces.map((el) => insidePoint(svg, el, clip)).reduce((a, b) => (b.area > a.area ? b : a));
+    return { id, x: best.p.x, y: best.p.y };
   }
   const cores = els.filter((el) => el.classList.contains('nerv-core'));
   if (cores.length === 0) {
@@ -133,6 +175,8 @@ function spread(ys: number[], gap: number, top: number, bottom: number) {
  *  de `names`, et la liste numérotée s'affiche sous la planche (`.plate-legend` dans Home). */
 export const COMPACT_LABELS = '(max-width: 640px)';
 
+const ANCHORS = new WeakMap<SVGSVGElement, Map<string, Anchor | null>>();
+
 export function drawLabels(svg: SVGSVGElement, names: Record<string, string>, selected: string | null) {
   clearLabels(svg);
   const base = baseBox(svg);
@@ -143,10 +187,16 @@ export function drawLabels(svg: SVGSVGElement, names: Record<string, string>, se
   );
   // Une structure avec une étendue est repérée au milieu de son accolade, pas sur un point du dessin.
   const extents = extentsOf(svg);
+  // Les points ne dépendent que du dessin (repère du viewBox), pas de la taille à l'écran : calculés une fois par
+  // SVG, ils servent aux redessins suivants (redimensionnement, changement de sélection).
+  let cache = ANCHORS.get(svg);
+  if (!cache) ANCHORS.set(svg, (cache = new Map()));
   const anchors = ids
     .map((id): Anchor | null => {
       const e = extents.get(id);
-      return e ? { id, x: (e.a.x + e.b.x) / 2, y: (e.a.y + e.b.y) / 2 } : anchorOf(svg, id, clip);
+      if (e) return { id, x: (e.a.x + e.b.x) / 2, y: (e.a.y + e.b.y) / 2 };
+      if (!cache.has(id)) cache.set(id, anchorOf(svg, id, clip));
+      return cache.get(id) ?? null;
     })
     .filter((a): a is Anchor => a !== null);
   const visibleExtents = [...extents.values()].filter((e) => ids.includes(e.id));
