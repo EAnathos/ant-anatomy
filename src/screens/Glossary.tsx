@@ -13,7 +13,6 @@ const T = t(
     source: 'Définitions d’après Bolton (1994), ',
     sourceAfter: ', pour le corps, complétées par Keller (2011), ',
     sourceEnd: '.',
-    notOnPlate: 'Pas encore sur une planche',
     quiz: 'Quiz : relier mots et définitions',
     search: 'Chercher un terme',
     placeholder: 'Nom ou synonyme',
@@ -29,7 +28,6 @@ const T = t(
     source: 'Definitions follow Bolton (1994), ',
     sourceAfter: ', for the body, supplemented by Keller (2011), ',
     sourceEnd: '.',
-    notOnPlate: 'Not on a plate yet',
     quiz: 'Quiz: match words and definitions',
     search: 'Search a term',
     placeholder: 'Name or synonym',
@@ -123,19 +121,20 @@ export function Glossary({ onShowPart, onStartMatch }: GlossaryProps) {
                       {synonyms.join(', ')}
                     </dd>
                   )}
-                  <dd className="glossary__refs">
-                    {placements.length === 0 && <span className="glossary__off">{T.notOnPlate}</span>}
-                    {placements.map(({ plate: id }) => {
-                      const plate = PLATE_BY_ID[id];
-                      return (
-                        <button key={id} type="button" className="plate-ref" onClick={() => onShowPart(id, p.id)} title={T.show}>
-                          <span className="sr-only">{T.plate}</span>
-                          <PlateName plate={plate} />
-                          <ArrowIcon size={14} />
-                        </button>
-                      );
-                    })}
-                  </dd>
+                  {placements.length > 0 && (
+                    <dd className="glossary__refs">
+                      {placements.map(({ plate: id }) => {
+                        const plate = PLATE_BY_ID[id];
+                        return (
+                          <button key={id} type="button" className="plate-ref" onClick={() => onShowPart(id, p.id)} title={T.show}>
+                            <span className="sr-only">{T.plate}</span>
+                            <PlateName plate={plate} />
+                            <ArrowIcon size={14} />
+                          </button>
+                        );
+                      })}
+                    </dd>
+                  )}
                 </div>
               );
             })}

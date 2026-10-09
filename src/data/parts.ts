@@ -23,7 +23,7 @@ export type TermId =
   | 'secteur-radial' | 'rs-plus-m' | 'rs-2-3' | 'rs-4-5' | 'rs-m'
   | 'media-1' | 'media-2' | 'media-3' | 'media-4' | 'm-plus-cu' | 'm-cu'
   | 'cubitus-1' | 'cubitus-2' | 'cubitus-3' | 'cu-a' | 'anale-1' | 'anale-2'
-  // Termes du glossaire de Bolton (1994) qui ne figurent sur aucune planche pour l'instant.
+  // Termes du glossaire de Bolton (1994), placés sur les planches détaillées ou au glossaire seulement.
   | 'oeil' | 'gena' | 'bord-occipital' | 'coins-occipitaux' | 'carene-frontale' | 'triangle-frontal'
   | 'suture-fronto-clypeale' | 'clypeus-median' | 'clypeus-lateral' | 'torulus' | 'fossette-antennaire' | 'scrobe'
   | 'fossette-tentoriale' | 'carene-nucale' | 'labre' | 'palpes-maxillaires' | 'palpes-labiaux' | 'hypostome'
@@ -166,7 +166,7 @@ const TERMS_FR: Term[] = [
   { id: 'anale-1', name: 'Anale 1', definition: 'Nervure anale, près du bord postérieur, de la base jusqu’à la transverse cu-a.', synonyms: [], variants: ['a1', 'anal', 'anal 1', 'nervure anale', 'nervure anale 1'] },
   { id: 'anale-2', name: 'Anale 2', definition: 'Prolongement de la nervure anale au-delà de la transverse cu-a, vers l’apex.', synonyms: [], variants: ['a2', 'anal 2', 'nervure anale 2'] },
 
-  // Termes du glossaire de Bolton (1994) qui ne figurent sur aucune planche pour l'instant (glossaire seulement).
+  // Termes du glossaire de Bolton (1994) : planches détaillées, ou glossaire seulement pour ceux absents de LAYOUT.
   { id: 'oeil', name: 'Œil composé', definition: 'Organe de la vue, sur le côté de la tête, formé de quelques centaines d’ommatidies à quelques-unes seulement. Il manque chez les ouvrières de certains genres ; chez d’autres (*Eciton*, *Simopelta*), les facettes sont fondues en une seule cornée convexe.', synonyms: [], variants: ['œil', 'yeux', 'yeux composés'] },
   { id: 'gena', name: 'Gena', definition: 'Zone de la face de la tête limitée en avant par le bord postérieur du clypéus, en arrière par le bord antérieur de l’œil et vers le milieu par la fossette antennaire. Elle couvre une partie du dessus et du côté de la tête, entre l’œil et le clypéus.', synonyms: ['joue'], variants: ['genae', 'joues'] },
   { id: 'bord-occipital', name: 'Bord occipital', definition: 'Bord postérieur transverse de la tête en vue de face. Le terme est impropre, l’occiput commençant en général plus en arrière, mais reste d’usage courant.', synonyms: ['marge occipitale', 'bord postérieur de la tête'] },

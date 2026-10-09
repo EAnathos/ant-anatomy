@@ -1310,14 +1310,6 @@ main.container {
 @media (prefers-reduced-motion: reduce) {
   .plate-focus { animation: none; }
 }
-
-.glossary__off {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font-size: 14px;
-  color: var(--slate);
-}
 .plate-ref:hover { background: var(--mist); }
 
 /* Relier : mots et définitions à associer */
