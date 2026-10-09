@@ -248,7 +248,7 @@ const TERMS_FR: Term[] = [
 // Un même terme peut figurer sur plusieurs planches (une fois par planche).
 const LAYOUT: Record<RegionId, TermId[]> = {
   ouvriere: [
-    'tete', 'mandibule', 'antenne', 'pronotum', 'mesonotum', 'mesopleure', 'propodeum', 'spiracle', 'petiole',
+    'tete', 'mandibule', 'antenne', 'mesosoma', 'petiole',
     'tergite', 'sternite', 'pygidium', 'hypopygium', 'aiguillon', 'patte',
   ],
   tete: [
@@ -298,11 +298,7 @@ const DETAIL_PLATES: Partial<Record<TermId, PlateId>> = {
   tete: 'tete',
   mandibule: 'mandibule',
   antenne: 'antenne',
-  pronotum: 'mesosoma',
-  mesonotum: 'mesosoma',
-  mesopleure: 'mesosoma',
-  propodeum: 'mesosoma',
-  spiracle: 'mesosoma',
+  mesosoma: 'mesosoma',
   patte: 'patte',
 };
 

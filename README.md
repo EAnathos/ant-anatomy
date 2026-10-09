@@ -21,11 +21,10 @@ sur des planches interactives. Six planches au choix :
 
 ## Fonctionnalités
 
-- **Planches interactives** : 15 structures sur l'ouvrière (sur les deux antennes et les six pattes), 16 sur la tête,
+- **Planches interactives** : 11 structures sur l'ouvrière (sur les deux antennes et les six pattes), 16 sur la tête,
   11 sur la mandibule, 6 sur l'antenne, 15 sur le mésosoma, 10 sur la patte, et sur l'aile 2 régions au choix : cellules (10 cellules et le
   ptérostigma) et nervures (22).
-  La tête, les mandibules, les antennes, les pattes et les sclérites du mésosoma de l'ouvrière ouvrent leur planche
-  détaillée.
+  La tête, les mandibules, les antennes, le mésosoma et les pattes de l'ouvrière ouvrent leur planche détaillée.
   Un clic sur l'accueil affiche le nom et une définition.
 - **Mode Trouver** : un nom s'affiche, il faut cliquer la bonne structure. Indice de région sur l'aile, correction immédiate,
   progression et bilan détaillé (score, précision, durée, meilleure série), avec la possibilité de rejouer ses erreurs.
