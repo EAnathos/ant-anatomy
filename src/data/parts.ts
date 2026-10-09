@@ -250,8 +250,8 @@ const LAYOUT: Record<RegionId, TermId[]> = {
     'tergite', 'sternite', 'pygidium', 'hypopygium', 'aiguillon', 'patte',
   ],
   tete: [
-    'bord-occipital', 'coins-occipitaux', 'oeil', 'ommatidies', 'gena', 'scrobe', 'carene-frontale', 'lobe',
-    'triangle-frontal', 'clypeus-median', 'clypeus-lateral', 'suture-fronto-clypeale', 'fossette-tentoriale',
+    'bord-occipital', 'coins-occipitaux', 'ocelles', 'oeil', 'ommatidies', 'gena', 'scrobe', 'carene-frontale', 'lobe',
+    'triangle-frontal', 'clypeus', 'clypeus-median', 'clypeus-lateral', 'suture-fronto-clypeale', 'fossette-tentoriale',
     'sillon-paraoculo-clypeal', 'torulus', 'fossette-antennaire',
   ],
   mandibule: [

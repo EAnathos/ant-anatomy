@@ -156,9 +156,11 @@ puis coudé à la verticale, bord externe presque droit avec un dernier tronçon
 `head.svg` : deux têtes d'ouvrière de face, sans mandibules ni antennes, dessin composite d'EAnathos d'après les
 figures 523 à 526 de Bolton (1994) (CC BY-NC 4.0). Formes décrites pour la moitié droite puis reflétées.
 - A (gauche) : tête entière, lobes frontaux qui cachent l'insertion antennaire (dessinés en dernier), longues carènes
-  frontales, scrobes en pointillés, bord occipital et coins occipitaux.
+  frontales, scrobes en pointillés, bord occipital et coins occipitaux, trois ocelles sur le vertex (emprunt à la reine,
+  la vue étant composite), clypéus en parties médiane et latérales.
 - B (droite) : moitié antérieure (`clipPath` et pointillé de coupe), sans lobes frontaux : torulus (anneau),
-  fossette antennaire, fossette tentoriale antérieure, sillon paraoculo-clypéal, carènes courtes.
+  fossette antennaire, fossette tentoriale antérieure, sillon paraoculo-clypéal, carènes courtes, clypéus entier (une
+  seule surface `clypeus`, sans partage en parties).
 - Le fond de la tête est un décor : pas de structure
   « Tête » sur cette planche. Les structures des deux têtes (yeux, genas, clypéus…) forment une seule structure, au
   pluriel sur cette planche (`PLATE_NAMES_*`).
