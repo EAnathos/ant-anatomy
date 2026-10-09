@@ -259,7 +259,7 @@ const LAYOUT: Record<RegionId, TermId[]> = {
     'dent-apicale', 'dent-preapicale', 'denticule', 'dent-prebasale', 'dent-basale', 'diasteme',
   ],
   antenne: ['bulbe-condylaire', 'col-bulbe', 'scape', 'pedicelle', 'funicule', 'massue'],
-  patte: ['coxa', 'trochanter', 'femur', 'tibia', 'eperon', 'strigile', 'basitarse', 'tarse', 'pretarse', 'griffe', 'arolium'],
+  patte: ['coxa', 'trochanter', 'femur', 'tibia', 'eperon', 'basitarse', 'tarse', 'pretarse', 'griffe', 'arolium'],
   cellules: [
     'pterostigma', 'costale', 'marginale', 'submarginale-1', 'submarginale-2', 'submarginale-3',
     'discoidale', 'subdiscoidale-1', 'subdiscoidale-2', 'basale', 'subbasale',

@@ -185,12 +185,10 @@ massue de 3 dont le dernier en ogive). Base : bulbe condylaire et col du bulbe.
 
 `leg.svg` : patte postérieure d'ouvrière, vue latérale, dessin composite d'EAnathos (CC BY-NC 4.0). Coxa en haut,
 fémur presque horizontal, tibia descendant, tarse étalé vers l'avant ; articles dessinés de l'extrémité vers la base.
-- Structures : coxa, trochanter, fémur, tibia, éperons, strigile, basitarse, tarse (articles 2 à 4), prétarse, griffes,
+- Structures : coxa, trochanter, fémur, tibia, éperons, basitarse, tarse (articles 2 à 4), prétarse, griffes,
   arolium. Accolade `data-extent-for="tarse"` du basitarse au prétarse.
 - Deux éperons à l'apex du tibia, sur sa face inférieure, sous le tarse : le grand en lame courbe pectinée (peigne
   sur le bord intérieur), le petit simple. Base enfoncée dans le tibia, éperons et peigne dessinés avant le tarse.
-- Strigile : emprunté à la patte antérieure (dessin composite). Encoche concave à la base du basitarse, face inférieure,
-  en face du peigne du grand éperon, bordée de soies fines ; surface transparente colorée à la sélection.
 - Griffes en crochet recourbées vers le bas, arolium entre elles ; zones de clic élargies pour griffes et éperons.
 - Sur l'ouvrière, toutes les parties des six pattes sont fondues dans `patte` (« Pattes »), qui ouvre cette planche.
 
