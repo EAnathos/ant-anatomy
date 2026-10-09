@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { AntPlate, type Marks } from '../components/AntPlate';
 import { CheckIcon, CrossIcon, CursorIcon, ReplayIcon } from '../components/icons';
 import { Legend } from '../components/Legend';
+import { Rich } from '../components/Rich';
 import { PLATE_BY_ID, partIn, partsOf, type PartId } from '../data/parts';
 import { isCorrectName } from '../lib/answers';
 import { t } from '../i18n';
@@ -208,7 +209,7 @@ export function NameMode({ settings }: { settings: Settings }) {
           {part && verdict === 'ok' && (
             <div className="verdict verdict--ok">
               <div className="verdict__title"><CheckIcon size={20} /> {T.exact(part.name)}</div>
-              <p>{part.definition}</p>
+              <p><Rich text={part.definition} /></p>
               <button type="button" className="btn btn--ghost" onClick={clear}>{T.another}</button>
             </div>
           )}
@@ -219,7 +220,7 @@ export function NameMode({ settings }: { settings: Settings }) {
                 {typed ? T.youWrote(typed) : ''}
                 {T.expected}<strong>{part.name}</strong><br />{T.staysRed}
               </p>
-              <p className="verdict__def">{part.definition}</p>
+              <p className="verdict__def"><Rich text={part.definition} /></p>
               <button type="button" className="btn btn--ghost" onClick={clear}>{T.another}</button>
             </div>
           )}

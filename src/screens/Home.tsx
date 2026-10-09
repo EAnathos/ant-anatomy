@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { AntPlate } from '../components/AntPlate';
 import { ArrowIcon, DiceIcon, MagnifierIcon } from '../components/icons';
+import { Rich } from '../components/Rich';
 import { SettingsPanel } from '../components/SettingsPanel';
 import { PLATES, REGION_BY_ID, partsInRegions, partsOf, regionsOf, partIn, type PartId, type PlateId, type RegionId } from '../data/parts';
 import { t } from '../i18n';
@@ -34,8 +35,8 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       lead: () => `${WORKER_COUNT} structures anatomiques, du scape à l’aiguillon. Repère-les sur la planche, puis nomme-les sans aide.`,
       note: (
         <>
-          La planche représente une ouvrière de <em>Neoponera verenae</em>, une <em>Ponerinae</em>. D’une fourmi à l’autre, l’anatomie varie : certaines structures manquent, comme
-          l’aiguillon chez les <em>Formicinae</em>, et d’autres s’ajoutent, comme le postpétiole chez les <em>Myrmicinae</em>.
+          La planche représente une ouvrière de <em>Neoponera verenae</em>, une Ponerinae. D’une fourmi à l’autre, l’anatomie varie : certaines structures manquent, comme
+          l’aiguillon chez les Formicinae, et d’autres s’ajoutent, comme le postpétiole chez les Myrmicinae.
         </>
       ),
       credit: (
@@ -61,7 +62,7 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         }. Repère-les sur la planche, puis nomme-les sans aide.`,
       note: (
         <>
-          La planche représente l’aile antérieure d’une reine d’<em>Odontomachus</em> sp., une autre <em>Ponerinae</em> que l’ouvrière de la première planche. La nervation
+          La planche représente l’aile antérieure d’une reine d’<em>Odontomachus</em> sp., une autre Ponerinae que l’ouvrière de la première planche. La nervation
           n’est pas la même chez toutes les fourmis : selon les genres, des nervures disparaissent et des cellules fusionnent ou restent ouvertes, et les ailes des mâles diffèrent souvent
           de celles des reines. Les ouvrières, elles, n’ont jamais d’ailes.
         </>
@@ -83,8 +84,8 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       lead: () => `${WORKER_COUNT} anatomical structures, from scape to sting. Find them on the plate, then name them unaided.`,
       note: (
         <>
-          The plate shows a worker of <em>Neoponera verenae</em>, a member of the <em>Ponerinae</em>. Anatomy varies from one ant to another: some structures are missing, such as
-          the sting in <em>Formicinae</em>, and others are added, such as the postpetiole in <em>Myrmicinae</em>.
+          The plate shows a worker of <em>Neoponera verenae</em>, a member of the Ponerinae. Anatomy varies from one ant to another: some structures are missing, such as
+          the sting in Formicinae, and others are added, such as the postpetiole in Myrmicinae.
         </>
       ),
       credit: (
@@ -109,7 +110,7 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         }. Find them on the plate, then name them unaided.`,
       note: (
         <>
-          The plate shows the forewing of an <em>Odontomachus</em> sp. queen, a different <em>Ponerinae</em> from the worker on the first plate. Venation is not the same in every
+          The plate shows the forewing of an <em>Odontomachus</em> sp. queen, a different Ponerinae from the worker on the first plate. Venation is not the same in every
           ant: depending on the genus, veins disappear and cells merge or stay open, and the wings of males often differ from those of queens. Workers never have wings.
         </>
       ),
@@ -141,8 +142,6 @@ const T = t(
     acceptedAccents: 'Accents, majuscules et synonymes courants sont acceptés.',
     accepted: 'Majuscules et synonymes courants sont acceptés.',
     start: 'Commencer',
-    abbr: 'Abréviation',
-    abbrSr: 'Abréviation : ',
   },
   {
     plate: 'Plate',
@@ -158,8 +157,6 @@ const T = t(
     acceptedAccents: 'Accents, capitals and common synonyms are accepted.',
     accepted: 'Capitals and common synonyms are accepted.',
     start: 'Start',
-    abbr: 'Abbreviation',
-    abbrSr: 'Abbreviation: ',
   },
 );
 
@@ -230,15 +227,9 @@ export function Home({ initialSelected, settings, onSettingsChange, onStartFind,
               <>
                 <div className="plate__title">
                   <strong>{part.name}</strong>
-                  {part.abbr && (
-                    <span className="part-abbr" title={T.abbr}>
-                      <span className="sr-only">{T.abbrSr}</span>
-                      {part.abbr}
-                    </span>
-                  )}
                   <span className="eyebrow">{REGION_BY_ID[part.region].label}</span>
                 </div>
-                <span className="muted">{part.definition}</span>
+                <span className="muted"><Rich text={part.definition} /></span>
               </>
             ) : (
               <span className="muted">{T.pickHint}</span>

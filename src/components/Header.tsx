@@ -21,15 +21,7 @@ export function Header({ current, onNavigate }: HeaderProps) {
   return (
     <header className="site-header">
       <button type="button" className="brand" onClick={() => onNavigate('home')}>
-        {LANG === 'en' ? (
-          <>
-            <em>Formicidae</em> anatomy atlas
-          </>
-        ) : (
-          <>
-            Atlas anatomique <em>Formicidae</em>
-          </>
-        )}
+        {LANG === 'en' ? 'Formicidae anatomy atlas' : 'Atlas anatomique Formicidae'}
       </button>
       <div className="site-header__end">
         <nav aria-label={T.modes} className="site-nav">

@@ -47,10 +47,9 @@ la navigation est un état `Screen` dans `src/App.tsx`.
   et injectés par `AntPlate` selon la planche (`PlateId`).
 - `src/i18n.ts` : langue de la page (`LANG`, lue dans `<html lang>`), helper `t(fr, en)`, URLs des langues.
 - `src/data/parts.en.ts` : traduction anglaise des planches, régions et termes (`Record` par id).
-- `src/data/parts.ts` : source unique des données, en trois couches.
+- `src/data/parts.ts` : source unique des données, en deux couches. Pas d'abréviations : elles varient d'un auteur à
+  l'autre (Bolton, Keller, Snodgrass…).
   - `TERMS_FR` : dictionnaire des termes (nom, définition, synonymes), une entrée par terme, quelle que soit la planche.
-  - `ABBREVIATIONS` : abréviations, celles de Bolton (1994) quand il en donne, communes aux deux langues, uniques par
-    planche, affichées dans la légende de l'accueil et le glossaire, mais pas acceptées comme réponses.
   - `REGIONS_FR` (chaque région rattachée à une planche) et `LAYOUT` (termes de chaque région, dans l'ordre de la
     légende). Un terme peut figurer sur plusieurs planches, une fois par planche, ou sur aucune (glossaire
     seulement : termes de Bolton en attente d'une planche) ; le glossaire le liste une seule fois avec un lien par planche. Une structure (`Part`) = un terme placé dans une région ; `PartId` = `TermId`, donc
@@ -60,7 +59,7 @@ la navigation est un état `Screen` dans `src/App.tsx`.
 - `src/lib/session.ts` : réglages (dont la planche choisie), tirage des questions, bilan (score, série, erreurs).
 - `src/components/AntPlate.tsx` : planche interactive (clic, clavier, états visuels).
 - `src/screens/` : `Home`, `FindMode`, `NameMode`, `Results`, `Glossary` (tous les termes du dictionnaire par ordre
-  alphabétique, avec abréviation, synonymes, recherche et lien « voir sur la planche » ; adresse `#glossaire` /
+  alphabétique, avec définition, synonymes, recherche et lien « voir sur la planche » ; adresse `#glossaire` /
   `#glossary`, liens dans l'en-tête et le pied de page).
 - `index.html` : balises d'aperçu des liens (Open Graph, Twitter) pointant vers `public/og.png` (1200×630, les deux planches
   et le titre aux polices de la charte). Régénérer l'image si les planches ou le concept changent.
@@ -118,10 +117,14 @@ collisions une fois injectés dans la page.
 
 - Textes d'interface en français (tutoiement) et en anglais.
 - **Pas de tiret cadratin (—) dans les textes**, dans les deux langues : utiliser un point, une virgule, deux-points ou « · » selon le contexte.
-- Noms de taxons en italique (*Formicidae*, *Myrmicinae*).
+- Italique pour les genres et les espèces seulement (*Eciton*, *Neoponera verenae*, *Odontomachus* sp.) ; les rangs
+  au-dessus du genre (sous-famille, tribu, famille, ordre : Ponerinae, Dacetini, Formicidae, Hymenoptera) restent en romain.
 - Les définitions doivent rester exactes du point de vue myrmécologique. Référence pour le corps : le glossaire de
   Bolton (1994, *Identification Guide to the Ant Genera of the World*, p. 191-201), à paraphraser, jamais recopier ;
-  il ne couvre pas l'aile. Le dessin n'a qu'un pétiole
+  il ne couvre pas l'aile. Complément : Keller (2011, *A phylogenetic analysis of ant morphology*, Bull. AMNH 355),
+  terminologie plus récente et plus stricte (sulcus/suture, lobe torulaire, aire supraclypéale…), citée dans les
+  définitions quand elle diffère de Bolton. Noms de genres et d'espèces entre astérisques (`*Eciton*`) dans les données : `Rich`
+  les rend en italique. Le dessin n'a qu'un pétiole
   (pas de postpétiole) ; le gastre est découpé en tergites, sternites, pygidium et aiguillon.
   Sur l'aile, les cellules submarginales et subdiscoïdales sont numérotées de la base vers l'apex.
 

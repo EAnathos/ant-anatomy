@@ -118,10 +118,6 @@ main.container {
   letter-spacing: -0.015em;
 }
 
-.brand em {
-  font-weight: 500;
-}
-
 .site-nav {
   display: flex;
   flex-wrap: wrap;
@@ -307,16 +303,6 @@ main.container {
 .plate__title strong {
   font-size: 19px;
   font-weight: 600;
-  color: var(--prusse);
-}
-
-/* Abréviation d'une structure (légende de l'accueil, glossaire) */
-.part-abbr {
-  padding: 2px 10px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
-  font-size: 13px;
   color: var(--prusse);
 }
 

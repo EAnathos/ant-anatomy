@@ -1,8 +1,8 @@
 import { GLOSSARY_HASH, t } from '../i18n';
 
 const T = t(
-  { glossary: 'Glossaire', glossaryText: ' : tous les termes, leurs abréviations et leurs synonymes.', before: 'Pour en apprendre davantage : ', after: ' sur AntWiki.' },
-  { glossary: 'Glossary', glossaryText: ': every term, with its abbreviation and synonyms.', before: 'To learn more: ', after: ' on AntWiki.' },
+  { glossary: 'Glossaire', glossaryText: ' : tous les termes, avec leur définition et leurs synonymes.', before: 'Pour en apprendre davantage : ', after: ' sur AntWiki.' },
+  { glossary: 'Glossary', glossaryText: ': every term, with its definition and synonyms.', before: 'To learn more: ', after: ' on AntWiki.' },
 );
 
 // Les crédits des planches sont sur l'accueil, sous le texte de la planche choisie.

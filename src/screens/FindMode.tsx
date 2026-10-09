@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { AntPlate, type Marks } from '../components/AntPlate';
 import { ArrowIcon, BulbIcon, CheckIcon, CrossIcon } from '../components/icons';
 import { Legend } from '../components/Legend';
+import { Rich } from '../components/Rich';
 import { REGION_BY_ID, partIn, type PartId, type PlateId } from '../data/parts';
 import { t } from '../i18n';
 import type { Answer } from '../lib/session';
@@ -119,13 +120,13 @@ export function FindMode({ plate, questions, onFinish }: FindModeProps) {
           {answered && correct && (
             <div className="verdict verdict--ok">
               <div className="verdict__title"><CheckIcon size={20} /> {T.right}</div>
-              <p>{part.definition}</p>
+              <p><Rich text={part.definition} /></p>
             </div>
           )}
           {answered && !correct && picked && (
             <div className="verdict verdict--ko">
               <div className="verdict__title"><CrossIcon size={20} /> {T.wrong(partIn(plate, picked).name)}</div>
-              <p>{T.shownInGreen} {part.definition}</p>
+              <p>{T.shownInGreen} <Rich text={part.definition} /></p>
             </div>
           )}
         </div>

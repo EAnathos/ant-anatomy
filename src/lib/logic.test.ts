@@ -84,14 +84,6 @@ describe('noms sans ambiguïté', () => {
   });
 });
 
-describe('abréviations', () => {
-  it.each(PLATES.map((p) => p.id))('%s : uniques et identiques dans les deux langues', (plate) => {
-    const abbrs = partsOf(plate).flatMap((p) => (p.abbr ? [p.abbr.toLowerCase()] : []));
-    expect(new Set(abbrs).size).toBe(abbrs.length);
-    for (const t of termsFor('en')) expect(t.abbr, t.id).toBe(TERM_BY_ID[t.id].abbr);
-  });
-});
-
 describe('dictionnaire', () => {
   it.each(['fr', 'en'] as const)('%s : aucun nom partagé par deux termes du glossaire', (lang) => {
     const seen = new Map<string, string>();

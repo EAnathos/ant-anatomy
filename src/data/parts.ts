@@ -35,7 +35,8 @@ export type TermId =
   | 'processus-metasternal' | 'fossette-endophragmale' | 'angles-humeraux' | 'abdomen' | 'metasoma' | 'gastre'
   | 'taille' | 'postpetiole' | 'helcium' | 'pedoncule' | 'processus-subpetiolaire' | 'presclerite' | 'hypopygium'
   | 'acidopore' | 'constriction' | 'appareil-stridulatoire' | 'basitarse' | 'pretarse' | 'strigile' | 'soie'
-  | 'pubescence' | 'psammophore';
+  | 'pubescence' | 'psammophore' | 'lobe-torulaire' | 'sillon-paraoculo-clypeal' | 'ocelles' | 'arolium' | 'suture'
+  | 'sulcus';
 
 /** Structure d'une planche : identifiée par son terme (`data-part` du SVG), unique au sein d'une planche. */
 export type PartId = TermId;
@@ -63,8 +64,6 @@ export interface Term {
   name: string;
   definition: string;
   synonyms: string[];
-  /** Abréviation des figures de morphologie, identique dans les deux langues. Absente si l'usage n'en fixe pas. */
-  abbr?: string;
 }
 
 /** Un terme placé sur une planche, dans une région. */
@@ -91,17 +90,17 @@ const REGIONS_FR: Region[] = [
   { id: 'nervures', label: 'Nervures', plate: 'aile' },
 ];
 
-const TERMS_FR: Omit<Term, 'abbr'>[] = [
+const TERMS_FR: Term[] = [
   { id: 'tete', name: 'Tête', definition: 'Capsule céphalique portant les yeux, les antennes et les pièces buccales.', synonyms: ['capsule céphalique'] },
   { id: 'ommatidies', name: 'Ommatidies', definition: 'Unités optiques en forme de facettes hexagonales qui, réunies, forment l’œil composé.', synonyms: ['ommatidie', 'ommatidium', 'ommatidia', 'facettes'] },
-  { id: 'lobe', name: 'Lobe frontal', definition: 'Expansion antérieure, en forme de lobe, de la carène frontale, qui recouvre en partie ou en totalité l’insertion de l’antenne (fossette antennaire et torulus).', synonyms: ['lobe', 'lobes frontaux'] },
+  { id: 'lobe', name: 'Lobe frontal', definition: 'Expansion dorsolatérale de l’avant de la carène frontale, qui recouvre en partie ou en totalité l’insertion de l’antenne (torulus et fossette antennaire). Keller (2011) réserve ce nom à cette seule structure : chez beaucoup de Ponerinae, le grand lobe ainsi nommé est en réalité un lobe torulaire.', synonyms: ['lobe', 'lobes frontaux'] },
   { id: 'clypeus', name: 'Clypéus', definition: 'Sclérite antérieur de la face dorsale de la tête, limité en arrière par la suture fronto-clypéale. Son bord antérieur forme en général le bord antérieur de la tête, au-dessus des mandibules. Il se compose d’une partie médiane et de deux parties latérales.', synonyms: [] },
   { id: 'mandibule', name: 'Mandibules', definition: 'Pièces buccales paires avec lesquelles la fourmi saisit, coupe et transporte. Leur forme et leur denture, très variables, comptent beaucoup en taxonomie.', synonyms: [] },
   { id: 'scape', name: 'Scapes', definition: 'Premier article de l’antenne, allongé, articulé à la tête dans la fossette antennaire par un bulbe condylaire.', synonyms: [] },
   { id: 'funicule', name: 'Funicules', definition: 'Ensemble des articles de l’antenne situés après le scape : de 3 à 11 selon les genres, qui portent l’antenne à 4 à 12 articles. Les derniers peuvent former une massue.', synonyms: ['funiculus', 'funiculi', 'flagelle'] },
   { id: 'pronotum', name: 'Pronotum', definition: 'Tergite du prothorax (premier segment thoracique). Il couvre le dessus du segment et descend sur ses côtés, en cachant presque entièrement le propleure.', synonyms: [] },
   { id: 'mesonotum', name: 'Mésonotum', definition: 'Tergite du mésothorax (deuxième segment thoracique). Une suture promésonotale le sépare du pronotum, ou bien les deux sont soudés en un promésonotum.', synonyms: [] },
-  { id: 'mesopleure', name: 'Mésopleure', definition: 'Pleurite du mésothorax, sur le côté du mésosoma au-dessus de la coxa médiane. C’est le plus grand pleurite ; un sillon le divise parfois en anépisterne (en haut) et katépisterne (en bas).', synonyms: ['mésopleuron'] },
+  { id: 'mesopleure', name: 'Mésopleure', definition: 'Pleurite du mésothorax, sur le côté du mésosoma au-dessus de la coxa médiane. C’est le plus grand pleurite ; un sillon le divise parfois en anépisterne (en haut) et katépisterne (en bas). Keller (2011) l’appelle mésépisterne.', synonyms: ['mésopleuron', 'mésépisterne'] },
   { id: 'propodeum', name: 'Propodéum', definition: 'Tergite du premier segment abdominal, dont le sternite a disparu. Soudé au thorax, il forme l’arrière du mésosoma. Épinotum est un terme ancien, à éviter.', synonyms: ['épinotum'] },
   { id: 'spiracle', name: 'Spiracle propodéal', definition: 'Orifice respiratoire sur le côté du propodéum : morphologiquement le spiracle du premier segment abdominal, en général le plus grand du corps.', synonyms: ['spiracle', 'stigmate', 'stigmate propodéal'] },
   { id: 'petiole', name: 'Pétiole', definition: 'Deuxième segment abdominal, réduit et isolé entre le mésosoma et le gastre (ou le postpétiole quand il existe). Il prend le plus souvent la forme d’un nœud ou d’une écaille, et porte le deuxième spiracle abdominal.', synonyms: ['nœud du pétiole', 'nœud', 'nœud pétiolaire'] },
@@ -113,9 +112,9 @@ const TERMS_FR: Omit<Term, 'abbr'>[] = [
   { id: 'trochanter', name: 'Trochanters', definition: 'Deuxième article de la patte, petit, entre la coxa et le fémur.', synonyms: ['trochanter'] },
   { id: 'femur', name: 'Fémurs', definition: 'Troisième article de la patte, en général le plus long et robuste, séparé de la coxa par le seul trochanter.', synonyms: [] },
   { id: 'tibia', name: 'Tibias', definition: 'Quatrième article de la patte, long, entre le fémur et le tarse.', synonyms: [] },
-  { id: 'eperon', name: 'Éperons tibiaux', definition: 'Épine articulée à l’apex du tibia. Celui de la patte antérieure, pectiné, forme le strigile qui sert à nettoyer l’antenne ; les tibias médians et postérieurs en portent deux, un ou aucun.', synonyms: ['éperon tibial', 'éperon', 'calcar', 'calcars'] },
+  { id: 'eperon', name: 'Éperons tibiaux', definition: 'Épine articulée à l’apex du tibia. Celui de la patte antérieure, pectiné, appelé calcar, forme avec l’encoche du basitarse le strigile qui nettoie l’antenne ; les tibias médians et postérieurs en portent deux, un ou aucun.', synonyms: ['éperon tibial', 'éperon', 'calcar', 'calcars'] },
   { id: 'tarse', name: 'Tarses', definition: 'Extrémité de la patte, formée de cinq petits articles : le premier, articulé au tibia, est le basitarse, le dernier, le prétarse, porte les griffes.', synonyms: [] },
-  { id: 'griffe', name: 'Griffes', definition: 'Paire de crochets portée par le prétarse, dernier article du tarse. Simples le plus souvent, elles peuvent porter une dent préapicale ou être pectinées.', synonyms: ['ongle', 'ongles', 'griffe tarsale', 'griffes tarsales', 'griffe prétarsale', 'griffes prétarsales'] },
+  { id: 'griffe', name: 'Griffes', definition: 'Paire de crochets portée par le prétarse, dernier article du tarse, de part et d’autre de l’arolium. Simples le plus souvent, elles peuvent porter une dent préapicale, être pectinées ou armées d’épines à la base.', synonyms: ['ongle', 'ongles', 'griffe tarsale', 'griffes tarsales', 'griffe prétarsale', 'griffes prétarsales'] },
 
   { id: 'pterostigma', name: 'Ptérostigma', definition: 'Épaississement sclérifié et pigmenté du bord antérieur de l’aile antérieure, au bout de la cellule costale.', synonyms: ['stigma', 'ptérostigme'] },
   { id: 'costale', name: 'Cellule costale', definition: 'Cellule étroite qui longe le bord antérieur de l’aile, de la base jusqu’au ptérostigma.', synonyms: ['costale'] },
@@ -153,17 +152,17 @@ const TERMS_FR: Omit<Term, 'abbr'>[] = [
   { id: 'anale-2', name: 'Anale 2', definition: 'Prolongement de la nervure anale au-delà de la transverse cu-a, vers l’apex.', synonyms: ['a2', 'anal 2', 'nervure anale 2'] },
 
   // Termes du glossaire de Bolton (1994) qui ne figurent sur aucune planche pour l'instant (glossaire seulement).
-  { id: 'oeil', name: 'Œil composé', definition: 'Organe de la vue, sur le côté de la tête, formé d’ommatidies. Il est réduit, voire absent, chez les ouvrières de certains groupes.', synonyms: ['œil', 'yeux', 'yeux composés'] },
+  { id: 'oeil', name: 'Œil composé', definition: 'Organe de la vue, sur le côté de la tête, formé de quelques centaines d’ommatidies à quelques-unes seulement. Il manque chez les ouvrières de certains genres ; chez d’autres (*Eciton*, *Simopelta*), les facettes sont fondues en une seule cornée convexe.', synonyms: ['œil', 'yeux', 'yeux composés'] },
   { id: 'gena', name: 'Gena', definition: 'Zone de la face de la tête limitée en avant par le bord postérieur du clypéus, en arrière par le bord antérieur de l’œil et vers le milieu par la fossette antennaire. Elle couvre une partie du dessus et du côté de la tête, entre l’œil et le clypéus.', synonyms: ['genae', 'joue', 'joues'] },
   { id: 'bord-occipital', name: 'Bord occipital', definition: 'Bord postérieur transverse de la tête en vue de face. Le terme est impropre, l’occiput commençant en général plus en arrière, mais reste d’usage courant.', synonyms: ['marge occipitale', 'bord postérieur de la tête'] },
   { id: 'coins-occipitaux', name: 'Coins occipitaux', definition: 'Angles postérolatéraux de la tête en vue de face, arrondis à aigus, là où les côtés rejoignent le bord occipital.', synonyms: ['coin occipital', 'angles occipitaux'] },
   { id: 'carene-frontale', name: 'Carène frontale', definition: 'Chacune des deux crêtes longitudinales de la tête, en arrière du clypéus et entre les insertions antennaires. Très variables : courtes, ou prolongées jusqu’au bord occipital, parfois en bordure d’un scrobe, parfois vestigiales. Elles s’élargissent souvent vers l’avant en lobes frontaux.', synonyms: ['carènes frontales'] },
-  { id: 'triangle-frontal', name: 'Triangle frontal', definition: 'Petite aire triangulaire au milieu de la tête, juste en arrière du clypéus, entre les insertions antennaires ou l’avant des carènes frontales. Peu visible chez beaucoup de fourmis.', synonyms: [] },
-  { id: 'suture-fronto-clypeale', name: 'Suture fronto-clypéale', definition: 'Suture qui forme le bord postérieur du clypéus.', synonyms: ['bord postérieur du clypéus', 'suture frontoclypéale'] },
+  { id: 'triangle-frontal', name: 'Triangle frontal', definition: 'Aire impaire bien délimitée juste en arrière de la partie médiane du clypéus, entre les carènes frontales. Elle n’est triangulaire que si les insertions antennaires sont écartées : Keller (2011) l’appelle donc aire supraclypéale et la dit présente chez presque toutes les fourmis, là où Bolton (1994) la jugeait souvent peu visible.', synonyms: ['aire supraclypéale'] },
+  { id: 'suture-fronto-clypeale', name: 'Suture fronto-clypéale', definition: 'Ligne qui forme le bord postérieur du clypéus. Keller (2011) parle de sillon fronto-clypéal : c’est la partie médiane du sillon épistomal, entre les deux fossettes tentoriales antérieures, un sillon externe doublé d’une crête interne plutôt qu’une vraie suture.', synonyms: ['bord postérieur du clypéus', 'suture frontoclypéale', 'sillon fronto-clypéal', 'sillon épistomal'] },
   { id: 'clypeus-median', name: 'Partie médiane du clypéus', definition: 'Bouclier central du clypéus, entre ses deux parties latérales. Il peut porter des carènes longitudinales, et s’arrête devant les insertions antennaires ou s’avance entre elles.', synonyms: ['clypéus médian'] },
   { id: 'clypeus-lateral', name: 'Partie latérale du clypéus', definition: 'Chacune des deux bandes étroites du clypéus, de part et d’autre de sa partie médiane.', synonyms: ['parties latérales du clypéus', 'clypéus latéral'] },
-  { id: 'torulus', name: 'Torulus', definition: 'Petit sclérite en anneau qui entoure la fossette antennaire. Il est parfois relevé jusqu’à la verticale, sa partie interne formant alors un petit lobe, recouvert ou non par le lobe frontal.', synonyms: ['toruli', 'sclérite antennaire', 'sclérite torulaire'] },
-  { id: 'fossette-antennaire', name: 'Fossette antennaire', definition: 'Orifice en arrière du clypéus dans lequel s’articule le scape. Le torulus l’entoure et le lobe frontal peut la surplomber et la cacher.', synonyms: ['insertion antennaire', 'cavité antennaire'] },
+  { id: 'torulus', name: 'Torulus', definition: 'Petit sclérite en anneau qui entoure la fossette antennaire. Keller (2011) y distingue un arc médian, côté milieu de la tête, et un arc latéral ; l’arc médian peut s’étendre en lobe torulaire, recouvert ou non par le lobe frontal.', synonyms: ['toruli', 'sclérite antennaire', 'sclérite torulaire'] },
+  { id: 'fossette-antennaire', name: 'Fossette antennaire', definition: 'Orifice en arrière du clypéus dans lequel s’articule le scape. Keller (2011) y distingue l’acétabulum, cuvette où se loge le bulbe du scape, et le foramen qui s’ouvre au fond vers l’intérieur de la tête. Le torulus l’entoure et le lobe frontal peut la surplomber et la cacher.', synonyms: ['insertion antennaire', 'cavité antennaire', 'acétabulum antennaire'] },
   { id: 'scrobe', name: 'Scrobe antennaire', definition: 'Sillon, dépression ou excavation sur le côté de la tête, au-dessus ou au-dessous de l’œil, qui loge le scape et parfois toute l’antenne repliée. Absent chez la plupart des genres.', synonyms: ['scrobe', 'scrobes'] },
   { id: 'fossette-tentoriale', name: 'Fossette tentoriale antérieure', definition: 'Chacune des deux petites fossettes à l’avant de la face dorsale de la tête, sur le bord postérieur du clypéus ou tout près. Elles marquent l’attache des bras antérieurs du tentorium, le squelette interne de la tête.', synonyms: ['fossettes tentoriales', 'fossette tentoriale'] },
   { id: 'carene-nucale', name: 'Carène nucale', definition: 'Crête à l’arrière de la tête qui sépare ses faces dorsale et latérales de la face occipitale.', synonyms: [] },
@@ -171,7 +170,7 @@ const TERMS_FR: Omit<Term, 'abbr'>[] = [
   { id: 'palpes-maxillaires', name: 'Palpes maxillaires', definition: 'Palpes sensoriels articulés portés par les maxilles, de six articles au plus, souvent moins selon les groupes. Leur nombre d’articles est noté en premier dans la formule palpaire.', synonyms: ['palpe maxillaire'] },
   { id: 'palpes-labiaux', name: 'Palpes labiaux', definition: 'Paire de palpes sensoriels portés par le labium, de quatre articles au plus.', synonyms: ['palpe labial'] },
   { id: 'hypostome', name: 'Hypostome', definition: 'Région antéroventrale de la tête, juste en arrière de la cavité buccale dont elle forme le bord postérieur. Son bord antérieur peut porter des dents hypostomales.', synonyms: ['hypostoma'] },
-  { id: 'bulbe-condylaire', name: 'Bulbe condylaire', definition: 'Renflement en boule à la base du scape : c’est lui qui s’articule dans la fossette antennaire.', synonyms: ['bulbe articulaire'] },
+  { id: 'bulbe-condylaire', name: 'Bulbe condylaire', definition: 'Renflement en boule à la base du scape, relié à lui par un court col : c’est lui qui s’articule dans la fossette antennaire. Keller (2011) l’appelle bulbus.', synonyms: ['bulbe articulaire', 'bulbus'] },
   { id: 'massue', name: 'Massue antennaire', definition: 'Derniers articles du funicule, de un à quatre, nettement élargis.', synonyms: ['massue'] },
   { id: 'bord-masticateur', name: 'Bord masticateur', definition: 'Bord interne de la mandibule, le plus proche de l’axe de la tête quand les mandibules sont fermées. Il porte en général les dents.', synonyms: ['bord apical'] },
   { id: 'bord-basal', name: 'Bord basal', definition: 'Bord de la mandibule entre l’angle basal et la base, transverse ou oblique, le plus souvent sans dents. Il rejoint le bord masticateur par l’angle basal ou par une courbe.', synonyms: ['bord basal de la mandibule'] },
@@ -185,11 +184,11 @@ const TERMS_FR: Omit<Term, 'abbr'>[] = [
   { id: 'diasteme', name: 'Diastème', definition: 'Espace naturel dans la rangée de dents du bord masticateur, à ne pas confondre avec une dent cassée ou usée.', synonyms: ['diastèmes'] },
   { id: 'lamelle-basale', name: 'Lamelle basale', definition: 'Fine lame de cuticule sur le bord masticateur, en arrière des dents, chez de nombreuses Myrmicinae de la tribu des Dacetini.', synonyms: [] },
   { id: 'trulleum', name: 'Trulleum', definition: 'Dépression en cuvette près de la base de la mandibule, sur sa face dorsale, limitée du côté distal par le bord basal.', synonyms: [] },
-  { id: 'mesosoma', name: 'Mésosoma', definition: 'Deuxième tagme visible, après la tête : les trois segments du thorax (pro-, méso- et métathorax) et le propodéum qui leur est soudé. Bolton (1994) l’appelle alitrunk.', synonyms: ['alitrunk', 'alitronc'] },
+  { id: 'mesosoma', name: 'Mésosoma', definition: 'Deuxième tagme visible, après la tête : les trois segments du thorax (pro-, méso- et métathorax) et le propodéum qui leur est soudé. Bolton (1994) l’appelait alitrunk ; mésosoma, employé dans tous les Hyménoptères apocrites, est aujourd’hui le terme admis (Keller 2011).', synonyms: ['alitrunk', 'alitronc'] },
   { id: 'thorax', name: 'Thorax', definition: 'Les trois segments thoraciques au sens strict. Chez les fourmis, ils sont soudés au propodéum, et l’ensemble s’appelle mésosoma : parler de thorax pour ce tagme est impropre.', synonyms: [] },
   { id: 'promesonotum', name: 'Promésonotum', definition: 'Sclérite unique issu de la fusion du pronotum et du mésonotum, quand la suture promésonotale a disparu.', synonyms: [] },
-  { id: 'suture-promesonotale', name: 'Suture promésonotale', definition: 'Suture transverse sur le dessus du mésosoma, entre le pronotum et le mésonotum. Souple chez certains groupes, elle est souvent soudée, réduite à une ligne, voire absente.', synonyms: [] },
-  { id: 'sillon-metanotal', name: 'Sillon métanotal', definition: 'Sillon transverse entre le mésonotum et le propodéum : la dernière trace, sur le dessus du mésosoma, du métanotum (tergite du métathorax).', synonyms: ['métanotum', 'suture métanotale'] },
+  { id: 'suture-promesonotale', name: 'Suture promésonotale', definition: 'Jonction transverse sur le dessus du mésosoma, entre le pronotum et le mésonotum. Mobile chez certains groupes (une articulation, au sens strict), elle est souvent soudée en suture, réduite à une ligne, voire effacée.', synonyms: ['jonction promésonotale'] },
+  { id: 'sillon-metanotal', name: 'Sillon métanotal', definition: 'Sillon transverse entre le mésonotum et le propodéum. Chez l’ouvrière, le métanotum (tergite du métathorax) reste parfois une petite bande distincte ; le plus souvent il n’en subsiste que ce sillon, ou plus rien.', synonyms: ['métanotum', 'suture métanotale'] },
   { id: 'propleure', name: 'Propleure', definition: 'Pleurite du prothorax, petit, presque entièrement caché par le pronotum de profil mais bien visible en vue ventrale.', synonyms: ['propleuron'] },
   { id: 'metapleure', name: 'Métapleure', definition: 'Pleurite du métathorax, à l’arrière du côté du mésosoma, sous le niveau du propodéum. Il porte la glande métapleurale chez la plupart des fourmis.', synonyms: ['métapleuron'] },
   { id: 'anepisterne', name: 'Anépisterne', definition: 'Partie supérieure de la mésopleure, quand un sillon transverse la divise.', synonyms: ['anépisternum'] },
@@ -203,24 +202,30 @@ const TERMS_FR: Omit<Term, 'abbr'>[] = [
   { id: 'fossette-endophragmale', name: 'Fossette endophragmale', definition: 'Fossette de la paroi latérale du mésosoma qui marque l’attache d’une partie du squelette interne.', synonyms: [] },
   { id: 'angles-humeraux', name: 'Angles huméraux', definition: 'Angles antérolatéraux du dessus du pronotum.', synonyms: ['angle huméral', 'humérus'] },
   { id: 'abdomen', name: 'Abdomen', definition: 'Troisième tagme de l’insecte. Chez l’ouvrière, il compte sept segments visibles portant chacun un spiracle ; le premier, le propodéum, est soudé au thorax, les suivants forment la taille et le gastre.', synonyms: [] },
-  { id: 'metasoma', name: 'Métasoma', definition: 'Segments abdominaux situés en arrière du propodéum : la taille et le gastre. Utile chez d’autres Hyménoptères, le terme est peu recommandé chez les fourmis selon Bolton (1994).', synonyms: [] },
+  { id: 'metasoma', name: 'Métasoma', definition: 'Segments abdominaux situés en arrière du mésosoma (II à VII) : la taille et le gastre. Bolton (1994) le jugeait peu utile chez les fourmis ; Keller (2011) l’adopte comme dans le reste des Hyménoptères et numérote les segments plutôt que de parler de gastre.', synonyms: [] },
   { id: 'gastre', name: 'Gastre', definition: 'Tagme terminal, élargi : segments abdominaux 3 à 7 quand la taille ne compte que le pétiole, 4 à 7 avec un postpétiole. On dit gastral plutôt que gastrique, réservé à l’intestin.', synonyms: [] },
   { id: 'taille', name: 'Taille', definition: 'Un ou deux segments abdominaux isolés entre le mésosoma et le gastre : le pétiole seul, ou le pétiole et le postpétiole. Pédicelle est un terme ancien à éviter, qui désigne un article de l’antenne chez les autres Hyménoptères.', synonyms: ['pédicelle'] },
   { id: 'postpetiole', name: 'Postpétiole', definition: 'Troisième segment abdominal, quand il est réduit et séparé à la fois du pétiole et du segment suivant, par exemple chez les Myrmicinae.', synonyms: [] },
   { id: 'helcium', name: 'Helcium', definition: 'Présclérites très réduits et spécialisés du troisième segment abdominal, qui forment une articulation complexe dans l’orifice postérieur du pétiole. Il est en général caché, en partie ou en totalité.', synonyms: [] },
   { id: 'pedoncule', name: 'Pédoncule', definition: 'Partie antérieure étroite du pétiole, entre l’articulation avec le propodéum et le nœud ou l’écaille. Un pétiole sans pédoncule est dit sessile.', synonyms: ['pédoncule du pétiole'] },
   { id: 'processus-subpetiolaire', name: 'Processus subpétiolaire', definition: 'Projection antéroventrale du pétiole ou de son pédoncule, de forme très variable, parfois absente.', synonyms: [] },
-  { id: 'presclerite', name: 'Présclérite', definition: 'Partie antérieure bien différenciée d’un sclérite abdominal, séparée du reste par une crête, un étranglement ou les deux, et en général recouverte par le segment précédent. On parle de prétergite et de présternite.', synonyms: ['prétergite', 'présternite'] },
+  { id: 'presclerite', name: 'Présclérite', definition: 'Partie antérieure d’un sclérite abdominal, tergite ou sternite, recouverte par le segment précédent. Elle se reconnaît à sa sculpture fine et lisse, sans pilosité, parfois aussi à une crête ou un étranglement. On parle de prétergite et de présternite.', synonyms: ['prétergite', 'présternite'] },
   { id: 'hypopygium', name: 'Hypopygium', definition: 'Sternite du septième segment abdominal : le dernier sternite visible du gastre.', synonyms: [] },
   { id: 'acidopore', name: 'Acidopore', definition: 'Orifice par lequel les Formicinae projettent l’acide formique, propre à cette sous-famille. Formé par l’apex de l’hypopygium, il prend souvent la forme d’une courte buse bordée de soies.', synonyms: [] },
   { id: 'constriction', name: 'Étranglement annulaire', definition: 'Rétrécissement brusque qui fait le tour d’un segment abdominal, à la jonction entre présclérite et postsclérite. Par commodité, les clés le placent entre deux segments.', synonyms: ['constriction annulaire'] },
   { id: 'appareil-stridulatoire', name: 'Appareil stridulatoire', definition: 'Organe sonore : une râpe (plectre), sur le bord postérieur du troisième segment abdominal, frotte sur une aire finement striée (stridulitrum) à l’avant du quatrième.', synonyms: ['plectre', 'stridulitrum'] },
   { id: 'basitarse', name: 'Basitarse', definition: 'Premier article du tarse, articulé au tibia.', synonyms: ['basitarses'] },
   { id: 'pretarse', name: 'Prétarse', definition: 'Dernier article du tarse, qui porte la paire de griffes.', synonyms: [] },
-  { id: 'strigile', name: 'Strigile', definition: 'Éperon pectiné du tibia antérieur, modifié pour nettoyer l’antenne.', synonyms: [] },
+  { id: 'strigile', name: 'Strigile', definition: 'Appareil de nettoyage de l’antenne, sur la patte antérieure : l’éperon pectiné du tibia (calcar) et l’encoche garnie d’un peigne à la base du basitarse, entre lesquels passe l’antenne. Bolton (1994) donne ce nom à l’éperon seul.', synonyms: [] },
   { id: 'soie', name: 'Soie', definition: 'Poil épais inséré dans une alvéole à sa base. Soie et poil sont interchangeables, mais il faut les distinguer de la pubescence. Les clés citent souvent la présence ou la forme des soies sur une partie précise.', synonyms: ['soies', 'poil', 'poils', 'seta', 'setae'] },
   { id: 'pubescence', name: 'Pubescence', definition: 'Duvet de poils très fins et courts, distinct des soies. Bolton (1994) la définit comme des projections non insérées dans une alvéole.', synonyms: [] },
   { id: 'psammophore', name: 'Psammophore', definition: 'Corbeille de longues soies, souvent épaisses et courbées, sous la tête et les mandibules, qui sert à transporter le sable chez des fourmis des déserts.', synonyms: [] },
+  { id: 'lobe-torulaire', name: 'Lobe torulaire', definition: 'Expansion en lobe de l’arc médian du torulus, qui peut couvrir l’acétabulum antennaire. Chez beaucoup de Ponerinae il est très développé, et souvent pris à tort pour le lobe frontal (Keller 2011).', synonyms: ['lobes torulaires'] },
+  { id: 'sillon-paraoculo-clypeal', name: 'Sillon paraoculo-clypéal', definition: 'Partie latérale du sillon épistomal, de chaque côté, de la fossette tentoriale antérieure jusqu’à l’articulation dorsale de la mandibule. Elle sépare la partie latérale du clypéus de la gena.', synonyms: [] },
+  { id: 'ocelles', name: 'Ocelles', definition: 'Petits yeux simples sur le dessus de la tête, au nombre de trois. Toujours présents chez les mâles et les reines, ils manquent chez la plupart des ouvrières mais existent dans certains groupes, surtout chez les Formicinae.', synonyms: ['ocelle'] },
+  { id: 'arolium', name: 'Arolium', definition: 'Petite pelote adhésive membraneuse du prétarse, entre les griffes. Bien développée chez certaines fourmis, notamment arboricoles, elle est vestigiale ou absente chez d’autres.', synonyms: ['arolia'] },
+  { id: 'suture', name: 'Suture', definition: 'Ligne de jonction entre deux sclérites. Au sens strict (Keller 2011), sillon né de la soudure de deux sclérites autrefois distincts, par opposition à une articulation, qui reste mobile.', synonyms: ['sutures'] },
+  { id: 'sulcus', name: 'Sillon', definition: 'Rainure externe de la cuticule qui correspond à une crête interne. On le distingue d’une suture, qui sépare deux sclérites soudés, et d’une ligne, simple marque sans repli interne (Keller 2011).', synonyms: ['sulcus', 'sulci'] },
 ];
 
 // Placement des termes sur les planches : régions dans l'ordre de REGIONS_FR, termes dans l'ordre de la légende.
@@ -243,43 +248,9 @@ const LAYOUT: Record<RegionId, TermId[]> = {
   ],
 };
 
-// Abréviations des légendes de figures. Pour la fourmi, celles de Bolton (1994, Identification Guide to the Ant Genera
-// of the World, fig. 523-531) quand il en donne ; sinon (trochanter, fémur, tibia, éperon, tarse, griffe, clypéus entier)
-// l'usage courant. Pour l'aile, la notation de nervation : majuscules pour les nervures longitudinales, minuscules pour
-// les transverses. Uniques au sein d'une planche.
-const ABBREVIATIONS: Partial<Record<TermId, string>> = {
-  tete: 'hd', lobe: 'fl', clypeus: 'cl', mandibule: 'mn',
-  scape: 'sc', funicule: 'fu',
-  pronotum: 'pn', mesonotum: 'ms', mesopleure: 'mpl', propodeum: 'ppd', spiracle: 'sp',
-  petiole: 'pt',
-  tergite: 'tr', sternite: 'st', pygidium: 'py', aiguillon: 's',
-  coxa: 'c', trochanter: 'tro', femur: 'fe', tibia: 'ti', eperon: 'tsp', tarse: 'ta', griffe: 'cw',
-
-  pterostigma: 'pts', costale: 'cc', marginale: 'mc',
-  'submarginale-1': 'smc1', 'submarginale-2': 'smc2', 'submarginale-3': 'smc3',
-  discoidale: 'dc', 'subdiscoidale-1': 'sdc1', 'subdiscoidale-2': 'sdc2',
-  basale: 'bc', subbasale: 'sbc',
-  costa: 'C', 'sous-costale': 'Sc', radius: 'R', '2r-rs': '2r-rs', '3r-rs': '3r-rs',
-  'secteur-radial': 'Rs', 'rs-plus-m': 'Rs+M', 'rs-2-3': 'Rs2+3', 'rs-4-5': 'Rs4+5', 'rs-m': 'rs-m',
-  'media-1': 'M1', 'media-2': 'M2', 'media-3': 'M3', 'media-4': 'M4', 'm-plus-cu': 'M+Cu', 'm-cu': 'm-cu',
-  'cubitus-1': 'Cu1', 'cubitus-2': 'Cu2', 'cubitus-3': 'Cu3', 'cu-a': 'cu-a', 'anale-1': 'A1', 'anale-2': 'A2',
-
-  oeil: 'ey', gena: 'gn', 'bord-occipital': 'om', 'carene-frontale': 'fc', 'triangle-frontal': 'ft',
-  'suture-fronto-clypeale': 'fs', 'clypeus-median': 'mc', 'clypeus-lateral': 'lc', torulus: 'to',
-  'fossette-antennaire': 'as', scrobe: 'scb', 'fossette-tentoriale': 'atp', 'bord-masticateur': 'ma',
-  'bord-basal': 'mb', 'bord-externe': 'me', 'angle-basal': 'ba', 'dent-apicale': 'at', 'dent-basale': 'bt',
-  denticule: 'dn', diasteme: 'di', trulleum: 'tu', mesosoma: 'mes', promesonotum: 'prs',
-  'suture-promesonotale': 'pms', 'sillon-metanotal': 'mtg', propleure: 'pr', metapleure: 'mtp', anepisterne: 'an',
-  katepisterne: 'kn', 'orifice-metapleural': 'or', 'bulle-metapleurale': 'mgb', 'lobe-propodeal': 'pl',
-  'declivite-propodeale': 'de', metasoma: 'mt', gastre: 'ga', taille: 'w', postpetiole: 'ppt', helcium: 'he',
-  pedoncule: 'pd', 'processus-subpetiolaire': 'sb', presclerite: 'psc', hypopygium: 'hy', constriction: 'gc',
-};
-
-const withAbbr = (t: Omit<Term, 'abbr'>): Term => (ABBREVIATIONS[t.id] ? { ...t, abbr: ABBREVIATIONS[t.id] } : t);
-
 /** Dictionnaire dans la langue demandée (les tests vérifient les deux langues). */
 export function termsFor(lang: Lang): Term[] {
-  return TERMS_FR.map((t) => withAbbr(lang === 'fr' ? t : { ...t, ...TERMS_EN[t.id] }));
+  return lang === 'fr' ? TERMS_FR : TERMS_FR.map((t) => ({ ...t, ...TERMS_EN[t.id] }));
 }
 
 const plateOf = (region: RegionId) => REGIONS_FR.find((r) => r.id === region)!.plate;
