@@ -39,6 +39,16 @@ describe('isCorrectName', () => {
     expect(isCorrectName(TERM_BY_ID['media-3'], 'M3', true)).toBe(true);
     expect(isCorrectName(TERM_BY_ID['m-cu'], 'media-cubitus', true)).toBe(true);
     expect(isCorrectName(TERM_BY_ID['m-plus-cu'], 'media-cubitus', true)).toBe(false);
+    expect(isCorrectName(TERM_BY_ID.griffe, 'ongle', true)).toBe(false);
+    expect(isCorrectName(TERM_BY_ID['sillon-metanotal'], 'métanotum', true)).toBe(false);
+    expect(isCorrectName(TERM_BY_ID.presclerite, 'prétergite', true)).toBe(false);
+  });
+
+  it('accepte les variantes sans les afficher comme synonymes', () => {
+    expect(isCorrectName(TERM_BY_ID['submarginale-1'], '1re submarginale', true)).toBe(true);
+    expect(TERM_BY_ID['submarginale-1'].synonyms).not.toContain('1re submarginale');
+    expect(isCorrectName(TERM_BY_ID.coxa, 'hanches', true)).toBe(true);
+    expect(TERM_BY_ID.coxa.synonyms).toEqual(['hanche']);
   });
 
   it('refuse une mauvaise réponse ou une réponse vide', () => {
@@ -76,7 +86,7 @@ describe('noms sans ambiguïté', () => {
     for (const plate of PLATES) {
       const seen = new Map<string, string>();
       for (const part of partsFor(lang).filter((p) => p.plate === plate.id)) {
-        for (const label of new Set([part.name, ...part.synonyms].map((s) => normalize(s, true).replace(/s$/, '')))) {
+        for (const label of new Set([part.name, ...part.synonyms, ...(part.variants ?? [])].map((s) => normalize(s, true).replace(/s$/, '')))) {
           expect(seen.get(label) ?? part.id, `« ${label} »`).toBe(part.id);
           seen.set(label, part.id);
         }

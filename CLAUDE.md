@@ -35,7 +35,7 @@ la CI (`.github/workflows/ci.yml`) est déployé automatiquement par la CD (`.gi
 - Données : `parts.ts` reste la référence en français ; tout terme ajouté doit l'être aussi dans `parts.en.ts`
   (sinon le typecheck échoue). Les tests vérifient que chaque définition est traduite et qu'aucun nom ou synonyme n'est
   partagé par deux structures d'une même planche, dans chaque langue.
-- Anglais : pluriels latins en synonymes (*femur/femora*, *coxa/coxae*), termes de AntWiki.
+- Anglais : pluriels latins en variantes (*femur/femora*, *coxa/coxae*), termes de AntWiki.
 
 ## Stack
 
@@ -53,7 +53,11 @@ moment. Animations coupées si `prefers-reduced-motion`.
 - `src/data/parts.en.ts` : traduction anglaise des planches, régions et termes (`Record` par id).
 - `src/data/parts.ts` : source unique des données, en deux couches. Pas d'abréviations : elles varient d'un auteur à
   l'autre (Bolton, Keller, Snodgrass…).
-  - `TERMS_FR` : dictionnaire des termes (nom, définition, synonymes), une entrée par terme, quelle que soit la planche.
+  - `TERMS_FR` : dictionnaire des termes (nom, définition, synonymes, variantes), une entrée par terme, quelle que soit
+    la planche. `synonyms` : vrais synonymes seulement, affichés dans le glossaire (pas de pluriel, de numérotation ni
+    de mot voisin). `variants` : autres formes acceptées comme réponse sans être affichées (singulier/pluriel,
+    « 1re submarginale », notation « m1 », forme latine ou anglaise). En anglais, les variantes ne sont pas héritées
+    du français.
   - `REGIONS_FR` (chaque région rattachée à une planche) et `LAYOUT` (termes de chaque région, dans l'ordre de la
     légende). Un terme peut figurer sur plusieurs planches, une fois par planche, ou sur aucune (glossaire
     seulement : termes de Bolton en attente d'une planche) ; le glossaire le liste une seule fois avec un lien par planche. Une structure (`Part`) = un terme placé dans une région ; `PartId` = `TermId`, donc

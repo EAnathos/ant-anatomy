@@ -11,5 +11,5 @@ const singular = (s: string) => s.replace(/s$/, '');
 export function isCorrectName(part: Term, answer: string, ignoreAccents: boolean): boolean {
   const given = normalize(answer, ignoreAccents);
   if (!given) return false;
-  return [part.name, ...part.synonyms].some((s) => singular(normalize(s, ignoreAccents)) === singular(given));
+  return [part.name, ...part.synonyms, ...(part.variants ?? [])].some((s) => singular(normalize(s, ignoreAccents)) === singular(given));
 }

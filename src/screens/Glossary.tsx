@@ -48,7 +48,7 @@ const SORTED = [...TERMS].sort((a, b) => collator.compare(a.name, b.name));
 const letterOf = (p: Term) => normalize(p.name, true).charAt(0).toUpperCase();
 
 const matches = (p: Term, query: string) =>
-  [p.name, ...p.synonyms].some((s) => normalize(s, true).includes(query));
+  [p.name, ...p.synonyms, ...(p.variants ?? [])].some((s) => normalize(s, true).includes(query));
 
 interface GlossaryProps {
   onShowPart: (plate: PlateId, id: PartId) => void;
