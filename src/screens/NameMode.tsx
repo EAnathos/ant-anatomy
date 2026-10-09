@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { AntPlate, type Marks } from '../components/AntPlate';
 import { CheckIcon, CrossIcon, CursorIcon, ReplayIcon } from '../components/icons';
 import { Legend } from '../components/Legend';
-import { PART_BY_ID, PLATE_BY_ID, partsOf, type PartId } from '../data/parts';
+import { PLATE_BY_ID, partIn, partsOf, type PartId } from '../data/parts';
 import { isCorrectName } from '../lib/answers';
 import { t } from '../i18n';
 import { playableParts, type Settings } from '../lib/session';
@@ -80,7 +80,7 @@ export function NameMode({ settings }: { settings: Settings }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const playable = playableParts(settings).map((p) => p.id);
-  const part = selected ? PART_BY_ID[selected] : null;
+  const part = selected ? partIn(settings.plate, selected) : null;
   const attempted = found.length + missed.length;
   const finished = playable.length > 0 && attempted === playable.length;
 
@@ -231,14 +231,14 @@ export function NameMode({ settings }: { settings: Settings }) {
             <span className="muted">{T.none}</span>
           ) : (
             <ul className="found__list">
-              {found.map((id) => <li key={id}>{PART_BY_ID[id].name}</li>)}
+              {found.map((id) => <li key={id}>{partIn(settings.plate, id).name}</li>)}
             </ul>
           )}
           {missed.length > 0 && (
             <>
               <span className="eyebrow">{T.missedList}</span>
               <ul className="found__list found__list--ko">
-                {missed.map((id) => <li key={id}>{PART_BY_ID[id].name}</li>)}
+                {missed.map((id) => <li key={id}>{partIn(settings.plate, id).name}</li>)}
               </ul>
             </>
           )}

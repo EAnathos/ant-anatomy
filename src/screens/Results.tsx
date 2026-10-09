@@ -1,6 +1,6 @@
 import { AntPlate, type Marks } from '../components/AntPlate';
 import { CheckIcon, CrossIcon, ReplayIcon } from '../components/icons';
-import { PART_BY_ID, REGION_BY_ID, type PartId, type PlateId } from '../data/parts';
+import { REGION_BY_ID, partIn, type PartId, type PlateId } from '../data/parts';
 import { LANG, t } from '../i18n';
 import { formatDuration, summarize, type Answer } from '../lib/session';
 
@@ -60,7 +60,7 @@ const listFormat = new Intl.ListFormat(LANG, { type: 'conjunction' });
 
 export function Results({ plate, log, durationMs, onReplay, onRestart, onHome }: ResultsProps) {
   const summary = summarize(log);
-  const missedNames = summary.missed.map((id) => PART_BY_ID[id].name);
+  const missedNames = summary.missed.map((id) => partIn(plate, id).name);
   const marks: Marks = Object.fromEntries(summary.missed.map((id) => [id, 'ko']));
 
   const message =
@@ -121,11 +121,11 @@ export function Results({ plate, log, durationMs, onReplay, onRestart, onHome }:
               {log.map((a, i) => (
                 <tr key={`${a.asked}-${i}`}>
                   <td className="mono muted">{String(i + 1).padStart(2, '0')}</td>
-                  <td className="results-table__asked">{PART_BY_ID[a.asked].name}</td>
-                  <td className="muted">{REGION_BY_ID[PART_BY_ID[a.asked].region].label}</td>
+                  <td className="results-table__asked">{partIn(plate, a.asked).name}</td>
+                  <td className="muted">{REGION_BY_ID[partIn(plate, a.asked).region].label}</td>
                   <td className={a.correct ? 'results-table__click results-table__click--same' : 'results-table__click'}>
                     <span className="results-table__label">{T.yourClickLabel}</span>
-                    {PART_BY_ID[a.picked].name}
+                    {partIn(plate, a.picked).name}
                   </td>
                   <td>
                     {a.correct ? (

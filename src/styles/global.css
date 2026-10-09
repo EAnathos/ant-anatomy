@@ -166,6 +166,9 @@ main.container {
 }
 
 .nav-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
   min-height: 44px;
   padding: 0 20px;
   border: 0;
@@ -304,6 +307,16 @@ main.container {
 .plate__title strong {
   font-size: 19px;
   font-weight: 600;
+  color: var(--prusse);
+}
+
+/* Abréviation d'une structure (légende de l'accueil, glossaire) */
+.part-abbr {
+  padding: 2px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 13px;
   color: var(--prusse);
 }
 
@@ -1202,3 +1215,90 @@ main.container {
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+
+/* Glossaire */
+.glossary {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding-top: clamp(40px, 6vw, 72px);
+}
+
+.glossary__head {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.glossary__head .lead { max-width: 52ch; }
+
+.glossary__search { max-width: 480px; }
+
+.glossary__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.glossary__letter {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--prusse);
+}
+
+.glossary__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+  gap: 0 48px;
+}
+
+.glossary__entry {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+  line-height: 1.6;
+}
+
+.glossary__entry dd { color: var(--slate); }
+
+.glossary__synonyms { font-size: 14px; }
+
+.glossary__empty { margin-top: -24px; }
+
+/* Lien vers la planche d'un terme */
+.plate-ref {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  margin-left: -16px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--prusse);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.glossary__refs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 8px;
+}
+
+.plate-ref em { font-weight: 500; }
+
+.glossary__off {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
+  color: var(--slate);
+}
+.plate-ref:hover { background: var(--mist); }

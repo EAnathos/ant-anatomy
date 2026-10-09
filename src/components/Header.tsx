@@ -1,6 +1,6 @@
-import { LANG, LANG_URLS, rememberLang, t, type Lang } from '../i18n';
+import { GLOSSARY_HASH, GLOSSARY_HASHES, LANG, LANG_URLS, rememberLang, t, type Lang } from '../i18n';
 
-export type NavTarget = 'home' | 'find' | 'name';
+export type NavTarget = 'home' | 'find' | 'name' | 'glossary';
 
 interface HeaderProps {
   current: NavTarget | null;
@@ -8,8 +8,8 @@ interface HeaderProps {
 }
 
 const T = t(
-  { modes: 'Modes de jeu', find: 'Trouver', name: 'Nommer', language: 'Langue' },
-  { modes: 'Game modes', find: 'Find', name: 'Name', language: 'Language' },
+  { modes: 'Navigation', find: 'Trouver', name: 'Nommer', glossary: 'Glossaire', language: 'Langue' },
+  { modes: 'Navigation', find: 'Find', name: 'Name', glossary: 'Glossary', language: 'Language' },
 );
 
 const LANGS: { id: Lang; short: string; label: string }[] = [
@@ -49,12 +49,23 @@ export function Header({ current, onNavigate }: HeaderProps) {
           >
             {T.name}
           </button>
+          <a
+            href={GLOSSARY_HASH}
+            className="nav-link"
+            aria-current={current === 'glossary' ? 'page' : undefined}
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate('glossary');
+            }}
+          >
+            {T.glossary}
+          </a>
         </nav>
         <nav aria-label={T.language} className="lang-switch">
           {LANGS.map((l) => (
             <a
               key={l.id}
-              href={LANG_URLS[l.id]}
+              href={LANG_URLS[l.id] + (current === 'glossary' ? GLOSSARY_HASHES[l.id] : '')}
               hrefLang={l.id}
               lang={l.id}
               aria-label={l.label}

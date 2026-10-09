@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Footer } from './components/Footer';
 import { Header, type NavTarget } from './components/Header';
-import { regionsOf, type PartId } from './data/parts';
+import { partIn, regionsOf, type PartId, type PlateId } from './data/parts';
+import { GLOSSARY_HASH, isGlossaryHash } from './i18n';
 import { buildQuestions, playableParts, shuffle, type Answer, type Settings } from './lib/session';
 import { FindMode } from './screens/FindMode';
+import { Glossary } from './screens/Glossary';
 import { Home } from './screens/Home';
 import { NameMode } from './screens/NameMode';
 import { Results } from './screens/Results';
 
 type Screen =
-  | { name: 'home' }
+  | { name: 'home'; selected?: PartId }
+  | { name: 'glossary' }
   | { name: 'find'; questions: PartId[]; run: number }
   | { name: 'name'; run: number }
   | { name: 'results'; log: Answer[]; durationMs: number };
@@ -23,11 +26,25 @@ const DEFAULT_SETTINGS: Settings = {
 
 export function App() {
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
-  const [screen, setScreen] = useState<Screen>({ name: 'home' });
+  const [screen, setScreen] = useState<Screen>(() => (isGlossaryHash(location.hash) ? { name: 'glossary' } : { name: 'home' }));
   const [run, setRun] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, [screen]);
+
+  // Le glossaire a sa propre adresse (#glossaire, #glossary) : lien partageable, retour arrière du navigateur.
+  useEffect(() => {
+    const onPop = () =>
+      setScreen((s) => (isGlossaryHash(location.hash) ? { name: 'glossary' } : s.name === 'glossary' ? { name: 'home' } : s));
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  useEffect(() => {
+    const onGlossary = isGlossaryHash(location.hash);
+    if (screen.name === 'glossary' && !onGlossary) history.pushState(null, '', GLOSSARY_HASH);
+    else if (screen.name !== 'glossary' && onGlossary) history.pushState(null, '', location.pathname + location.search);
   }, [screen]);
 
   const canPlay = playableParts(settings).length > 0;
@@ -47,10 +64,20 @@ export function App() {
   const navigate = (target: NavTarget) => {
     if (target === 'find') startFind();
     else if (target === 'name') startName();
+    else if (target === 'glossary') setScreen({ name: 'glossary' });
     else setScreen({ name: 'home' });
   };
 
-  const current: NavTarget | null = screen.name === 'find' || screen.name === 'name' ? screen.name : null;
+  // Depuis le glossaire : accueil sur la planche de la structure, toutes ses régions affichées, structure sélectionnée.
+  const showPart = (plate: PlateId, id: PartId) => {
+    const { region } = partIn(plate, id);
+    if (plate !== settings.plate || !settings.regions.includes(region)) {
+      setSettings({ ...settings, plate, regions: regionsOf(plate).map((r) => r.id) });
+    }
+    setScreen({ name: 'home', selected: id });
+  };
+
+  const current: NavTarget | null = screen.name === 'find' || screen.name === 'name' || screen.name === 'glossary' ? screen.name : null;
 
   return (
     <>
@@ -58,7 +85,7 @@ export function App() {
         <Header current={current} onNavigate={navigate} />
       </div>
       {screen.name === 'home' && (
-        <Home settings={settings} onSettingsChange={setSettings} onStartFind={() => startFind()} onStartName={startName} />
+        <Home initialSelected={screen.selected} settings={settings} onSettingsChange={setSettings} onStartFind={() => startFind()} onStartName={startName} />
       )}
       {screen.name === 'find' && (
         <FindMode
@@ -68,6 +95,7 @@ export function App() {
           onFinish={(log, durationMs) => setScreen({ name: 'results', log, durationMs })}
         />
       )}
+      {screen.name === 'glossary' && <Glossary onShowPart={showPart} />}
       {screen.name === 'name' && <NameMode key={screen.run} settings={settings} />}
       {screen.name === 'results' && (
         <Results
@@ -80,7 +108,7 @@ export function App() {
         />
       )}
       <div className="container">
-        <Footer />
+        <Footer onGlossary={() => navigate('glossary')} />
       </div>
     </>
   );

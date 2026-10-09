@@ -2,11 +2,13 @@ import { useState, type ReactNode } from 'react';
 import { AntPlate } from '../components/AntPlate';
 import { ArrowIcon, DiceIcon, MagnifierIcon } from '../components/icons';
 import { SettingsPanel } from '../components/SettingsPanel';
-import { PART_BY_ID, PLATES, REGION_BY_ID, partsInRegions, partsOf, regionsOf, type PartId, type PlateId, type RegionId } from '../data/parts';
+import { PLATES, REGION_BY_ID, partsInRegions, partsOf, regionsOf, partIn, type PartId, type PlateId, type RegionId } from '../data/parts';
 import { t } from '../i18n';
 import { playableParts, type Settings } from '../lib/session';
 
 interface HomeProps {
+  /** Structure sélectionnée à l'arrivée (lien « Voir sur la planche » du glossaire). */
+  initialSelected?: PartId;
   settings: Settings;
   onSettingsChange: (settings: Settings) => void;
   onStartFind: () => void;
@@ -139,6 +141,8 @@ const T = t(
     acceptedAccents: 'Accents, majuscules et synonymes courants sont acceptés.',
     accepted: 'Majuscules et synonymes courants sont acceptés.',
     start: 'Commencer',
+    abbr: 'Abréviation',
+    abbrSr: 'Abréviation : ',
   },
   {
     plate: 'Plate',
@@ -154,13 +158,15 @@ const T = t(
     acceptedAccents: 'Accents, capitals and common synonyms are accepted.',
     accepted: 'Capitals and common synonyms are accepted.',
     start: 'Start',
+    abbr: 'Abbreviation',
+    abbrSr: 'Abbreviation: ',
   },
 );
 
-export function Home({ settings, onSettingsChange, onStartFind, onStartName }: HomeProps) {
-  const [selected, setSelected] = useState<PartId | null>(null);
+export function Home({ initialSelected, settings, onSettingsChange, onStartFind, onStartName }: HomeProps) {
+  const [selected, setSelected] = useState<PartId | null>(initialSelected ?? null);
   const [labels, setLabels] = useState(false);
-  const part = selected ? PART_BY_ID[selected] : null;
+  const part = selected ? partIn(settings.plate, selected) : null;
   const canPlay = playableParts(settings).length > 0;
   const intro = INTROS[settings.plate];
   const plateRegions = regionsOf(settings.plate).map((r) => r.id);
@@ -224,6 +230,12 @@ export function Home({ settings, onSettingsChange, onStartFind, onStartName }: H
               <>
                 <div className="plate__title">
                   <strong>{part.name}</strong>
+                  {part.abbr && (
+                    <span className="part-abbr" title={T.abbr}>
+                      <span className="sr-only">{T.abbrSr}</span>
+                      {part.abbr}
+                    </span>
+                  )}
                   <span className="eyebrow">{REGION_BY_ID[part.region].label}</span>
                 </div>
                 <span className="muted">{part.definition}</span>

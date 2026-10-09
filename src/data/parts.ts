@@ -1,5 +1,5 @@
 import { LANG, type Lang } from '../i18n';
-import { PARTS_EN, PLATES_EN, REGIONS_EN } from './parts.en';
+import { PLATES_EN, REGIONS_EN, TERMS_EN } from './parts.en';
 
 export type PlateId = 'ouvriere' | 'aile';
 
@@ -7,7 +7,8 @@ export type RegionId =
   | 'tete' | 'antenne' | 'mesosoma' | 'petiole' | 'gastre' | 'pattes'
   | 'cellules' | 'nervures';
 
-export type PartId =
+/** Terme du glossaire. */
+export type TermId =
   | 'tete' | 'ommatidies' | 'lobe' | 'clypeus' | 'mandibule'
   | 'scape' | 'funicule'
   | 'pronotum' | 'mesonotum' | 'mesopleure' | 'propodeum' | 'spiracle'
@@ -21,7 +22,23 @@ export type PartId =
   | 'costa' | 'sous-costale' | 'radius' | '2r-rs' | '3r-rs'
   | 'secteur-radial' | 'rs-plus-m' | 'rs-2-3' | 'rs-4-5' | 'rs-m'
   | 'media-1' | 'media-2' | 'media-3' | 'media-4' | 'm-plus-cu' | 'm-cu'
-  | 'cubitus-1' | 'cubitus-2' | 'cubitus-3' | 'cu-a' | 'anale-1' | 'anale-2';
+  | 'cubitus-1' | 'cubitus-2' | 'cubitus-3' | 'cu-a' | 'anale-1' | 'anale-2'
+  // Termes du glossaire de Bolton (1994) qui ne figurent sur aucune planche pour l'instant.
+  | 'oeil' | 'gena' | 'bord-occipital' | 'coins-occipitaux' | 'carene-frontale' | 'triangle-frontal'
+  | 'suture-fronto-clypeale' | 'clypeus-median' | 'clypeus-lateral' | 'torulus' | 'fossette-antennaire' | 'scrobe'
+  | 'fossette-tentoriale' | 'carene-nucale' | 'labre' | 'palpes-maxillaires' | 'palpes-labiaux' | 'hypostome'
+  | 'bulbe-condylaire' | 'massue' | 'bord-masticateur' | 'bord-basal' | 'bord-externe' | 'angle-basal'
+  | 'dent-apicale' | 'dent-basale' | 'dent-preapicale' | 'dent-prebasale' | 'denticule' | 'diasteme'
+  | 'lamelle-basale' | 'trulleum' | 'mesosoma' | 'thorax' | 'promesonotum' | 'suture-promesonotale'
+  | 'sillon-metanotal' | 'propleure' | 'metapleure' | 'anepisterne' | 'katepisterne' | 'orifice-metapleural'
+  | 'bulle-metapleurale' | 'lobe-propodeal' | 'declivite-propodeale' | 'epines-propodeales'
+  | 'processus-metasternal' | 'fossette-endophragmale' | 'angles-humeraux' | 'abdomen' | 'metasoma' | 'gastre'
+  | 'taille' | 'postpetiole' | 'helcium' | 'pedoncule' | 'processus-subpetiolaire' | 'presclerite' | 'hypopygium'
+  | 'acidopore' | 'constriction' | 'appareil-stridulatoire' | 'basitarse' | 'pretarse' | 'strigile' | 'soie'
+  | 'pubescence' | 'psammophore';
+
+/** Structure d'une planche : identifiée par son terme (`data-part` du SVG), unique au sein d'une planche. */
+export type PartId = TermId;
 
 export interface Plate {
   id: PlateId;
@@ -40,12 +57,20 @@ export interface Region {
   plate: PlateId;
 }
 
-export interface Part {
-  id: PartId;
+/** Entrée du dictionnaire : la même sur toutes les planches où le terme figure. */
+export interface Term {
+  id: TermId;
   name: string;
-  region: RegionId;
   definition: string;
   synonyms: string[];
+  /** Abréviation des figures de morphologie, identique dans les deux langues. Absente si l'usage n'en fixe pas. */
+  abbr?: string;
+}
+
+/** Un terme placé sur une planche, dans une région. */
+export interface Part extends Term {
+  region: RegionId;
+  plate: PlateId;
 }
 
 // Données de référence en français. La traduction anglaise est dans parts.en.ts.
@@ -66,84 +91,228 @@ const REGIONS_FR: Region[] = [
   { id: 'nervures', label: 'Nervures', plate: 'aile' },
 ];
 
-const PARTS_FR: Part[] = [
-  { id: 'tete', name: 'Tête', region: 'tete', definition: 'Capsule céphalique portant les yeux, les antennes et les pièces buccales.', synonyms: ['capsule céphalique'] },
-  { id: 'ommatidies', name: 'Ommatidies', region: 'tete', definition: 'Unités optiques en forme de facettes hexagonales qui, réunies, forment l’œil composé.', synonyms: ['ommatidie', 'ommatidium', 'ommatidia', 'facettes'] },
-  { id: 'lobe', name: 'Lobe frontal', region: 'tete', definition: 'Lame de la capsule céphalique, prolongée par la carène frontale, qui borde et protège l’insertion de l’antenne (torulus).', synonyms: ['lobe', 'lobes frontaux', 'carène frontale', 'torulus'] },
-  { id: 'clypeus', name: 'Clypéus', region: 'tete', definition: 'Plaque antérieure de la tête, juste au-dessus des mandibules.', synonyms: [] },
-  { id: 'mandibule', name: 'Mandibules', region: 'tete', definition: 'Pièces buccales paires servant à saisir, couper et transporter.', synonyms: [] },
-  { id: 'scape', name: 'Scapes', region: 'antenne', definition: 'Premier article de l’antenne, long, articulé à la tête.', synonyms: [] },
-  { id: 'funicule', name: 'Funicules', region: 'antenne', definition: 'Ensemble des articles de l’antenne situés après le scape.', synonyms: ['funiculus', 'funiculi', 'flagelle'] },
-  { id: 'pronotum', name: 'Pronotum', region: 'mesosoma', definition: 'Plaque dorsale du premier segment thoracique.', synonyms: [] },
-  { id: 'mesonotum', name: 'Mésonotum', region: 'mesosoma', definition: 'Plaque dorsale du deuxième segment thoracique.', synonyms: [] },
-  { id: 'mesopleure', name: 'Mésopleure', region: 'mesosoma', definition: 'Plaque latérale du deuxième segment thoracique, au-dessus de la coxa médiane.', synonyms: ['mésopleuron', 'pleure'] },
-  { id: 'propodeum', name: 'Propodéum', region: 'mesosoma', definition: 'Premier segment abdominal, soudé au thorax.', synonyms: ['épinotum'] },
-  { id: 'spiracle', name: 'Spiracle propodéal', region: 'mesosoma', definition: 'Orifice respiratoire situé sur le côté du propodéum.', synonyms: ['spiracle', 'stigmate', 'stigmate propodéal'] },
-  { id: 'petiole', name: 'Pétiole', region: 'petiole', definition: 'Segment étroit, en forme de nœud, qui relie le mésosoma au gastre.', synonyms: ['nœud du pétiole', 'nœud', 'nœud pétiolaire'] },
-  { id: 'tergite', name: 'Tergites', region: 'gastre', definition: 'Plaques dorsales des segments du gastre.', synonyms: [] },
-  { id: 'sternite', name: 'Sternites', region: 'gastre', definition: 'Plaques ventrales des segments du gastre.', synonyms: [] },
-  { id: 'pygidium', name: 'Pygidium', region: 'gastre', definition: 'Dernier tergite visible, à l’extrémité du gastre.', synonyms: [] },
-  { id: 'aiguillon', name: 'Aiguillon', region: 'gastre', definition: 'Dard venimeux à l’extrémité du gastre.', synonyms: ['dard'] },
-  { id: 'coxa', name: 'Coxas', region: 'pattes', definition: 'Premier article de la patte, articulé au mésosoma.', synonyms: ['coxae', 'hanche', 'hanches'] },
-  { id: 'trochanter', name: 'Trochanters', region: 'pattes', definition: 'Deuxième article de la patte, court, entre la coxa et le fémur.', synonyms: ['trochanter'] },
-  { id: 'femur', name: 'Fémurs', region: 'pattes', definition: 'Article le plus robuste de la patte.', synonyms: [] },
-  { id: 'tibia', name: 'Tibias', region: 'pattes', definition: 'Long article entre le fémur et le tarse.', synonyms: [] },
-  { id: 'eperon', name: 'Éperons tibiaux', region: 'pattes', definition: 'Épine articulée à l’extrémité du tibia.', synonyms: ['éperon tibial', 'éperon', 'calcar', 'calcars'] },
-  { id: 'tarse', name: 'Tarses', region: 'pattes', definition: 'Extrémité de la patte, formée de cinq articles.', synonyms: [] },
-  { id: 'griffe', name: 'Griffes', region: 'pattes', definition: 'Crochet au bout du dernier article du tarse.', synonyms: ['ongle', 'ongles', 'griffe tarsale', 'griffes tarsales'] },
+const TERMS_FR: Omit<Term, 'abbr'>[] = [
+  { id: 'tete', name: 'Tête', definition: 'Capsule céphalique portant les yeux, les antennes et les pièces buccales.', synonyms: ['capsule céphalique'] },
+  { id: 'ommatidies', name: 'Ommatidies', definition: 'Unités optiques en forme de facettes hexagonales qui, réunies, forment l’œil composé.', synonyms: ['ommatidie', 'ommatidium', 'ommatidia', 'facettes'] },
+  { id: 'lobe', name: 'Lobe frontal', definition: 'Expansion antérieure, en forme de lobe, de la carène frontale, qui recouvre en partie ou en totalité l’insertion de l’antenne (fossette antennaire et torulus).', synonyms: ['lobe', 'lobes frontaux'] },
+  { id: 'clypeus', name: 'Clypéus', definition: 'Sclérite antérieur de la face dorsale de la tête, limité en arrière par la suture fronto-clypéale. Son bord antérieur forme en général le bord antérieur de la tête, au-dessus des mandibules. Il se compose d’une partie médiane et de deux parties latérales.', synonyms: [] },
+  { id: 'mandibule', name: 'Mandibules', definition: 'Pièces buccales paires avec lesquelles la fourmi saisit, coupe et transporte. Leur forme et leur denture, très variables, comptent beaucoup en taxonomie.', synonyms: [] },
+  { id: 'scape', name: 'Scapes', definition: 'Premier article de l’antenne, allongé, articulé à la tête dans la fossette antennaire par un bulbe condylaire.', synonyms: [] },
+  { id: 'funicule', name: 'Funicules', definition: 'Ensemble des articles de l’antenne situés après le scape : de 3 à 11 selon les genres, qui portent l’antenne à 4 à 12 articles. Les derniers peuvent former une massue.', synonyms: ['funiculus', 'funiculi', 'flagelle'] },
+  { id: 'pronotum', name: 'Pronotum', definition: 'Tergite du prothorax (premier segment thoracique). Il couvre le dessus du segment et descend sur ses côtés, en cachant presque entièrement le propleure.', synonyms: [] },
+  { id: 'mesonotum', name: 'Mésonotum', definition: 'Tergite du mésothorax (deuxième segment thoracique). Une suture promésonotale le sépare du pronotum, ou bien les deux sont soudés en un promésonotum.', synonyms: [] },
+  { id: 'mesopleure', name: 'Mésopleure', definition: 'Pleurite du mésothorax, sur le côté du mésosoma au-dessus de la coxa médiane. C’est le plus grand pleurite ; un sillon le divise parfois en anépisterne (en haut) et katépisterne (en bas).', synonyms: ['mésopleuron'] },
+  { id: 'propodeum', name: 'Propodéum', definition: 'Tergite du premier segment abdominal, dont le sternite a disparu. Soudé au thorax, il forme l’arrière du mésosoma. Épinotum est un terme ancien, à éviter.', synonyms: ['épinotum'] },
+  { id: 'spiracle', name: 'Spiracle propodéal', definition: 'Orifice respiratoire sur le côté du propodéum : morphologiquement le spiracle du premier segment abdominal, en général le plus grand du corps.', synonyms: ['spiracle', 'stigmate', 'stigmate propodéal'] },
+  { id: 'petiole', name: 'Pétiole', definition: 'Deuxième segment abdominal, réduit et isolé entre le mésosoma et le gastre (ou le postpétiole quand il existe). Il prend le plus souvent la forme d’un nœud ou d’une écaille, et porte le deuxième spiracle abdominal.', synonyms: ['nœud du pétiole', 'nœud', 'nœud pétiolaire'] },
+  { id: 'tergite', name: 'Tergites', definition: 'Sclérites dorsaux des segments du gastre.', synonyms: [] },
+  { id: 'sternite', name: 'Sternites', definition: 'Sclérites ventraux des segments du gastre.', synonyms: [] },
+  { id: 'pygidium', name: 'Pygidium', definition: 'Tergite du septième segment abdominal : le dernier tergite visible, à l’extrémité du gastre.', synonyms: [] },
+  { id: 'aiguillon', name: 'Aiguillon', definition: 'Dard venimeux à l’extrémité du gastre.', synonyms: ['dard'] },
+  { id: 'coxa', name: 'Coxas', definition: 'Premier article de la patte, le plus basal, articulé au mésosoma.', synonyms: ['coxae', 'hanche', 'hanches'] },
+  { id: 'trochanter', name: 'Trochanters', definition: 'Deuxième article de la patte, petit, entre la coxa et le fémur.', synonyms: ['trochanter'] },
+  { id: 'femur', name: 'Fémurs', definition: 'Troisième article de la patte, en général le plus long et robuste, séparé de la coxa par le seul trochanter.', synonyms: [] },
+  { id: 'tibia', name: 'Tibias', definition: 'Quatrième article de la patte, long, entre le fémur et le tarse.', synonyms: [] },
+  { id: 'eperon', name: 'Éperons tibiaux', definition: 'Épine articulée à l’apex du tibia. Celui de la patte antérieure, pectiné, forme le strigile qui sert à nettoyer l’antenne ; les tibias médians et postérieurs en portent deux, un ou aucun.', synonyms: ['éperon tibial', 'éperon', 'calcar', 'calcars'] },
+  { id: 'tarse', name: 'Tarses', definition: 'Extrémité de la patte, formée de cinq petits articles : le premier, articulé au tibia, est le basitarse, le dernier, le prétarse, porte les griffes.', synonyms: [] },
+  { id: 'griffe', name: 'Griffes', definition: 'Paire de crochets portée par le prétarse, dernier article du tarse. Simples le plus souvent, elles peuvent porter une dent préapicale ou être pectinées.', synonyms: ['ongle', 'ongles', 'griffe tarsale', 'griffes tarsales', 'griffe prétarsale', 'griffes prétarsales'] },
 
-  { id: 'pterostigma', name: 'Ptérostigma', region: 'cellules', definition: 'Épaississement sclérifié et pigmenté du bord antérieur de l’aile antérieure, au bout de la cellule costale.', synonyms: ['stigma', 'ptérostigme'] },
-  { id: 'costale', name: 'Cellule costale', region: 'cellules', definition: 'Cellule étroite qui longe le bord antérieur de l’aile, de la base jusqu’au ptérostigma.', synonyms: ['costale'] },
-  { id: 'marginale', name: 'Cellule marginale', region: 'cellules', definition: 'Cellule allongée qui longe le bord antérieur au-delà du ptérostigma, vers l’apex. On l’appelle aussi cellule radiale.', synonyms: ['marginale', 'cellule radiale', 'radiale'] },
-  { id: 'submarginale-1', name: 'Cellule submarginale 1', region: 'cellules', definition: 'Cellule submarginale la plus proche de la base, sous le ptérostigma. Le nombre de cellules submarginales varie selon les genres et sert à l’identification.', synonyms: ['submarginale 1', 'première cellule submarginale', 'première submarginale', '1re cellule submarginale', '1re submarginale'] },
-  { id: 'submarginale-2', name: 'Cellule submarginale 2', region: 'cellules', definition: 'Deuxième cellule submarginale, sous la cellule marginale.', synonyms: ['submarginale 2', 'deuxième cellule submarginale', 'deuxième submarginale', '2e cellule submarginale', '2e submarginale'] },
-  { id: 'submarginale-3', name: 'Cellule submarginale 3', region: 'cellules', definition: 'Cellule submarginale la plus proche de l’apex, sous la nervure radiale.', synonyms: ['submarginale 3', 'troisième cellule submarginale', 'troisième submarginale', '3e cellule submarginale', '3e submarginale'] },
-  { id: 'discoidale', name: 'Cellule discoïdale', region: 'cellules', definition: 'Cellule fermée au centre de l’aile, sous la première cellule submarginale.', synonyms: ['discoïdale', 'cellule discale'] },
-  { id: 'subdiscoidale-1', name: 'Cellule subdiscoïdale 1', region: 'cellules', definition: 'Cellule située sous la cellule discoïdale, vers le bord postérieur de l’aile.', synonyms: ['subdiscoïdale 1', 'première cellule subdiscoïdale', 'première subdiscoïdale', '1re cellule subdiscoïdale', '1re subdiscoïdale'] },
-  { id: 'subdiscoidale-2', name: 'Cellule subdiscoïdale 2', region: 'cellules', definition: 'Grande cellule ouverte entre la nervure médiane et le bord postérieur, du côté de l’apex.', synonyms: ['subdiscoïdale 2', 'deuxième cellule subdiscoïdale', 'deuxième subdiscoïdale', '2e cellule subdiscoïdale', '2e subdiscoïdale'] },
-  { id: 'basale', name: 'Cellule basale', region: 'cellules', definition: 'Cellule de la base de l’aile, sous la cellule costale.', synonyms: ['basale'] },
-  { id: 'subbasale', name: 'Cellule subbasale', region: 'cellules', definition: 'Cellule étroite de la base de l’aile, sous la cellule basale.', synonyms: ['subbasale', 'sub-basale', 'cellule sub-basale'] },
+  { id: 'pterostigma', name: 'Ptérostigma', definition: 'Épaississement sclérifié et pigmenté du bord antérieur de l’aile antérieure, au bout de la cellule costale.', synonyms: ['stigma', 'ptérostigme'] },
+  { id: 'costale', name: 'Cellule costale', definition: 'Cellule étroite qui longe le bord antérieur de l’aile, de la base jusqu’au ptérostigma.', synonyms: ['costale'] },
+  { id: 'marginale', name: 'Cellule marginale', definition: 'Cellule allongée qui longe le bord antérieur au-delà du ptérostigma, vers l’apex. On l’appelle aussi cellule radiale.', synonyms: ['marginale', 'cellule radiale', 'radiale'] },
+  { id: 'submarginale-1', name: 'Cellule submarginale 1', definition: 'Cellule submarginale la plus proche de la base, sous le ptérostigma. Le nombre de cellules submarginales varie selon les genres et sert à l’identification.', synonyms: ['submarginale 1', 'première cellule submarginale', 'première submarginale', '1re cellule submarginale', '1re submarginale'] },
+  { id: 'submarginale-2', name: 'Cellule submarginale 2', definition: 'Deuxième cellule submarginale, sous la cellule marginale.', synonyms: ['submarginale 2', 'deuxième cellule submarginale', 'deuxième submarginale', '2e cellule submarginale', '2e submarginale'] },
+  { id: 'submarginale-3', name: 'Cellule submarginale 3', definition: 'Cellule submarginale la plus proche de l’apex, sous la nervure radiale.', synonyms: ['submarginale 3', 'troisième cellule submarginale', 'troisième submarginale', '3e cellule submarginale', '3e submarginale'] },
+  { id: 'discoidale', name: 'Cellule discoïdale', definition: 'Cellule fermée au centre de l’aile, sous la première cellule submarginale.', synonyms: ['discoïdale', 'cellule discale'] },
+  { id: 'subdiscoidale-1', name: 'Cellule subdiscoïdale 1', definition: 'Cellule située sous la cellule discoïdale, vers le bord postérieur de l’aile.', synonyms: ['subdiscoïdale 1', 'première cellule subdiscoïdale', 'première subdiscoïdale', '1re cellule subdiscoïdale', '1re subdiscoïdale'] },
+  { id: 'subdiscoidale-2', name: 'Cellule subdiscoïdale 2', definition: 'Grande cellule ouverte entre la nervure médiane et le bord postérieur, du côté de l’apex.', synonyms: ['subdiscoïdale 2', 'deuxième cellule subdiscoïdale', 'deuxième subdiscoïdale', '2e cellule subdiscoïdale', '2e subdiscoïdale'] },
+  { id: 'basale', name: 'Cellule basale', definition: 'Cellule de la base de l’aile, sous la cellule costale.', synonyms: ['basale'] },
+  { id: 'subbasale', name: 'Cellule subbasale', definition: 'Cellule étroite de la base de l’aile, sous la cellule basale.', synonyms: ['subbasale', 'sub-basale', 'cellule sub-basale'] },
 
-  { id: 'costa', name: 'Costa', region: 'nervures', definition: 'Nervure qui forme le bord antérieur de l’aile, de la base jusqu’au ptérostigma.', synonyms: ['nervure costale'] },
-  { id: 'sous-costale', name: 'Sous-costale', region: 'nervures', definition: 'Nervure longitudinale qui part de la base sous la costa. Chez les fourmis, elle est fusionnée au radius (Sc+R).', synonyms: ['subcosta', 'subcostale', 'nervure sous-costale', 'sc', 'sc+r'] },
-  { id: 'radius', name: 'Radius', region: 'nervures', definition: 'Nervure qui rejoint le ptérostigma puis longe le bord antérieur en bordant la cellule marginale.', synonyms: ['nervure radiale', 'r1'] },
-  { id: '2r-rs', name: 'Transverse 2r-rs', region: 'nervures', definition: 'Nervure transverse qui relie le ptérostigma au secteur radial et ferme la cellule marginale du côté de la base.', synonyms: ['2r-rs', 'nervure 2r-rs', '2 radius radial sector'] },
-  { id: '3r-rs', name: 'Transverse 3r-rs', region: 'nervures', definition: 'Nervure transverse à l’apex de la cellule marginale, qui la referme contre le bord antérieur.', synonyms: ['3r-rs', 'nervure 3r-rs', '3 radius radial sector'] },
-  { id: 'secteur-radial', name: 'Secteur radial', region: 'nervures', definition: 'Branche postérieure du radius : ce court segment descend jusqu’à la média et fusionne avec elle.', synonyms: ['rs', 'radial sector'] },
-  { id: 'rs-plus-m', name: 'Secteur radial + média', region: 'nervures', definition: 'Segment où secteur radial et média sont fusionnés, au bord supérieur de la cellule discoïdale.', synonyms: ['rs+m', 'rs + m', 'radial sector+media', 'radial sector + media', 'secteur radial+média'] },
-  { id: 'rs-2-3', name: 'Secteur radial 2+3', region: 'nervures', definition: 'Branche du secteur radial qui remonte vers le ptérostigma, entre les cellules submarginales 1 et 2.', synonyms: ['rs2+3', 'rs 2+3', 'radial sector 2+3', 'secteur radial 2 3'] },
-  { id: 'rs-4-5', name: 'Secteur radial 4+5', region: 'nervures', definition: 'Branche du secteur radial qui borde la cellule marginale par-dessous, jusqu’à l’apex.', synonyms: ['rs4+5', 'rs 4+5', 'radial sector 4+5', 'radial sector 4 5', 'secteur radial 4 5'] },
-  { id: 'rs-m', name: 'Transverse rs-m', region: 'nervures', definition: 'Nervure transverse qui relie le secteur radial à la média, entre les cellules submarginales 2 et 3.', synonyms: ['rs-m', 'nervure rs-m', 'radial sector media'] },
-  { id: 'media-1', name: 'Média 1', region: 'nervures', definition: 'Premier segment de la média : il quitte la tige commune avec le cubitus et remonte jusqu’au secteur radial en bordant la cellule discoïdale.', synonyms: ['media 1', 'm1', 'médiane 1'] },
-  { id: 'media-2', name: 'Média 2', region: 'nervures', definition: 'Segment de la média qui longe la cellule discoïdale, entre le secteur radial et la transverse m-cu.', synonyms: ['media 2', 'm2', 'médiane 2'] },
-  { id: 'media-3', name: 'Média 3', region: 'nervures', definition: 'Segment de la média entre la transverse m-cu et la transverse rs-m, sous la cellule submarginale 2.', synonyms: ['media 3', 'm3', 'médiane 3'] },
-  { id: 'media-4', name: 'Média 4', region: 'nervures', definition: 'Dernier segment de la média, de la transverse rs-m vers l’apex de l’aile.', synonyms: ['media 4', 'm4', 'médiane 4'] },
-  { id: 'm-plus-cu', name: 'Média + cubitus', region: 'nervures', definition: 'Tige commune de la média et du cubitus, depuis la base de l’aile jusqu’à leur séparation.', synonyms: ['m+cu', 'm + cu', 'media+cubitus', 'media + cubitus'] },
-  { id: 'm-cu', name: 'Transverse m-cu', region: 'nervures', definition: 'Nervure transverse qui relie la média au cubitus, sur le côté de la cellule discoïdale.', synonyms: ['m-cu', 'nervure m-cu', 'media cubitus'] },
-  { id: 'cubitus-1', name: 'Cubitus 1', region: 'nervures', definition: 'Premier segment du cubitus, qui borde la cellule discoïdale par-dessous.', synonyms: ['cu1', 'cu 1'] },
-  { id: 'cubitus-2', name: 'Cubitus 2', region: 'nervures', definition: 'Segment du cubitus qui descend en oblique vers le bord postérieur, après la transverse m-cu.', synonyms: ['cu2', 'cu 2'] },
-  { id: 'cubitus-3', name: 'Cubitus 3', region: 'nervures', definition: 'Dernier segment du cubitus, qui file vers l’apex près du bord postérieur.', synonyms: ['cu3', 'cu 3'] },
-  { id: 'cu-a', name: 'Transverse cu-a', region: 'nervures', definition: 'Nervure transverse qui relie la tige média + cubitus à la nervure anale, près de la base.', synonyms: ['cu-a', 'nervure cu-a', 'cubitus anal'] },
-  { id: 'anale-1', name: 'Anale 1', region: 'nervures', definition: 'Nervure anale, près du bord postérieur, de la base jusqu’à la transverse cu-a.', synonyms: ['a1', 'anal', 'anal 1', 'nervure anale', 'nervure anale 1'] },
-  { id: 'anale-2', name: 'Anale 2', region: 'nervures', definition: 'Prolongement de la nervure anale au-delà de la transverse cu-a, vers l’apex.', synonyms: ['a2', 'anal 2', 'nervure anale 2'] },
+  { id: 'costa', name: 'Costa', definition: 'Nervure qui forme le bord antérieur de l’aile, de la base jusqu’au ptérostigma.', synonyms: ['nervure costale'] },
+  { id: 'sous-costale', name: 'Sous-costale', definition: 'Nervure longitudinale qui part de la base sous la costa. Chez les fourmis, elle est fusionnée au radius (Sc+R).', synonyms: ['subcosta', 'subcostale', 'nervure sous-costale', 'sc', 'sc+r'] },
+  { id: 'radius', name: 'Radius', definition: 'Nervure qui rejoint le ptérostigma puis longe le bord antérieur en bordant la cellule marginale.', synonyms: ['nervure radiale', 'r1'] },
+  { id: '2r-rs', name: 'Transverse 2r-rs', definition: 'Nervure transverse qui relie le ptérostigma au secteur radial et ferme la cellule marginale du côté de la base.', synonyms: ['2r-rs', 'nervure 2r-rs', '2 radius radial sector'] },
+  { id: '3r-rs', name: 'Transverse 3r-rs', definition: 'Nervure transverse à l’apex de la cellule marginale, qui la referme contre le bord antérieur.', synonyms: ['3r-rs', 'nervure 3r-rs', '3 radius radial sector'] },
+  { id: 'secteur-radial', name: 'Secteur radial', definition: 'Branche postérieure du radius : ce court segment descend jusqu’à la média et fusionne avec elle.', synonyms: ['rs', 'radial sector'] },
+  { id: 'rs-plus-m', name: 'Secteur radial + média', definition: 'Segment où secteur radial et média sont fusionnés, au bord supérieur de la cellule discoïdale.', synonyms: ['rs+m', 'rs + m', 'radial sector+media', 'radial sector + media', 'secteur radial+média'] },
+  { id: 'rs-2-3', name: 'Secteur radial 2+3', definition: 'Branche du secteur radial qui remonte vers le ptérostigma, entre les cellules submarginales 1 et 2.', synonyms: ['rs2+3', 'rs 2+3', 'radial sector 2+3', 'secteur radial 2 3'] },
+  { id: 'rs-4-5', name: 'Secteur radial 4+5', definition: 'Branche du secteur radial qui borde la cellule marginale par-dessous, jusqu’à l’apex.', synonyms: ['rs4+5', 'rs 4+5', 'radial sector 4+5', 'radial sector 4 5', 'secteur radial 4 5'] },
+  { id: 'rs-m', name: 'Transverse rs-m', definition: 'Nervure transverse qui relie le secteur radial à la média, entre les cellules submarginales 2 et 3.', synonyms: ['rs-m', 'nervure rs-m', 'radial sector media'] },
+  { id: 'media-1', name: 'Média 1', definition: 'Premier segment de la média : il quitte la tige commune avec le cubitus et remonte jusqu’au secteur radial en bordant la cellule discoïdale.', synonyms: ['media 1', 'm1', 'médiane 1'] },
+  { id: 'media-2', name: 'Média 2', definition: 'Segment de la média qui longe la cellule discoïdale, entre le secteur radial et la transverse m-cu.', synonyms: ['media 2', 'm2', 'médiane 2'] },
+  { id: 'media-3', name: 'Média 3', definition: 'Segment de la média entre la transverse m-cu et la transverse rs-m, sous la cellule submarginale 2.', synonyms: ['media 3', 'm3', 'médiane 3'] },
+  { id: 'media-4', name: 'Média 4', definition: 'Dernier segment de la média, de la transverse rs-m vers l’apex de l’aile.', synonyms: ['media 4', 'm4', 'médiane 4'] },
+  { id: 'm-plus-cu', name: 'Média + cubitus', definition: 'Tige commune de la média et du cubitus, depuis la base de l’aile jusqu’à leur séparation.', synonyms: ['m+cu', 'm + cu', 'media+cubitus', 'media + cubitus'] },
+  { id: 'm-cu', name: 'Transverse m-cu', definition: 'Nervure transverse qui relie la média au cubitus, sur le côté de la cellule discoïdale.', synonyms: ['m-cu', 'nervure m-cu', 'media cubitus'] },
+  { id: 'cubitus-1', name: 'Cubitus 1', definition: 'Premier segment du cubitus, qui borde la cellule discoïdale par-dessous.', synonyms: ['cu1', 'cu 1'] },
+  { id: 'cubitus-2', name: 'Cubitus 2', definition: 'Segment du cubitus qui descend en oblique vers le bord postérieur, après la transverse m-cu.', synonyms: ['cu2', 'cu 2'] },
+  { id: 'cubitus-3', name: 'Cubitus 3', definition: 'Dernier segment du cubitus, qui file vers l’apex près du bord postérieur.', synonyms: ['cu3', 'cu 3'] },
+  { id: 'cu-a', name: 'Transverse cu-a', definition: 'Nervure transverse qui relie la tige média + cubitus à la nervure anale, près de la base.', synonyms: ['cu-a', 'nervure cu-a', 'cubitus anal'] },
+  { id: 'anale-1', name: 'Anale 1', definition: 'Nervure anale, près du bord postérieur, de la base jusqu’à la transverse cu-a.', synonyms: ['a1', 'anal', 'anal 1', 'nervure anale', 'nervure anale 1'] },
+  { id: 'anale-2', name: 'Anale 2', definition: 'Prolongement de la nervure anale au-delà de la transverse cu-a, vers l’apex.', synonyms: ['a2', 'anal 2', 'nervure anale 2'] },
+
+  // Termes du glossaire de Bolton (1994) qui ne figurent sur aucune planche pour l'instant (glossaire seulement).
+  { id: 'oeil', name: 'Œil composé', definition: 'Organe de la vue, sur le côté de la tête, formé d’ommatidies. Il est réduit, voire absent, chez les ouvrières de certains groupes.', synonyms: ['œil', 'yeux', 'yeux composés'] },
+  { id: 'gena', name: 'Gena', definition: 'Zone de la face de la tête limitée en avant par le bord postérieur du clypéus, en arrière par le bord antérieur de l’œil et vers le milieu par la fossette antennaire. Elle couvre une partie du dessus et du côté de la tête, entre l’œil et le clypéus.', synonyms: ['genae', 'joue', 'joues'] },
+  { id: 'bord-occipital', name: 'Bord occipital', definition: 'Bord postérieur transverse de la tête en vue de face. Le terme est impropre, l’occiput commençant en général plus en arrière, mais reste d’usage courant.', synonyms: ['marge occipitale', 'bord postérieur de la tête'] },
+  { id: 'coins-occipitaux', name: 'Coins occipitaux', definition: 'Angles postérolatéraux de la tête en vue de face, arrondis à aigus, là où les côtés rejoignent le bord occipital.', synonyms: ['coin occipital', 'angles occipitaux'] },
+  { id: 'carene-frontale', name: 'Carène frontale', definition: 'Chacune des deux crêtes longitudinales de la tête, en arrière du clypéus et entre les insertions antennaires. Très variables : courtes, ou prolongées jusqu’au bord occipital, parfois en bordure d’un scrobe, parfois vestigiales. Elles s’élargissent souvent vers l’avant en lobes frontaux.', synonyms: ['carènes frontales'] },
+  { id: 'triangle-frontal', name: 'Triangle frontal', definition: 'Petite aire triangulaire au milieu de la tête, juste en arrière du clypéus, entre les insertions antennaires ou l’avant des carènes frontales. Peu visible chez beaucoup de fourmis.', synonyms: [] },
+  { id: 'suture-fronto-clypeale', name: 'Suture fronto-clypéale', definition: 'Suture qui forme le bord postérieur du clypéus.', synonyms: ['bord postérieur du clypéus', 'suture frontoclypéale'] },
+  { id: 'clypeus-median', name: 'Partie médiane du clypéus', definition: 'Bouclier central du clypéus, entre ses deux parties latérales. Il peut porter des carènes longitudinales, et s’arrête devant les insertions antennaires ou s’avance entre elles.', synonyms: ['clypéus médian'] },
+  { id: 'clypeus-lateral', name: 'Partie latérale du clypéus', definition: 'Chacune des deux bandes étroites du clypéus, de part et d’autre de sa partie médiane.', synonyms: ['parties latérales du clypéus', 'clypéus latéral'] },
+  { id: 'torulus', name: 'Torulus', definition: 'Petit sclérite en anneau qui entoure la fossette antennaire. Il est parfois relevé jusqu’à la verticale, sa partie interne formant alors un petit lobe, recouvert ou non par le lobe frontal.', synonyms: ['toruli', 'sclérite antennaire', 'sclérite torulaire'] },
+  { id: 'fossette-antennaire', name: 'Fossette antennaire', definition: 'Orifice en arrière du clypéus dans lequel s’articule le scape. Le torulus l’entoure et le lobe frontal peut la surplomber et la cacher.', synonyms: ['insertion antennaire', 'cavité antennaire'] },
+  { id: 'scrobe', name: 'Scrobe antennaire', definition: 'Sillon, dépression ou excavation sur le côté de la tête, au-dessus ou au-dessous de l’œil, qui loge le scape et parfois toute l’antenne repliée. Absent chez la plupart des genres.', synonyms: ['scrobe', 'scrobes'] },
+  { id: 'fossette-tentoriale', name: 'Fossette tentoriale antérieure', definition: 'Chacune des deux petites fossettes à l’avant de la face dorsale de la tête, sur le bord postérieur du clypéus ou tout près. Elles marquent l’attache des bras antérieurs du tentorium, le squelette interne de la tête.', synonyms: ['fossettes tentoriales', 'fossette tentoriale'] },
+  { id: 'carene-nucale', name: 'Carène nucale', definition: 'Crête à l’arrière de la tête qui sépare ses faces dorsale et latérales de la face occipitale.', synonyms: [] },
+  { id: 'labre', name: 'Labre', definition: 'Pièce buccale articulée au bord antérieur du clypéus, repliée vers le bas sur les maxilles et le labium au repos. Bilobé et caché en vue dorsale chez la plupart des fourmis, il dépasse du clypéus chez quelques-unes.', synonyms: [] },
+  { id: 'palpes-maxillaires', name: 'Palpes maxillaires', definition: 'Palpes sensoriels articulés portés par les maxilles, de six articles au plus, souvent moins selon les groupes. Leur nombre d’articles est noté en premier dans la formule palpaire.', synonyms: ['palpe maxillaire'] },
+  { id: 'palpes-labiaux', name: 'Palpes labiaux', definition: 'Paire de palpes sensoriels portés par le labium, de quatre articles au plus.', synonyms: ['palpe labial'] },
+  { id: 'hypostome', name: 'Hypostome', definition: 'Région antéroventrale de la tête, juste en arrière de la cavité buccale dont elle forme le bord postérieur. Son bord antérieur peut porter des dents hypostomales.', synonyms: ['hypostoma'] },
+  { id: 'bulbe-condylaire', name: 'Bulbe condylaire', definition: 'Renflement en boule à la base du scape : c’est lui qui s’articule dans la fossette antennaire.', synonyms: ['bulbe articulaire'] },
+  { id: 'massue', name: 'Massue antennaire', definition: 'Derniers articles du funicule, de un à quatre, nettement élargis.', synonyms: ['massue'] },
+  { id: 'bord-masticateur', name: 'Bord masticateur', definition: 'Bord interne de la mandibule, le plus proche de l’axe de la tête quand les mandibules sont fermées. Il porte en général les dents.', synonyms: ['bord apical'] },
+  { id: 'bord-basal', name: 'Bord basal', definition: 'Bord de la mandibule entre l’angle basal et la base, transverse ou oblique, le plus souvent sans dents. Il rejoint le bord masticateur par l’angle basal ou par une courbe.', synonyms: ['bord basal de la mandibule'] },
+  { id: 'bord-externe', name: 'Bord externe', definition: 'Bord extérieur de la mandibule en vue de face, droit, sinueux ou convexe.', synonyms: ['bord latéral de la mandibule', 'bord externe de la mandibule'] },
+  { id: 'angle-basal', name: 'Angle basal', definition: 'Angle où le bord masticateur rejoint le bord basal, près du bord antérieur du clypéus. Il disparaît chez les mandibules linéaires.', synonyms: [] },
+  { id: 'dent-apicale', name: 'Dent apicale', definition: 'Première dent du bord masticateur, la plus distale, en général la plus grande.', synonyms: [] },
+  { id: 'dent-basale', name: 'Dent basale', definition: 'Dent située à l’angle basal de la mandibule, ou la plus proche de lui.', synonyms: [] },
+  { id: 'dent-preapicale', name: 'Dent préapicale', definition: 'Dent qui suit immédiatement la dent apicale. Le terme désigne parfois plusieurs dents entre l’apex et le milieu du bord masticateur.', synonyms: ['dent subapicale', 'dents préapicales'] },
+  { id: 'dent-prebasale', name: 'Dent prébasale', definition: 'Dent qui précède immédiatement la dent basale.', synonyms: ['dent subbasale'] },
+  { id: 'denticule', name: 'Denticule', definition: 'Dent courte ou très réduite du bord masticateur. Une mandibule qui ne porte que des denticules est dite denticulée.', synonyms: ['denticules'] },
+  { id: 'diasteme', name: 'Diastème', definition: 'Espace naturel dans la rangée de dents du bord masticateur, à ne pas confondre avec une dent cassée ou usée.', synonyms: ['diastèmes'] },
+  { id: 'lamelle-basale', name: 'Lamelle basale', definition: 'Fine lame de cuticule sur le bord masticateur, en arrière des dents, chez de nombreuses Myrmicinae de la tribu des Dacetini.', synonyms: [] },
+  { id: 'trulleum', name: 'Trulleum', definition: 'Dépression en cuvette près de la base de la mandibule, sur sa face dorsale, limitée du côté distal par le bord basal.', synonyms: [] },
+  { id: 'mesosoma', name: 'Mésosoma', definition: 'Deuxième tagme visible, après la tête : les trois segments du thorax (pro-, méso- et métathorax) et le propodéum qui leur est soudé. Bolton (1994) l’appelle alitrunk.', synonyms: ['alitrunk', 'alitronc'] },
+  { id: 'thorax', name: 'Thorax', definition: 'Les trois segments thoraciques au sens strict. Chez les fourmis, ils sont soudés au propodéum, et l’ensemble s’appelle mésosoma : parler de thorax pour ce tagme est impropre.', synonyms: [] },
+  { id: 'promesonotum', name: 'Promésonotum', definition: 'Sclérite unique issu de la fusion du pronotum et du mésonotum, quand la suture promésonotale a disparu.', synonyms: [] },
+  { id: 'suture-promesonotale', name: 'Suture promésonotale', definition: 'Suture transverse sur le dessus du mésosoma, entre le pronotum et le mésonotum. Souple chez certains groupes, elle est souvent soudée, réduite à une ligne, voire absente.', synonyms: [] },
+  { id: 'sillon-metanotal', name: 'Sillon métanotal', definition: 'Sillon transverse entre le mésonotum et le propodéum : la dernière trace, sur le dessus du mésosoma, du métanotum (tergite du métathorax).', synonyms: ['métanotum', 'suture métanotale'] },
+  { id: 'propleure', name: 'Propleure', definition: 'Pleurite du prothorax, petit, presque entièrement caché par le pronotum de profil mais bien visible en vue ventrale.', synonyms: ['propleuron'] },
+  { id: 'metapleure', name: 'Métapleure', definition: 'Pleurite du métathorax, à l’arrière du côté du mésosoma, sous le niveau du propodéum. Il porte la glande métapleurale chez la plupart des fourmis.', synonyms: ['métapleuron'] },
+  { id: 'anepisterne', name: 'Anépisterne', definition: 'Partie supérieure de la mésopleure, quand un sillon transverse la divise.', synonyms: ['anépisternum'] },
+  { id: 'katepisterne', name: 'Katépisterne', definition: 'Partie inférieure de la mésopleure, quand un sillon transverse la divise.', synonyms: ['katépisternum'] },
+  { id: 'orifice-metapleural', name: 'Orifice de la glande métapleurale', definition: 'Ouverture de la glande métapleurale, une glande exocrine, à l’angle postéroventral du côté du mésosoma, au-dessus de la métacoxa et sous le spiracle propodéal. Simple pore, ou protégé par des expansions de cuticule ou des soies.', synonyms: ['orifice métapleural'] },
+  { id: 'bulle-metapleurale', name: 'Bulle de la glande métapleurale', definition: 'Renflement du métapleure qui contient la glande métapleurale, souvent plus visible que son orifice, en forme de cloque.', synonyms: ['bulle métapleurale'] },
+  { id: 'lobe-propodeal', name: 'Lobe propodéal', definition: 'Chacun des deux lobes à la base de la déclivité propodéale, de part et d’autre de l’articulation avec le pétiole. Ils appartiennent au propodéum et non au métapleure : le nom de lobe métapleural est à éviter.', synonyms: ['lobes propodéaux', 'lobe métapleural', 'lame propodéale inférieure'] },
+  { id: 'declivite-propodeale', name: 'Déclivité propodéale', definition: 'Face postérieure en pente du propodéum, au-dessus de l’articulation avec le pétiole.', synonyms: ['face déclive', 'déclivité'] },
+  { id: 'epines-propodeales', name: 'Épines propodéales', definition: 'Paire de dents ou d’épines qui termine souvent le dessus du propodéum vers l’arrière.', synonyms: ['épine propodéale', 'dents propodéales'] },
+  { id: 'processus-metasternal', name: 'Processus métasternal', definition: 'Projection paire de cuticule sous l’arrière du mésosoma, de part et d’autre de la ligne médiane, devant la cavité où s’articule le pétiole.', synonyms: [] },
+  { id: 'fossette-endophragmale', name: 'Fossette endophragmale', definition: 'Fossette de la paroi latérale du mésosoma qui marque l’attache d’une partie du squelette interne.', synonyms: [] },
+  { id: 'angles-humeraux', name: 'Angles huméraux', definition: 'Angles antérolatéraux du dessus du pronotum.', synonyms: ['angle huméral', 'humérus'] },
+  { id: 'abdomen', name: 'Abdomen', definition: 'Troisième tagme de l’insecte. Chez l’ouvrière, il compte sept segments visibles portant chacun un spiracle ; le premier, le propodéum, est soudé au thorax, les suivants forment la taille et le gastre.', synonyms: [] },
+  { id: 'metasoma', name: 'Métasoma', definition: 'Segments abdominaux situés en arrière du propodéum : la taille et le gastre. Utile chez d’autres Hyménoptères, le terme est peu recommandé chez les fourmis selon Bolton (1994).', synonyms: [] },
+  { id: 'gastre', name: 'Gastre', definition: 'Tagme terminal, élargi : segments abdominaux 3 à 7 quand la taille ne compte que le pétiole, 4 à 7 avec un postpétiole. On dit gastral plutôt que gastrique, réservé à l’intestin.', synonyms: [] },
+  { id: 'taille', name: 'Taille', definition: 'Un ou deux segments abdominaux isolés entre le mésosoma et le gastre : le pétiole seul, ou le pétiole et le postpétiole. Pédicelle est un terme ancien à éviter, qui désigne un article de l’antenne chez les autres Hyménoptères.', synonyms: ['pédicelle'] },
+  { id: 'postpetiole', name: 'Postpétiole', definition: 'Troisième segment abdominal, quand il est réduit et séparé à la fois du pétiole et du segment suivant, par exemple chez les Myrmicinae.', synonyms: [] },
+  { id: 'helcium', name: 'Helcium', definition: 'Présclérites très réduits et spécialisés du troisième segment abdominal, qui forment une articulation complexe dans l’orifice postérieur du pétiole. Il est en général caché, en partie ou en totalité.', synonyms: [] },
+  { id: 'pedoncule', name: 'Pédoncule', definition: 'Partie antérieure étroite du pétiole, entre l’articulation avec le propodéum et le nœud ou l’écaille. Un pétiole sans pédoncule est dit sessile.', synonyms: ['pédoncule du pétiole'] },
+  { id: 'processus-subpetiolaire', name: 'Processus subpétiolaire', definition: 'Projection antéroventrale du pétiole ou de son pédoncule, de forme très variable, parfois absente.', synonyms: [] },
+  { id: 'presclerite', name: 'Présclérite', definition: 'Partie antérieure bien différenciée d’un sclérite abdominal, séparée du reste par une crête, un étranglement ou les deux, et en général recouverte par le segment précédent. On parle de prétergite et de présternite.', synonyms: ['prétergite', 'présternite'] },
+  { id: 'hypopygium', name: 'Hypopygium', definition: 'Sternite du septième segment abdominal : le dernier sternite visible du gastre.', synonyms: [] },
+  { id: 'acidopore', name: 'Acidopore', definition: 'Orifice par lequel les Formicinae projettent l’acide formique, propre à cette sous-famille. Formé par l’apex de l’hypopygium, il prend souvent la forme d’une courte buse bordée de soies.', synonyms: [] },
+  { id: 'constriction', name: 'Étranglement annulaire', definition: 'Rétrécissement brusque qui fait le tour d’un segment abdominal, à la jonction entre présclérite et postsclérite. Par commodité, les clés le placent entre deux segments.', synonyms: ['constriction annulaire'] },
+  { id: 'appareil-stridulatoire', name: 'Appareil stridulatoire', definition: 'Organe sonore : une râpe (plectre), sur le bord postérieur du troisième segment abdominal, frotte sur une aire finement striée (stridulitrum) à l’avant du quatrième.', synonyms: ['plectre', 'stridulitrum'] },
+  { id: 'basitarse', name: 'Basitarse', definition: 'Premier article du tarse, articulé au tibia.', synonyms: ['basitarses'] },
+  { id: 'pretarse', name: 'Prétarse', definition: 'Dernier article du tarse, qui porte la paire de griffes.', synonyms: [] },
+  { id: 'strigile', name: 'Strigile', definition: 'Éperon pectiné du tibia antérieur, modifié pour nettoyer l’antenne.', synonyms: [] },
+  { id: 'soie', name: 'Soie', definition: 'Poil épais inséré dans une alvéole à sa base. Soie et poil sont interchangeables, mais il faut les distinguer de la pubescence. Les clés citent souvent la présence ou la forme des soies sur une partie précise.', synonyms: ['soies', 'poil', 'poils', 'seta', 'setae'] },
+  { id: 'pubescence', name: 'Pubescence', definition: 'Duvet de poils très fins et courts, distinct des soies. Bolton (1994) la définit comme des projections non insérées dans une alvéole.', synonyms: [] },
+  { id: 'psammophore', name: 'Psammophore', definition: 'Corbeille de longues soies, souvent épaisses et courbées, sous la tête et les mandibules, qui sert à transporter le sable chez des fourmis des déserts.', synonyms: [] },
 ];
 
-/** Structures dans la langue demandée (les tests vérifient les deux langues). */
+// Placement des termes sur les planches : régions dans l'ordre de REGIONS_FR, termes dans l'ordre de la légende.
+// Un même terme peut figurer sur plusieurs planches (une fois par planche).
+const LAYOUT: Record<RegionId, TermId[]> = {
+  tete: ['tete', 'ommatidies', 'lobe', 'clypeus', 'mandibule'],
+  antenne: ['scape', 'funicule'],
+  mesosoma: ['pronotum', 'mesonotum', 'mesopleure', 'propodeum', 'spiracle'],
+  petiole: ['petiole'],
+  gastre: ['tergite', 'sternite', 'pygidium', 'aiguillon'],
+  pattes: ['coxa', 'trochanter', 'femur', 'tibia', 'eperon', 'tarse', 'griffe'],
+  cellules: [
+    'pterostigma', 'costale', 'marginale', 'submarginale-1', 'submarginale-2', 'submarginale-3',
+    'discoidale', 'subdiscoidale-1', 'subdiscoidale-2', 'basale', 'subbasale',
+  ],
+  nervures: [
+    'costa', 'sous-costale', 'radius', '2r-rs', '3r-rs', 'secteur-radial', 'rs-plus-m', 'rs-2-3', 'rs-4-5', 'rs-m',
+    'media-1', 'media-2', 'media-3', 'media-4', 'm-plus-cu', 'm-cu', 'cubitus-1', 'cubitus-2', 'cubitus-3', 'cu-a',
+    'anale-1', 'anale-2',
+  ],
+};
+
+// Abréviations des légendes de figures. Pour la fourmi, celles de Bolton (1994, Identification Guide to the Ant Genera
+// of the World, fig. 523-531) quand il en donne ; sinon (trochanter, fémur, tibia, éperon, tarse, griffe, clypéus entier)
+// l'usage courant. Pour l'aile, la notation de nervation : majuscules pour les nervures longitudinales, minuscules pour
+// les transverses. Uniques au sein d'une planche.
+const ABBREVIATIONS: Partial<Record<TermId, string>> = {
+  tete: 'hd', lobe: 'fl', clypeus: 'cl', mandibule: 'mn',
+  scape: 'sc', funicule: 'fu',
+  pronotum: 'pn', mesonotum: 'ms', mesopleure: 'mpl', propodeum: 'ppd', spiracle: 'sp',
+  petiole: 'pt',
+  tergite: 'tr', sternite: 'st', pygidium: 'py', aiguillon: 's',
+  coxa: 'c', trochanter: 'tro', femur: 'fe', tibia: 'ti', eperon: 'tsp', tarse: 'ta', griffe: 'cw',
+
+  pterostigma: 'pts', costale: 'cc', marginale: 'mc',
+  'submarginale-1': 'smc1', 'submarginale-2': 'smc2', 'submarginale-3': 'smc3',
+  discoidale: 'dc', 'subdiscoidale-1': 'sdc1', 'subdiscoidale-2': 'sdc2',
+  basale: 'bc', subbasale: 'sbc',
+  costa: 'C', 'sous-costale': 'Sc', radius: 'R', '2r-rs': '2r-rs', '3r-rs': '3r-rs',
+  'secteur-radial': 'Rs', 'rs-plus-m': 'Rs+M', 'rs-2-3': 'Rs2+3', 'rs-4-5': 'Rs4+5', 'rs-m': 'rs-m',
+  'media-1': 'M1', 'media-2': 'M2', 'media-3': 'M3', 'media-4': 'M4', 'm-plus-cu': 'M+Cu', 'm-cu': 'm-cu',
+  'cubitus-1': 'Cu1', 'cubitus-2': 'Cu2', 'cubitus-3': 'Cu3', 'cu-a': 'cu-a', 'anale-1': 'A1', 'anale-2': 'A2',
+
+  oeil: 'ey', gena: 'gn', 'bord-occipital': 'om', 'carene-frontale': 'fc', 'triangle-frontal': 'ft',
+  'suture-fronto-clypeale': 'fs', 'clypeus-median': 'mc', 'clypeus-lateral': 'lc', torulus: 'to',
+  'fossette-antennaire': 'as', scrobe: 'scb', 'fossette-tentoriale': 'atp', 'bord-masticateur': 'ma',
+  'bord-basal': 'mb', 'bord-externe': 'me', 'angle-basal': 'ba', 'dent-apicale': 'at', 'dent-basale': 'bt',
+  denticule: 'dn', diasteme: 'di', trulleum: 'tu', mesosoma: 'mes', promesonotum: 'prs',
+  'suture-promesonotale': 'pms', 'sillon-metanotal': 'mtg', propleure: 'pr', metapleure: 'mtp', anepisterne: 'an',
+  katepisterne: 'kn', 'orifice-metapleural': 'or', 'bulle-metapleurale': 'mgb', 'lobe-propodeal': 'pl',
+  'declivite-propodeale': 'de', metasoma: 'mt', gastre: 'ga', taille: 'w', postpetiole: 'ppt', helcium: 'he',
+  pedoncule: 'pd', 'processus-subpetiolaire': 'sb', presclerite: 'psc', hypopygium: 'hy', constriction: 'gc',
+};
+
+const withAbbr = (t: Omit<Term, 'abbr'>): Term => (ABBREVIATIONS[t.id] ? { ...t, abbr: ABBREVIATIONS[t.id] } : t);
+
+/** Dictionnaire dans la langue demandée (les tests vérifient les deux langues). */
+export function termsFor(lang: Lang): Term[] {
+  return TERMS_FR.map((t) => withAbbr(lang === 'fr' ? t : { ...t, ...TERMS_EN[t.id] }));
+}
+
+const plateOf = (region: RegionId) => REGIONS_FR.find((r) => r.id === region)!.plate;
+
+/** Structures de toutes les planches dans la langue demandée, dans l'ordre des planches et de leurs légendes. */
 export function partsFor(lang: Lang): Part[] {
-  return lang === 'fr' ? PARTS_FR : PARTS_FR.map((p) => ({ ...p, ...PARTS_EN[p.id] }));
+  const byId = Object.fromEntries(termsFor(lang).map((t) => [t.id, t])) as Record<TermId, Term>;
+  return REGIONS_FR.flatMap((r) => LAYOUT[r.id].map((id) => ({ ...byId[id], region: r.id, plate: plateOf(r.id) })));
 }
 
 export const PLATES: Plate[] = LANG === 'fr' ? PLATES_FR : PLATES_FR.map((p) => ({ ...p, ...PLATES_EN[p.id] }));
 
 export const REGIONS: Region[] = LANG === 'fr' ? REGIONS_FR : REGIONS_FR.map((r) => ({ ...r, label: REGIONS_EN[r.id] }));
 
-export const PARTS: Part[] = partsFor(LANG);
+export const TERMS: Term[] = termsFor(LANG);
 
-export const PART_BY_ID = Object.fromEntries(PARTS.map((p) => [p.id, p])) as Record<PartId, Part>;
+export const TERM_BY_ID = Object.fromEntries(TERMS.map((t) => [t.id, t])) as Record<TermId, Term>;
+
+/** Une entrée par terme et par planche où il figure. */
+export const PARTS: Part[] = partsFor(LANG);
 
 export const PLATE_BY_ID = Object.fromEntries(PLATES.map((p) => [p.id, p])) as Record<PlateId, Plate>;
 
 export const REGION_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r])) as Record<RegionId, Region>;
+
+const PART_BY_PLATE = Object.fromEntries(
+  PLATES.map((pl) => [pl.id, Object.fromEntries(PARTS.filter((p) => p.plate === pl.id).map((p) => [p.id, p]))]),
+) as Record<PlateId, Record<PartId, Part>>;
+
+/** Structure `id` de la planche `plate`. */
+export function partIn(plate: PlateId, id: PartId): Part {
+  return PART_BY_PLATE[plate][id];
+}
 
 export function partsInRegions(regions: readonly RegionId[]): Part[] {
   return PARTS.filter((p) => regions.includes(p.region));
@@ -154,5 +323,10 @@ export function regionsOf(plate: PlateId): Region[] {
 }
 
 export function partsOf(plate: PlateId): Part[] {
-  return PARTS.filter((p) => REGION_BY_ID[p.region].plate === plate);
+  return PARTS.filter((p) => p.plate === plate);
+}
+
+/** Placements d'un terme : une structure par planche où il figure. */
+export function placementsOf(id: TermId): Part[] {
+  return PARTS.filter((p) => p.id === id);
 }

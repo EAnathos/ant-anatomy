@@ -13,6 +13,13 @@ export const LANG_URLS: Record<Lang, string> = {
   en: `${import.meta.env.BASE_URL}en/`,
 };
 
+/** Adresse du glossaire dans la langue de la page. Les deux sont reconnues (la redirection fr → en garde le #). */
+export const GLOSSARY_HASHES: Record<Lang, string> = { fr: '#glossaire', en: '#glossary' };
+
+export const GLOSSARY_HASH = GLOSSARY_HASHES[LANG];
+
+export const isGlossaryHash = (hash: string) => hash === '#glossaire' || hash === '#glossary';
+
 /** Mémorise le choix explicite de langue (lu par le script de redirection de `index.html`). */
 export function rememberLang(lang: Lang) {
   try {

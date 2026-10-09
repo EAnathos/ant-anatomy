@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { PART_BY_ID, PLATES, partsFor, partsOf, regionsOf } from '../data/parts';
+import { PLATES, TERM_BY_ID, partIn, partsFor, partsOf, regionsOf, termsFor } from '../data/parts';
 import { isCorrectName, normalize } from './answers';
 import { buildQuestions, formatDuration, shuffle, summarize } from './session';
 
@@ -17,40 +17,42 @@ describe('normalize', () => {
 
 describe('isCorrectName', () => {
   it('accepte le nom, les synonymes et le pluriel', () => {
-    expect(isCorrectName(PART_BY_ID.funicule, 'funicule', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID.funicule, 'Funiculus', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID.coxa, 'hanche', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID.mandibule, 'mandibules', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID.mandibule, 'mandibule', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID.femur, 'fémur', false)).toBe(true);
-    expect(isCorrectName(PART_BY_ID.eperon, 'éperon tibial', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID.lobe, 'carène frontale', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID.ommatidies, 'ommatidie', false)).toBe(true);
-    expect(isCorrectName(PART_BY_ID.ommatidies, 'Ommatidium', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID.ommatidies, 'œil composé', true)).toBe(false);
-    expect(isCorrectName(PART_BY_ID['submarginale-1'], '1re submarginale', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID.marginale, 'cellule radiale', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID['subdiscoidale-2'], 'subdiscoidale 1', true)).toBe(false);
-    expect(isCorrectName(PART_BY_ID['2r-rs'], '2r-rs', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID['rs-plus-m'], 'Rs + M', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID['media-3'], 'M3', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID['m-cu'], 'media-cubitus', true)).toBe(true);
-    expect(isCorrectName(PART_BY_ID['m-plus-cu'], 'media-cubitus', true)).toBe(false);
+    expect(isCorrectName(TERM_BY_ID.funicule, 'funicule', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.funicule, 'Funiculus', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.coxa, 'hanche', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.mandibule, 'mandibules', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.mandibule, 'mandibule', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.femur, 'fémur', false)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.eperon, 'éperon tibial', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.lobe, 'lobes frontaux', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.lobe, 'carène frontale', true)).toBe(false);
+    expect(isCorrectName(TERM_BY_ID.lobe, 'torulus', true)).toBe(false);
+    expect(isCorrectName(TERM_BY_ID.ommatidies, 'ommatidie', false)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.ommatidies, 'Ommatidium', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.ommatidies, 'œil composé', true)).toBe(false);
+    expect(isCorrectName(TERM_BY_ID['submarginale-1'], '1re submarginale', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.marginale, 'cellule radiale', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID['subdiscoidale-2'], 'subdiscoidale 1', true)).toBe(false);
+    expect(isCorrectName(TERM_BY_ID['2r-rs'], '2r-rs', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID['rs-plus-m'], 'Rs + M', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID['media-3'], 'M3', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID['m-cu'], 'media-cubitus', true)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID['m-plus-cu'], 'media-cubitus', true)).toBe(false);
   });
 
   it('refuse une mauvaise réponse ou une réponse vide', () => {
-    expect(isCorrectName(PART_BY_ID.scape, 'funicule', true)).toBe(false);
-    expect(isCorrectName(PART_BY_ID.scape, '   ', true)).toBe(false);
+    expect(isCorrectName(TERM_BY_ID.scape, 'funicule', true)).toBe(false);
+    expect(isCorrectName(TERM_BY_ID.scape, '   ', true)).toBe(false);
   });
 
   it('exige les accents quand ils ne sont pas ignorés', () => {
-    expect(isCorrectName(PART_BY_ID.propodeum, 'propodeum', false)).toBe(false);
-    expect(isCorrectName(PART_BY_ID.propodeum, 'Propodéum', false)).toBe(true);
+    expect(isCorrectName(TERM_BY_ID.propodeum, 'propodeum', false)).toBe(false);
+    expect(isCorrectName(TERM_BY_ID.propodeum, 'Propodéum', false)).toBe(true);
   });
 });
 
 describe('anglais', () => {
-  const EN = Object.fromEntries(partsFor('en').map((p) => [p.id, p])) as typeof PART_BY_ID;
+  const EN = Object.fromEntries(termsFor('en').map((t) => [t.id, t])) as typeof TERM_BY_ID;
 
   it('accepte les noms, synonymes et pluriels anglais', () => {
     expect(isCorrectName(EN.femur, 'femur', true)).toBe(true);
@@ -63,23 +65,52 @@ describe('anglais', () => {
     expect(isCorrectName(EN.femur, 'fémur', false)).toBe(false);
   });
 
-  it('traduit toutes les structures', () => {
-    for (const p of partsFor('en')) expect(p.definition, p.id).not.toBe(PART_BY_ID[p.id].definition);
+  it('traduit tous les termes', () => {
+    for (const t of termsFor('en')) expect(t.definition, t.id).not.toBe(TERM_BY_ID[t.id].definition);
   });
 });
 
 describe('noms sans ambiguïté', () => {
   it.each(['fr', 'en'] as const)('%s : aucun nom ni synonyme partagé par deux structures d’une planche', (lang) => {
     for (const plate of PLATES) {
-      const ids = new Set(partsOf(plate.id).map((p) => p.id));
       const seen = new Map<string, string>();
-      for (const part of partsFor(lang).filter((p) => ids.has(p.id))) {
+      for (const part of partsFor(lang).filter((p) => p.plate === plate.id)) {
         for (const label of new Set([part.name, ...part.synonyms].map((s) => normalize(s, true).replace(/s$/, '')))) {
           expect(seen.get(label) ?? part.id, `« ${label} »`).toBe(part.id);
           seen.set(label, part.id);
         }
       }
     }
+  });
+});
+
+describe('abréviations', () => {
+  it.each(PLATES.map((p) => p.id))('%s : uniques et identiques dans les deux langues', (plate) => {
+    const abbrs = partsOf(plate).flatMap((p) => (p.abbr ? [p.abbr.toLowerCase()] : []));
+    expect(new Set(abbrs).size).toBe(abbrs.length);
+    for (const t of termsFor('en')) expect(t.abbr, t.id).toBe(TERM_BY_ID[t.id].abbr);
+  });
+});
+
+describe('dictionnaire', () => {
+  it.each(['fr', 'en'] as const)('%s : aucun nom partagé par deux termes du glossaire', (lang) => {
+    const seen = new Map<string, string>();
+    for (const t of termsFor(lang)) {
+      const label = normalize(t.name, true).replace(/s$/, '');
+      expect(seen.get(label) ?? t.id, `« ${label} »`).toBe(t.id);
+      seen.set(label, t.id);
+    }
+  });
+
+  it('ne place un terme qu’une fois par planche', () => {
+    for (const plate of PLATES) {
+      const ids = partsOf(plate.id).map((p) => p.id);
+      expect(new Set(ids).size, plate.id).toBe(ids.length);
+    }
+  });
+
+  it('rattache chaque région à la planche de ses structures', () => {
+    for (const p of partsFor('fr')) expect(regionsOf(p.plate).map((r) => r.id), p.id).toContain(p.region);
   });
 });
 
@@ -98,7 +129,7 @@ describe('sessions', () => {
     expect(regionsOf('aile').map((r) => r.id)).toEqual(['cellules', 'nervures']);
     const qs = buildQuestions({ plate: 'aile', regions: ['nervures'], questionCount: 'all', ignoreAccents: true });
     expect(qs).toHaveLength(22);
-    expect(qs.every((id) => PART_BY_ID[id].region === 'nervures')).toBe(true);
+    expect(qs.every((id) => partIn('aile', id).region === 'nervures')).toBe(true);
   });
 
   it('calcule score, série et erreurs', () => {
