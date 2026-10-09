@@ -169,6 +169,7 @@ figures 523 à 526 de Bolton (1994) (CC BY-NC 4.0). Formes décrites pour la moi
   tête redessiné par-dessus en décor. Le bord antérieur est fait de tronçons partagés avec les surfaces du clypéus.
 - Coins occipitaux : tronçons arrondis du contour, en traits (`.nerv-core` + `.nerv-hit`) comme le bord occipital.
 - Triangle frontal : sa base suit exactement la suture fronto-clypéale (sous-courbe de la suture).
+- Scrobes (tête A) : leur bord interne est la carène frontale elle-même (même courbe), le trait de la carène le recouvre.
 - Sur l'ouvrière, lobe frontal, clypéus et œil (ommatidies) sont fondus dans la structure `tete`, qui ouvre cette
   planche. Le sillon paraoculo-clypéal est cliquable sur les deux têtes.
 
