@@ -1,8 +1,9 @@
 import { AntPlate, type Marks } from '../components/AntPlate';
 import { CheckIcon, CrossIcon, ReplayIcon } from '../components/icons';
-import { REGION_BY_ID, partIn, type PartId, type PlateId } from '../data/parts';
+import { PlateName } from '../components/PlateName';
+import { PLATES, PLATE_BY_ID, REGION_BY_ID, partIn } from '../data/parts';
 import { LANG, t } from '../i18n';
-import { formatDuration, summarize, type Answer } from '../lib/session';
+import { formatDuration, summarize, type Answer, type Question } from '../lib/session';
 
 const T = t(
   {
@@ -48,20 +49,25 @@ const T = t(
 );
 
 interface ResultsProps {
-  plate: PlateId;
   log: Answer[];
   durationMs: number;
-  onReplay: (questions: PartId[]) => void;
+  onReplay: (questions: Question[]) => void;
   onRestart: () => void;
   onHome: () => void;
 }
 
 const listFormat = new Intl.ListFormat(LANG, { type: 'conjunction' });
 
-export function Results({ plate, log, durationMs, onReplay, onRestart, onHome }: ResultsProps) {
+export function Results({ log, durationMs, onReplay, onRestart, onHome }: ResultsProps) {
   const summary = summarize(log);
-  const missedNames = summary.missed.map((id) => partIn(plate, id).name);
-  const marks: Marks = Object.fromEntries(summary.missed.map((id) => [id, 'ko']));
+  const missedNames = [...new Set(summary.missed.map((q) => partIn(q.plate, q.id).name))];
+  // Une planche par planche où il y a eu des erreurs (une seule pour une partie sur une planche) ; sans erreur,
+  // la planche de la partie.
+  const missedPlates = PLATES.map((p) => p.id).filter((id) => summary.missed.some((q) => q.plate === id));
+  const shownPlates = missedPlates.length > 0 ? missedPlates : log.length > 0 ? [log[0].plate] : [];
+  const severalPlates = new Set(log.map((a) => a.plate)).size > 1;
+  const marksOf = (plate: string): Marks =>
+    Object.fromEntries(summary.missed.filter((q) => q.plate === plate).map((q) => [q.id, 'ko']));
 
   const message =
     summary.missed.length === 0
@@ -95,13 +101,22 @@ export function Results({ plate, log, durationMs, onReplay, onRestart, onHome }:
             <button type="button" className="btn btn--secondary" onClick={onHome}>{T.changeMode}</button>
           </div>
         </div>
-        <figure className="plate hero__plate">
-          <AntPlate plate={plate} marks={marks} />
-          <figcaption className="plate__caption plate__caption--row">
-            <span className="swatch swatch--ko" aria-hidden="true" />
-            <span className="muted">{T.missedCaption}</span>
-          </figcaption>
-        </figure>
+        <div className="hero__plate results__plates">
+          {shownPlates.map((plate) => (
+            <figure key={plate} className="plate">
+              {severalPlates && (
+                <span className="eyebrow">
+                  <PlateName plate={PLATE_BY_ID[plate]} />
+                </span>
+              )}
+              <AntPlate plate={plate} marks={marksOf(plate)} />
+              <figcaption className="plate__caption plate__caption--row">
+                <span className="swatch swatch--ko" aria-hidden="true" />
+                <span className="muted">{T.missedCaption}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
       </section>
 
       <section className="details" aria-labelledby="details-title">
@@ -121,11 +136,11 @@ export function Results({ plate, log, durationMs, onReplay, onRestart, onHome }:
               {log.map((a, i) => (
                 <tr key={`${a.asked}-${i}`}>
                   <td className="mono muted">{String(i + 1).padStart(2, '0')}</td>
-                  <td className="results-table__asked">{partIn(plate, a.asked).name}</td>
-                  <td className="muted">{REGION_BY_ID[partIn(plate, a.asked).region].label}</td>
+                  <td className="results-table__asked">{partIn(a.plate, a.asked).name}</td>
+                  <td className="muted">{REGION_BY_ID[partIn(a.plate, a.asked).region].label}</td>
                   <td className={a.correct ? 'results-table__click results-table__click--same' : 'results-table__click'}>
                     <span className="results-table__label">{T.yourClickLabel}</span>
-                    {partIn(plate, a.picked).name}
+                    {partIn(a.plate, a.picked).name}
                   </td>
                   <td>
                     {a.correct ? (

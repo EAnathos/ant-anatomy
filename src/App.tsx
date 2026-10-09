@@ -5,7 +5,7 @@ import { Launch } from './components/Launch';
 import { PlateName } from './components/PlateName';
 import { PLATES, PLATE_BY_ID, partIn, regionsOf, type PartId, type PlateId } from './data/parts';
 import { GLOSSARY_HASH, PLATE_PARAM, isGlossaryHash, t } from './i18n';
-import { buildQuestions, playableParts, shuffle, type Answer, type Settings } from './lib/session';
+import { buildQuestions, playableParts, shuffle, type Answer, type Question, type Settings } from './lib/session';
 import { FindMode } from './screens/FindMode';
 import { Glossary } from './screens/Glossary';
 import { Home } from './screens/Home';
@@ -16,7 +16,7 @@ import { Results } from './screens/Results';
 type Screen =
   | { name: 'home'; selected?: PartId }
   | { name: 'glossary' }
-  | { name: 'find'; questions: PartId[]; run: number }
+  | { name: 'find'; questions: Question[]; run: number }
   | { name: 'name'; run: number }
   | { name: 'match'; run: number }
   | { name: 'results'; log: Answer[]; durationMs: number };
@@ -25,12 +25,12 @@ type Screen =
 function initialSettings(): Settings {
   const asked = new URLSearchParams(location.search).get(PLATE_PARAM);
   const plate = PLATES.find((p) => p.id === asked)?.id ?? 'ouvriere';
-  return { plate, regions: regionsOf(plate).map((r) => r.id), questionCount: 10, ignoreAccents: true };
+  return { plate, regions: regionsOf(plate).map((r) => r.id), questionCount: 10, ignoreAccents: true, allPlates: false };
 }
 
 const T = t(
-  { find: 'Trouver', name: 'Nommer', match: 'Relier', glossary: 'Tout le glossaire' },
-  { find: 'Find', name: 'Name', match: 'Match', glossary: 'The whole glossary' },
+  { find: 'Trouver', name: 'Nommer', match: 'Relier', glossary: 'Tout le glossaire', allPlates: 'Toutes les planches' },
+  { find: 'Find', name: 'Name', match: 'Match', glossary: 'The whole glossary', allPlates: 'All plates' },
 );
 
 type GameScreen = 'find' | 'name' | 'match';
@@ -78,13 +78,16 @@ export function App() {
 
   const plateLabel = (plate: PlateId) => <PlateName plate={PLATE_BY_ID[plate]} />;
 
-  const launch = (game: GameScreen, subtitle: ReactNode = plateLabel(settings.plate)) => {
+  // Sous-titre de l'écran de lancement : la planche, ou « Toutes les planches ».
+  const sessionLabel = () => (settings.allPlates ? T.allPlates : plateLabel(settings.plate));
+
+  const launch = (game: GameScreen, subtitle: ReactNode = sessionLabel()) => {
     setLaunching({ title: T[game], subtitle });
     setRevealed(false);
     setRun((r) => r + 1);
   };
 
-  const startFind = (questions: PartId[] = buildQuestions(settings)) => {
+  const startFind = (questions: Question[] = buildQuestions(settings)) => {
     if (questions.length === 0) return setScreen({ name: 'home' });
     launch('find');
     setScreen({ name: 'find', questions, run: run + 1 });
@@ -100,7 +103,7 @@ export function App() {
   const startMatch = (source: MatchSource = matchSource) => {
     const usable = source === 'plate' && matchPool(settings, 'plate').length >= 2 ? 'plate' : 'glossary';
     setMatchSource(usable);
-    launch('match', usable === 'plate' ? plateLabel(settings.plate) : T.glossary);
+    launch('match', usable === 'plate' ? sessionLabel() : T.glossary);
     setScreen({ name: 'match', run: run + 1 });
   };
 
@@ -142,7 +145,6 @@ export function App() {
       {!hidden && screen.name === 'find' && (
         <FindMode
           key={screen.run}
-          plate={settings.plate}
           questions={screen.questions}
           onFinish={(log, durationMs) => setScreen({ name: 'results', log, durationMs })}
         />
@@ -154,7 +156,6 @@ export function App() {
       )}
       {screen.name === 'results' && (
         <Results
-          plate={settings.plate}
           log={screen.log}
           durationMs={screen.durationMs}
           onReplay={(missed) => startFind(shuffle(missed))}

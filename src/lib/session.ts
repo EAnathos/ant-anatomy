@@ -1,4 +1,4 @@
-import { partsInRegions, type Part, type PartId, type PlateId, type RegionId } from '../data/parts';
+import { PARTS, PLATES, partsInRegions, type Part, type PartId, type PlateId, type RegionId } from '../data/parts';
 
 export type QuestionCount = 10 | 20 | 'all';
 
@@ -7,9 +7,18 @@ export interface Settings {
   regions: RegionId[];
   questionCount: QuestionCount;
   ignoreAccents: boolean;
+  /** Jouer sur toutes les planches à la fois (toutes leurs régions), plutôt que sur la planche choisie. */
+  allPlates: boolean;
+}
+
+/** Une question : une structure d'une planche (le même terme peut figurer sur plusieurs planches). */
+export interface Question {
+  plate: PlateId;
+  id: PartId;
 }
 
 export interface Answer {
+  plate: PlateId;
   asked: PartId;
   picked: PartId;
   correct: boolean;
@@ -20,7 +29,7 @@ export interface Summary {
   total: number;
   accuracy: number;
   bestStreak: number;
-  missed: PartId[];
+  missed: Question[];
 }
 
 export function shuffle<T>(items: readonly T[], random: () => number = Math.random): T[] {
@@ -33,11 +42,16 @@ export function shuffle<T>(items: readonly T[], random: () => number = Math.rand
 }
 
 export function playableParts(settings: Settings): Part[] {
-  return partsInRegions(settings.regions);
+  return settings.allPlates ? PARTS : partsInRegions(settings.regions);
 }
 
-export function buildQuestions(settings: Settings, random: () => number = Math.random): PartId[] {
-  const pool = shuffle(playableParts(settings).map((p) => p.id), random);
+/** Planches de la session : toutes, ou la planche choisie. */
+export function sessionPlates(settings: Settings): PlateId[] {
+  return settings.allPlates ? PLATES.map((p) => p.id) : [settings.plate];
+}
+
+export function buildQuestions(settings: Settings, random: () => number = Math.random): Question[] {
+  const pool = shuffle(playableParts(settings).map((p) => ({ plate: p.plate, id: p.id })), random);
   return settings.questionCount === 'all' ? pool : pool.slice(0, settings.questionCount);
 }
 
@@ -54,7 +68,7 @@ export function summarize(log: readonly Answer[]): Summary {
     total: log.length,
     accuracy: log.length ? Math.round((score / log.length) * 100) : 0,
     bestStreak,
-    missed: log.filter((a) => !a.correct).map((a) => a.asked),
+    missed: log.filter((a) => !a.correct).map((a) => ({ plate: a.plate, id: a.asked })),
   };
 }
 

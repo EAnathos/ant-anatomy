@@ -15,6 +15,7 @@ const T = t(
   {
     source: 'Mots tirés de',
     plate: 'La planche',
+    plates: 'Les planches',
     glossary: 'Tout le glossaire',
     found: ' paires trouvées',
     mistakes: ' erreurs',
@@ -31,6 +32,7 @@ const T = t(
   {
     source: 'Words drawn from',
     plate: 'The plate',
+    plates: 'The plates',
     glossary: 'The whole glossary',
     found: ' pairs found',
     mistakes: ' mistakes',
@@ -139,7 +141,7 @@ export function MatchMode({ settings, source, onSourceChange }: MatchModeProps) 
           <span className="eyebrow">{T.source}</span>
           <div className="segmented" role="group" aria-label={T.source}>
             <button type="button" aria-pressed={source === 'plate'} disabled={!plateUsable} onClick={() => changeSource('plate')}>
-              {T.plate}
+              {settings.allPlates ? T.plates : T.plate}
             </button>
             <button type="button" aria-pressed={source === 'glossary'} onClick={() => changeSource('glossary')}>
               {T.glossary}

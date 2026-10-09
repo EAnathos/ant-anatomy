@@ -30,8 +30,12 @@
     <path data-part="suture-fronto-clypeale" class="nerv nerv-core" style="fill:none;stroke:#000000;stroke-width:1.3;stroke-linecap:round" d="M139.0 254.0 C140.0 230.0 152.0 214.0 170.0 214.0 C188.0 214.0 200.0 230.0 201.0 254.0"/>
     <path data-part="carene-frontale" class="nerv nerv-hit" style="fill:none;stroke:transparent;stroke-width:9;stroke-linecap:round" d="M199.0 215.0 C201.0 180.0 202.0 136.0 206.0 98.0"/>
     <path data-part="carene-frontale" class="nerv nerv-core" style="fill:none;stroke:#000000;stroke-width:1.3;stroke-linecap:round" d="M199.0 215.0 C201.0 180.0 202.0 136.0 206.0 98.0"/>
+    <path data-part="sillon-paraoculo-clypeal" class="nerv nerv-hit" style="fill:none;stroke:transparent;stroke-width:9;stroke-linecap:round" d="M201.0 254.0 C215.0 256.0 230.0 259.0 242.0 266.0"/>
+    <path data-part="sillon-paraoculo-clypeal" class="nerv nerv-core" style="fill:none;stroke:#000000;stroke-width:1.3;stroke-linecap:round" d="M201.0 254.0 C215.0 256.0 230.0 259.0 242.0 266.0"/>
     <path data-part="carene-frontale" class="nerv nerv-hit" style="fill:none;stroke:transparent;stroke-width:9;stroke-linecap:round" d="M141.0 215.0 C139.0 180.0 138.0 136.0 134.0 98.0"/>
     <path data-part="carene-frontale" class="nerv nerv-core" style="fill:none;stroke:#000000;stroke-width:1.3;stroke-linecap:round" d="M141.0 215.0 C139.0 180.0 138.0 136.0 134.0 98.0"/>
+    <path data-part="sillon-paraoculo-clypeal" class="nerv nerv-hit" style="fill:none;stroke:transparent;stroke-width:9;stroke-linecap:round" d="M139.0 254.0 C125.0 256.0 110.0 259.0 98.0 266.0"/>
+    <path data-part="sillon-paraoculo-clypeal" class="nerv nerv-core" style="fill:none;stroke:#000000;stroke-width:1.3;stroke-linecap:round" d="M139.0 254.0 C125.0 256.0 110.0 259.0 98.0 266.0"/>
     <path data-part="bord-occipital" class="nerv nerv-hit" style="fill:none;stroke:transparent;stroke-width:9;stroke-linecap:round" d="M100.0 54.0 C118.0 55.0 140.0 62.0 170.0 62.0 C200.0 62.0 222.0 55.0 240.0 54.0"/>
     <path data-part="bord-occipital" class="nerv nerv-core" style="fill:none;stroke:#000000;stroke-width:1.3;stroke-linecap:round" d="M100.0 54.0 C118.0 55.0 140.0 62.0 170.0 62.0 C200.0 62.0 222.0 55.0 240.0 54.0"/>
     <path data-part="lobe" style="fill:#d6d6d6;stroke:#000000;stroke-width:1.1;stroke-linejoin:round" d="M187.0 220.0 C194.0 211.0 212.0 214.0 216.0 228.0 C219.0 241.0 208.0 251.0 197.0 249.0 C189.0 247.0 185.0 239.0 186.0 230.0 L187.0 220.0 Z"/>

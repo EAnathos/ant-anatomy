@@ -80,8 +80,7 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       ),
     },
     tete: {
-      title: (regions) =>
-        only(regions, 'capsule') ? 'Capsule céphalique' : only(regions, 'clypeus-insertion') ? 'Clypéus et insertion des antennes' : 'Anatomie de la tête',
+      title: () => 'Anatomie de la tête',
       lead: (n) => `${n} structures de la tête vue de face, du bord occipital au clypéus. Repère-les sur la planche, puis nomme-les sans aide.`,
       note: (
         <>
@@ -101,15 +100,8 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       ),
     },
     mandibule: {
-      title: (regions) => (only(regions, 'dents') ? 'Dents de la mandibule' : 'Anatomie de la mandibule'),
-      lead: (n, regions) =>
-        `${n} ${
-          only(regions, 'dents')
-            ? 'éléments de l’armature de la mandibule, de la dent apicale au diastème'
-            : only(regions, 'lame')
-              ? 'éléments de la lame de la mandibule, ses bords et son angle basal'
-              : 'structures de la mandibule, de la dent apicale à l’angle basal'
-        }. Repère-les sur la planche, puis nomme-les sans aide.`,
+      title: () => 'Anatomie de la mandibule',
+      lead: (n) => `${n} structures de la mandibule, de la dent apicale à l’angle basal. Repère-les sur la planche, puis nomme-les sans aide.`,
       note: (
         <>
           La planche montre une mandibule gauche triangulaire, grande ouverte, vue de dessus. C’est un dessin composite, qui ne représente aucune espèce, d’après la
@@ -128,15 +120,8 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       ),
     },
     antenne: {
-      title: (regions) => (only(regions, 'funicule-massue') ? 'Funicule de l’antenne' : only(regions, 'scape-base') ? 'Scape de l’antenne' : 'Anatomie de l’antenne'),
-      lead: (n, regions) =>
-        `${n} ${
-          only(regions, 'scape-base')
-            ? 'parties de la base de l’antenne, du bulbe condylaire au scape'
-            : only(regions, 'funicule-massue')
-              ? 'parties du funicule, du pédicelle à la massue'
-              : 'parties de l’antenne, du bulbe condylaire à la massue'
-        }. Repère-les sur la planche, puis nomme-les sans aide.`,
+      title: () => 'Anatomie de l’antenne',
+      lead: (n) => `${n} parties de l’antenne, du bulbe condylaire à la massue. Repère-les sur la planche, puis nomme-les sans aide.`,
       note: (
         <>
           La planche montre une antenne gauche d’ouvrière, vue de côté. C’est un dessin composite, qui ne représente aucune espèce : 12 articles, le scape puis un
@@ -155,15 +140,8 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       ),
     },
     patte: {
-      title: (regions) => (only(regions, 'tarse-pretarse') ? 'Tarse de la patte' : 'Anatomie de la patte'),
-      lead: (n, regions) =>
-        `${n} ${
-          only(regions, 'coxa-tibia')
-            ? 'parties de la patte, de la coxa aux éperons tibiaux'
-            : only(regions, 'tarse-pretarse')
-              ? 'parties du tarse, du basitarse aux griffes'
-              : 'parties de la patte, de la coxa aux griffes'
-        }. Repère-les sur la planche, puis nomme-les sans aide.`,
+      title: () => 'Anatomie de la patte',
+      lead: (n) => `${n} parties de la patte, de la coxa aux griffes. Repère-les sur la planche, puis nomme-les sans aide.`,
       note: (
         <>
           La planche montre une patte postérieure d’ouvrière, vue de côté. C’est un dessin composite, qui ne représente aucune espèce. Le tibia porte à son
@@ -229,8 +207,7 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       ),
     },
     tete: {
-      title: (regions) =>
-        only(regions, 'capsule') ? 'Head capsule' : only(regions, 'clypeus-insertion') ? 'Clypeus and antennal insertion' : 'Head anatomy',
+      title: () => 'Head anatomy',
       lead: (n) => `${n} structures of the head in full-face view, from the occipital margin to the clypeus. Find them on the plate, then name them unaided.`,
       note: (
         <>
@@ -250,15 +227,8 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       ),
     },
     mandibule: {
-      title: (regions) => (only(regions, 'dents') ? 'Mandible teeth' : 'Mandible anatomy'),
-      lead: (n, regions) =>
-        `${n} ${
-          only(regions, 'dents')
-            ? 'parts of the mandible’s armament, from the apical tooth to the diastema'
-            : only(regions, 'lame')
-              ? 'parts of the mandible’s blade, its margins and basal angle'
-              : 'structures of the mandible, from the apical tooth to the basal angle'
-        }. Find them on the plate, then name them unaided.`,
+      title: () => 'Mandible anatomy',
+      lead: (n) => `${n} structures of the mandible, from the apical tooth to the basal angle. Find them on the plate, then name them unaided.`,
       note: (
         <>
           The plate shows a fully opened triangular left mandible, seen from above. It is a composite drawing, not based on any species, after figure 527 of
@@ -277,15 +247,8 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       ),
     },
     antenne: {
-      title: (regions) => (only(regions, 'funicule-massue') ? 'Antennal funiculus' : only(regions, 'scape-base') ? 'Antennal scape' : 'Antenna anatomy'),
-      lead: (n, regions) =>
-        `${n} ${
-          only(regions, 'scape-base')
-            ? 'parts of the base of the antenna, from the condylar bulb to the scape'
-            : only(regions, 'funicule-massue')
-              ? 'parts of the funiculus, from the pedicel to the club'
-              : 'parts of the antenna, from the condylar bulb to the club'
-        }. Find them on the plate, then name them unaided.`,
+      title: () => 'Antenna anatomy',
+      lead: (n) => `${n} parts of the antenna, from the condylar bulb to the club. Find them on the plate, then name them unaided.`,
       note: (
         <>
           The plate shows the left antenna of a worker, seen from the side. It is a composite drawing, not based on any species: 12 segments, the scape then an
@@ -304,15 +267,8 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       ),
     },
     patte: {
-      title: (regions) => (only(regions, 'tarse-pretarse') ? 'Leg tarsus' : 'Leg anatomy'),
-      lead: (n, regions) =>
-        `${n} ${
-          only(regions, 'coxa-tibia')
-            ? 'parts of the leg, from the coxa to the tibial spurs'
-            : only(regions, 'tarse-pretarse')
-              ? 'parts of the tarsus, from the basitarsus to the claws'
-              : 'parts of the leg, from the coxa to the claws'
-        }. Find them on the plate, then name them unaided.`,
+      title: () => 'Leg anatomy',
+      lead: (n) => `${n} parts of the leg, from the coxa to the claws. Find them on the plate, then name them unaided.`,
       note: (
         <>
           The plate shows the hind leg of a worker, seen from the side. It is a composite drawing, not based on any species. The tibia bears two spurs at its
@@ -460,7 +416,7 @@ export function Home({ initialSelected, settings, onSettingsChange, onStartFind,
               <>
                 <div className="plate__title">
                   <strong>{part.name}</strong>
-                  <span className="eyebrow">{REGION_BY_ID[part.region].label}</span>
+                  {regionsOf(settings.plate).length > 1 && <span className="eyebrow">{REGION_BY_ID[part.region].label}</span>}
                 </div>
                 <span className="muted"><Rich text={part.definition} /></span>
                 {detail && (

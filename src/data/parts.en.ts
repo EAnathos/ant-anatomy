@@ -19,23 +19,13 @@ export const PLATES_EN: Record<PlateId, { subject: string; example: string; deta
 };
 
 export const REGIONS_EN: Record<RegionId, string> = {
+  ouvriere: 'Worker',
   tete: 'Head',
+  mandibule: 'Mandible',
   antenne: 'Antenna',
-  mesosoma: 'Mesosoma',
-  petiole: 'Petiole',
-  gastre: 'Gaster',
-  pattes: 'Legs',
+  patte: 'Leg',
   cellules: 'Cells',
   nervures: 'Veins',
-  capsule: 'Capsule',
-  'region-frontale': 'Frontal region',
-  'clypeus-insertion': 'Clypeus and antennal insertion',
-  lame: 'Blade and margins',
-  dents: 'Teeth',
-  'scape-base': 'Scape and base',
-  'funicule-massue': 'Funiculus and club',
-  'coxa-tibia': 'Coxa to tibia',
-  'tarse-pretarse': 'Tarsus and pretarsus',
 };
 
 export const PLATE_NAMES_EN: Partial<Record<PlateId, Partial<Record<TermId, string>>>> = {

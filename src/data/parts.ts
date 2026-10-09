@@ -3,13 +3,9 @@ import { PLATES_EN, PLATE_NAMES_EN, REGIONS_EN, TERMS_EN } from './parts.en';
 
 export type PlateId = 'ouvriere' | 'aile' | 'tete' | 'mandibule' | 'antenne' | 'patte';
 
-export type RegionId =
-  | 'tete' | 'antenne' | 'mesosoma' | 'petiole' | 'gastre' | 'pattes'
-  | 'cellules' | 'nervures'
-  | 'lame' | 'dents'
-  | 'scape-base' | 'funicule-massue'
-  | 'capsule' | 'region-frontale' | 'clypeus-insertion'
-  | 'coxa-tibia' | 'tarse-pretarse';
+// Une région par planche, sauf l'aile, où l'on choisit cellules, nervures ou les deux. Une région de planche porte
+// l'id de sa planche.
+export type RegionId = 'ouvriere' | 'tete' | 'mandibule' | 'antenne' | 'patte' | 'cellules' | 'nervures';
 
 /** Terme du glossaire. */
 export type TermId =
@@ -95,21 +91,11 @@ const PLATES_FR: Plate[] = [
 ];
 
 const REGIONS_FR: Region[] = [
-  { id: 'tete', label: 'Tête', plate: 'ouvriere' },
-  { id: 'antenne', label: 'Antenne', plate: 'ouvriere' },
-  { id: 'mesosoma', label: 'Mésosoma', plate: 'ouvriere' },
-  { id: 'petiole', label: 'Pétiole', plate: 'ouvriere' },
-  { id: 'gastre', label: 'Gastre', plate: 'ouvriere' },
-  { id: 'pattes', label: 'Pattes', plate: 'ouvriere' },
-  { id: 'capsule', label: 'Capsule', plate: 'tete' },
-  { id: 'region-frontale', label: 'Région frontale', plate: 'tete' },
-  { id: 'clypeus-insertion', label: 'Clypéus et insertion antennaire', plate: 'tete' },
-  { id: 'lame', label: 'Lame et bords', plate: 'mandibule' },
-  { id: 'dents', label: 'Dents', plate: 'mandibule' },
-  { id: 'scape-base', label: 'Scape et base', plate: 'antenne' },
-  { id: 'funicule-massue', label: 'Funicule et massue', plate: 'antenne' },
-  { id: 'coxa-tibia', label: 'De la coxa au tibia', plate: 'patte' },
-  { id: 'tarse-pretarse', label: 'Tarse et prétarse', plate: 'patte' },
+  { id: 'ouvriere', label: 'Ouvrière', plate: 'ouvriere' },
+  { id: 'tete', label: 'Tête', plate: 'tete' },
+  { id: 'mandibule', label: 'Mandibule', plate: 'mandibule' },
+  { id: 'antenne', label: 'Antenne', plate: 'antenne' },
+  { id: 'patte', label: 'Patte', plate: 'patte' },
   { id: 'cellules', label: 'Cellules', plate: 'aile' },
   { id: 'nervures', label: 'Nervures', plate: 'aile' },
 ];
@@ -259,12 +245,21 @@ const TERMS_FR: Term[] = [
 // Placement des termes sur les planches : régions dans l'ordre de REGIONS_FR, termes dans l'ordre de la légende.
 // Un même terme peut figurer sur plusieurs planches (une fois par planche).
 const LAYOUT: Record<RegionId, TermId[]> = {
-  tete: ['tete', 'mandibule'],
-  antenne: ['antenne'],
-  mesosoma: ['pronotum', 'mesonotum', 'mesopleure', 'propodeum', 'spiracle'],
-  petiole: ['petiole'],
-  gastre: ['tergite', 'sternite', 'pygidium', 'hypopygium', 'aiguillon'],
-  pattes: ['patte'],
+  ouvriere: [
+    'tete', 'mandibule', 'antenne', 'pronotum', 'mesonotum', 'mesopleure', 'propodeum', 'spiracle', 'petiole',
+    'tergite', 'sternite', 'pygidium', 'hypopygium', 'aiguillon', 'patte',
+  ],
+  tete: [
+    'bord-occipital', 'coins-occipitaux', 'oeil', 'ommatidies', 'gena', 'scrobe', 'carene-frontale', 'lobe',
+    'triangle-frontal', 'clypeus-median', 'clypeus-lateral', 'suture-fronto-clypeale', 'fossette-tentoriale',
+    'sillon-paraoculo-clypeal', 'torulus', 'fossette-antennaire',
+  ],
+  mandibule: [
+    'mandibule', 'bord-masticateur', 'bord-basal', 'bord-externe', 'angle-basal',
+    'dent-apicale', 'dent-preapicale', 'denticule', 'dent-prebasale', 'dent-basale', 'diasteme',
+  ],
+  antenne: ['bulbe-condylaire', 'col-bulbe', 'scape', 'pedicelle', 'funicule', 'massue'],
+  patte: ['coxa', 'trochanter', 'femur', 'tibia', 'eperon', 'basitarse', 'tarse', 'pretarse', 'griffe', 'arolium'],
   cellules: [
     'pterostigma', 'costale', 'marginale', 'submarginale-1', 'submarginale-2', 'submarginale-3',
     'discoidale', 'subdiscoidale-1', 'subdiscoidale-2', 'basale', 'subbasale',
@@ -274,18 +269,6 @@ const LAYOUT: Record<RegionId, TermId[]> = {
     'media-1', 'media-2', 'media-3', 'media-4', 'm-plus-cu', 'm-cu', 'cubitus-1', 'cubitus-2', 'cubitus-3', 'cu-a',
     'anale-1', 'anale-2',
   ],
-  capsule: ['bord-occipital', 'coins-occipitaux', 'oeil', 'ommatidies', 'gena', 'scrobe'],
-  'region-frontale': ['carene-frontale', 'lobe', 'triangle-frontal'],
-  'clypeus-insertion': [
-    'clypeus-median', 'clypeus-lateral', 'suture-fronto-clypeale', 'fossette-tentoriale', 'sillon-paraoculo-clypeal',
-    'torulus', 'fossette-antennaire',
-  ],
-  lame: ['mandibule', 'bord-masticateur', 'bord-basal', 'bord-externe', 'angle-basal'],
-  dents: ['dent-apicale', 'dent-preapicale', 'denticule', 'dent-prebasale', 'dent-basale', 'diasteme'],
-  'scape-base': ['bulbe-condylaire', 'col-bulbe', 'scape'],
-  'funicule-massue': ['pedicelle', 'funicule', 'massue'],
-  'coxa-tibia': ['coxa', 'trochanter', 'femur', 'tibia', 'eperon'],
-  'tarse-pretarse': ['basitarse', 'tarse', 'pretarse', 'griffe', 'arolium'],
 };
 
 // Nom d'un terme sur une planche donnée, quand il diffère du glossaire : au pluriel s'il y figure plusieurs fois,

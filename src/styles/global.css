@@ -1525,3 +1525,19 @@ main.container {
   #root > .page-footer,
   .match [data-state] { animation: none; }
 }
+
+/* Toutes les planches : onglets de planche (Nommer) et bilan empilé par planche */
+.plate-tabs {
+  align-self: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.plate-tabs button { font-family: var(--font-sans); }
+
+.results__plates {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+

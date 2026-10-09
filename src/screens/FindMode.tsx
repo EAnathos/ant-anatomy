@@ -2,10 +2,11 @@ import { useRef, useState } from 'react';
 import { AntPlate, type Marks } from '../components/AntPlate';
 import { ArrowIcon, BulbIcon, CheckIcon, CrossIcon } from '../components/icons';
 import { Legend } from '../components/Legend';
+import { PlateName } from '../components/PlateName';
 import { Rich } from '../components/Rich';
-import { REGION_BY_ID, partIn, type PartId, type PlateId } from '../data/parts';
+import { PLATE_BY_ID, REGION_BY_ID, partIn, regionsOf, type PartId } from '../data/parts';
 import { t } from '../i18n';
-import type { Answer } from '../lib/session';
+import type { Answer, Question } from '../lib/session';
 
 const T = t(
   {
@@ -43,20 +44,21 @@ const T = t(
 );
 
 interface FindModeProps {
-  plate: PlateId;
-  questions: PartId[];
+  /** Questions de la partie : chacune porte sa planche (une partie peut couvrir toutes les planches). */
+  questions: Question[];
   onFinish: (log: Answer[], durationMs: number) => void;
 }
 
-export function FindMode({ plate, questions, onFinish }: FindModeProps) {
+export function FindMode({ questions, onFinish }: FindModeProps) {
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<PartId | null>(null);
   const [log, setLog] = useState<Answer[]>([]);
   const [hint, setHint] = useState(false);
   const startedAt = useRef(Date.now());
 
-  const asked = questions[index];
+  const { plate, id: asked } = questions[index];
   const part = partIn(plate, asked);
+  const severalPlates = new Set(questions.map((q) => q.plate)).size > 1;
   const answered = picked !== null;
   const correct = picked === asked;
   const isLast = index === questions.length - 1;
@@ -71,7 +73,7 @@ export function FindMode({ plate, questions, onFinish }: FindModeProps) {
   const pick = (id: PartId) => {
     if (answered) return;
     setPicked(id);
-    setLog((l) => [...l, { asked, picked: id, correct: id === asked }]);
+    setLog((l) => [...l, { plate, asked, picked: id, correct: id === asked }]);
   };
 
   const next = () => {
@@ -99,21 +101,27 @@ export function FindMode({ plate, questions, onFinish }: FindModeProps) {
             {questions.map((q, i) => {
               const a = log[i];
               const state = a ? (a.correct ? 'ok' : 'ko') : i === index ? 'current' : 'todo';
-              return <span key={`${q}-${i}`} className={`dot dot--${state}`} />;
+              return <span key={`${q.plate}-${q.id}-${i}`} className={`dot dot--${state}`} />;
             })}
           </div>
         </div>
 
         <div className="card prompt">
+          {severalPlates && (
+            <span className="eyebrow">
+              <PlateName plate={PLATE_BY_ID[plate]} />
+            </span>
+          )}
           <span className="eyebrow">{T.clickOn}</span>
           <h1 className="prompt__name">{part.name}</h1>
-          {hint ? (
-            <span className="hint-pill"><BulbIcon /> {T.region(REGION_BY_ID[part.region].label)}</span>
-          ) : (
-            <button type="button" className="btn btn--secondary btn--small" onClick={() => setHint(true)} disabled={answered}>
-              {T.hint}
-            </button>
-          )}
+          {regionsOf(plate).length > 1 &&
+            (hint ? (
+              <span className="hint-pill"><BulbIcon /> {T.region(REGION_BY_ID[part.region].label)}</span>
+            ) : (
+              <button type="button" className="btn btn--secondary btn--small" onClick={() => setHint(true)} disabled={answered}>
+                {T.hint}
+              </button>
+            ))}
         </div>
 
         <div aria-live="polite">

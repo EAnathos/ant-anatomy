@@ -5,6 +5,9 @@ import { playableParts, type QuestionCount, type Settings } from '../lib/session
 const T = t(
   {
     title: 'Paramètres de session',
+    plates: 'Planches',
+    thisPlate: 'Celle-ci',
+    allPlates: 'Toutes',
     included: (n: number) => `${n} structures incluses`,
     regions: 'Régions incluses',
     questions: 'Questions (Trouver)',
@@ -15,6 +18,9 @@ const T = t(
   },
   {
     title: 'Session settings',
+    plates: 'Plates',
+    thisPlate: 'This one',
+    allPlates: 'All',
     included: (n: number) => `${n} structures included`,
     regions: 'Regions included',
     questions: 'Questions (Find)',
@@ -55,23 +61,37 @@ export function SettingsPanel({ settings, onChange }: SettingsPanelProps) {
         <span className="mono muted">{T.included(included)}</span>
       </div>
       <div className="settings__body">
-        <fieldset className="settings__group settings__group--wide">
-          <legend className="eyebrow">{T.regions}</legend>
-          <div className="chips">
-            {plateRegions.map((r) => (
-              <button
-                key={r.id}
-                type="button"
-                className="chip"
-                aria-pressed={settings.regions.includes(r.id)}
-                onClick={() => toggleRegion(r.id)}
-              >
-                {r.label}
-                <span className="chip__count">{countIn(r.id)}</span>
-              </button>
-            ))}
+        <fieldset className="settings__group">
+          <legend className="eyebrow">{T.plates}</legend>
+          <div className="segmented">
+            <button type="button" aria-pressed={!settings.allPlates} onClick={() => onChange({ ...settings, allPlates: false })}>
+              {T.thisPlate}
+            </button>
+            <button type="button" aria-pressed={settings.allPlates} onClick={() => onChange({ ...settings, allPlates: true })}>
+              {T.allPlates}
+            </button>
           </div>
         </fieldset>
+        {/* Seule l'aile a des régions à choisir (cellules, nervures) ; rien à choisir sur toutes les planches. */}
+        {!settings.allPlates && plateRegions.length > 1 && (
+          <fieldset className="settings__group settings__group--wide">
+            <legend className="eyebrow">{T.regions}</legend>
+            <div className="chips">
+              {plateRegions.map((r) => (
+                <button
+                  key={r.id}
+                  type="button"
+                  className="chip"
+                  aria-pressed={settings.regions.includes(r.id)}
+                  onClick={() => toggleRegion(r.id)}
+                >
+                  {r.label}
+                  <span className="chip__count">{countIn(r.id)}</span>
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        )}
         <fieldset className="settings__group">
           <legend className="eyebrow">{T.questions}</legend>
           <div className="segmented">
@@ -99,7 +119,7 @@ export function SettingsPanel({ settings, onChange }: SettingsPanelProps) {
           </label>
         </fieldset>
       </div>
-      {included === 0 && <p className="settings__warning">{T.noRegion}</p>}
+      {included === 0 && !settings.allPlates && <p className="settings__warning">{T.noRegion}</p>}
     </section>
   );
 }

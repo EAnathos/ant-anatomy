@@ -3,10 +3,10 @@ import { AntPlate, type Marks } from '../components/AntPlate';
 import { CheckIcon, CrossIcon, CursorIcon, ReplayIcon } from '../components/icons';
 import { Legend } from '../components/Legend';
 import { Rich } from '../components/Rich';
-import { PLATE_BY_ID, partIn, partsOf, type PartId } from '../data/parts';
+import { PLATE_BY_ID, partIn, partsOf, type PartId, type PlateId } from '../data/parts';
 import { isCorrectName } from '../lib/answers';
 import { t } from '../i18n';
-import { playableParts, type Settings } from '../lib/session';
+import { playableParts, sessionPlates, type Question, type Settings } from '../lib/session';
 
 const T = t(
   {
@@ -37,6 +37,7 @@ const T = t(
     missedList: 'Ratées',
     answer: 'Réponse',
     plate: 'Planche anatomique',
+    plates: 'Planche affichée',
   },
   {
     attempted: 'Structures attempted',
@@ -66,22 +67,29 @@ const T = t(
     missedList: 'Missed',
     answer: 'Answer',
     plate: 'Anatomical plate',
+    plates: 'Plate shown',
   },
 );
 
 type Verdict = 'ok' | 'ko' | null;
 
+const keyOf = (q: Question) => `${q.plate}:${q.id}`;
+
 export function NameMode({ settings }: { settings: Settings }) {
-  const [selected, setSelected] = useState<PartId | null>(null);
+  // Toutes les planches : des onglets changent la planche affichée, la progression les couvre toutes.
+  const plates = sessionPlates(settings);
+  const [view, setView] = useState<PlateId>(plates[0]);
+  const [selected, setSelected] = useState<Question | null>(null);
   const [answer, setAnswer] = useState('');
   const [typed, setTyped] = useState('');
   const [verdict, setVerdict] = useState<Verdict>(null);
-  const [found, setFound] = useState<PartId[]>([]);
-  const [missed, setMissed] = useState<PartId[]>([]);
+  const [found, setFound] = useState<Question[]>([]);
+  const [missed, setMissed] = useState<Question[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const playable = playableParts(settings).map((p) => p.id);
-  const part = selected ? partIn(settings.plate, selected) : null;
+  const playable = playableParts(settings);
+  const playableKeys = new Set(playable.map((p) => keyOf({ plate: p.plate, id: p.id })));
+  const part = selected ? partIn(selected.plate, selected.id) : null;
   const attempted = found.length + missed.length;
   const finished = playable.length > 0 && attempted === playable.length;
 
@@ -89,14 +97,15 @@ export function NameMode({ settings }: { settings: Settings }) {
     if (selected && verdict === null) inputRef.current?.focus();
   }, [selected, verdict]);
 
+  const inView = (qs: Question[]) => qs.filter((q) => q.plate === view).map((q) => q.id);
   const marks: Marks = {};
-  for (const p of partsOf(settings.plate)) if (!playable.includes(p.id)) marks[p.id] = 'off';
-  for (const id of found) marks[id] = 'done';
-  for (const id of missed) marks[id] = 'ko';
-  if (selected) marks[selected] = verdict ?? 'sel';
+  for (const p of partsOf(view)) if (!playableKeys.has(keyOf({ plate: view, id: p.id }))) marks[p.id] = 'off';
+  for (const id of inView(found)) marks[id] = 'done';
+  for (const id of inView(missed)) marks[id] = 'ko';
+  if (selected?.plate === view) marks[selected.id] = verdict ?? 'sel';
 
   const pick = (id: PartId) => {
-    setSelected(id);
+    setSelected({ plate: view, id });
     setAnswer('');
     setTyped('');
     setVerdict(null);
@@ -117,8 +126,9 @@ export function NameMode({ settings }: { settings: Settings }) {
     if (!part) return;
     setTyped(given);
     setVerdict(good ? 'ok' : 'ko');
-    if (good) setFound((f) => [...f, part.id]);
-    else setMissed((m) => [...m, part.id]);
+    const q = { plate: part.plate, id: part.id };
+    if (good) setFound((f) => [...f, q]);
+    else setMissed((m) => [...m, q]);
   };
 
   const submit = (e: FormEvent) => {
@@ -191,7 +201,7 @@ export function NameMode({ settings }: { settings: Settings }) {
               type="text"
               autoComplete="off"
               spellCheck={false}
-              placeholder={T.example(PLATE_BY_ID[settings.plate].example)}
+              placeholder={T.example(PLATE_BY_ID[selected?.plate ?? view].example)}
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
               disabled={verdict !== null}
@@ -232,14 +242,14 @@ export function NameMode({ settings }: { settings: Settings }) {
             <span className="muted">{T.none}</span>
           ) : (
             <ul className="found__list">
-              {found.map((id) => <li key={id}>{partIn(settings.plate, id).name}</li>)}
+              {found.map((q) => <li key={keyOf(q)}>{partIn(q.plate, q.id).name}</li>)}
             </ul>
           )}
           {missed.length > 0 && (
             <>
               <span className="eyebrow">{T.missedList}</span>
               <ul className="found__list found__list--ko">
-                {missed.map((id) => <li key={id}>{partIn(settings.plate, id).name}</li>)}
+                {missed.map((q) => <li key={keyOf(q)}>{partIn(q.plate, q.id).name}</li>)}
               </ul>
             </>
           )}
@@ -247,7 +257,16 @@ export function NameMode({ settings }: { settings: Settings }) {
       </section>
 
       <section className="plate play__plate" aria-label={T.plate}>
-        <AntPlate plate={settings.plate} marks={marks} onPick={pick} locked={[...found, ...missed]} />
+        {plates.length > 1 && (
+          <div className="segmented plate-tabs" role="group" aria-label={T.plates}>
+            {plates.map((p) => (
+              <button key={p} type="button" aria-pressed={p === view} onClick={() => setView(p)}>
+                {PLATE_BY_ID[p].subject}
+              </button>
+            ))}
+          </div>
+        )}
+        <AntPlate plate={view} marks={marks} onPick={pick} locked={[...inView(found), ...inView(missed)]} />
         <Legend items={['sel', 'done', 'missed', 'hover']} />
       </section>
     </main>

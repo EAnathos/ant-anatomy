@@ -19,14 +19,12 @@ sur des planches interactives. Six planches au choix :
 
 ## Fonctionnalités
 
-- **Planches interactives** : sur l'ouvrière, 15 structures cliquables réparties en 6 régions (tête, antenne, mésosoma,
-  pétiole, gastre, pattes), sur les deux antennes et les six pattes ; sur l'aile, 2 régions : cellules (10 cellules et le
-  ptérostigma) et nervures (22) ; sur la mandibule, 2 régions : lame et bords (5), dents (6) ; sur l'antenne, 2 régions : scape et base (3),
-  funicule et massue (3). Sur la tête, 3 régions : capsule (6), région frontale (3), clypéus et
-  insertion antennaire (7). Sur la patte, 2 régions : de la coxa au tibia (5), tarse et prétarse (5).
+- **Planches interactives** : 15 structures sur l'ouvrière (sur les deux antennes et les six pattes), 16 sur la tête,
+  11 sur la mandibule, 6 sur l'antenne, 10 sur la patte, et sur l'aile 2 régions au choix : cellules (10 cellules et le
+  ptérostigma) et nervures (22).
   La tête, les mandibules, les antennes et les pattes de l'ouvrière ouvrent leur planche détaillée.
-  Un clic sur l'accueil affiche le nom, la région et une définition.
-- **Mode Trouver** : un nom s'affiche, il faut cliquer la bonne structure. Indice de région, correction immédiate,
+  Un clic sur l'accueil affiche le nom et une définition.
+- **Mode Trouver** : un nom s'affiche, il faut cliquer la bonne structure. Indice de région sur l'aile, correction immédiate,
   progression et bilan détaillé (score, précision, durée, meilleure série), avec la possibilité de rejouer ses erreurs.
 - **Mode Nommer** : on clique une structure et on tape son nom, avec un seul essai par structure. Une structure ratée
   reste en rouge et ne peut plus être choisie. Les majuscules, les accents (réglable) et les synonymes courants sont
@@ -35,7 +33,8 @@ sur des planches interactives. Six planches au choix :
   planche ou tout le glossaire.
 - **Glossaire** : tous les termes par ordre alphabétique, avec définition et synonymes, d'après Bolton (1994) et
   Keller (2011), et un lien vers chaque planche où le terme figure.
-- **Paramètres de session** : choix de la planche (sur l'accueil), des régions (pour l'aile : cellules, nervures ou les deux ; pour la tête : capsule, région frontale, clypéus ; pour la mandibule : lame, dents ou les deux ; pour l'antenne : base, funicule ou les deux ; pour la patte : coxa à tibia, tarse ou les deux), nombre de questions (10, 20 ou toutes), tolérance aux accents.
+- **Paramètres de session** : choix de la planche (sur l'accueil) ou de toutes les planches à la fois, des régions de
+  l'aile (cellules, nervures ou les deux), nombre de questions (10, 20 ou toutes), tolérance aux accents.
 - En français (`/`) et en anglais (`/en/`), avec un sélecteur dans l'en-tête et des aperçus de liens traduits.
 - Utilisable au clavier et sur mobile.
 

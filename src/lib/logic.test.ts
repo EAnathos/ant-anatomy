@@ -140,26 +140,35 @@ describe('sessions', () => {
     expect(shuffle(items).sort()).toEqual(items);
   });
 
-  it('limite les questions aux régions choisies', () => {
-    const qs = buildQuestions({ plate: 'ouvriere', regions: ['antenne'], questionCount: 10, ignoreAccents: true });
-    expect(qs).toEqual(['antenne']);
+  it('n’a de régions à choisir que sur l’aile', () => {
+    for (const plate of PLATES) expect(regionsOf(plate.id).length, plate.id).toBe(plate.id === 'aile' ? 2 : 1);
+    const qs = buildQuestions({ plate: 'antenne', regions: ['antenne'], questionCount: 'all', ignoreAccents: true, allPlates: false });
+    expect(qs.map((q) => q.id).sort()).toEqual(partsOf('antenne').map((p) => p.id).sort());
   });
 
   it('sépare cellules et nervures de l’aile', () => {
     expect(regionsOf('aile').map((r) => r.id)).toEqual(['cellules', 'nervures']);
-    const qs = buildQuestions({ plate: 'aile', regions: ['nervures'], questionCount: 'all', ignoreAccents: true });
+    const qs = buildQuestions({ plate: 'aile', regions: ['nervures'], questionCount: 'all', ignoreAccents: true, allPlates: false });
     expect(qs).toHaveLength(22);
-    expect(qs.every((id) => partIn('aile', id).region === 'nervures')).toBe(true);
+    expect(qs.every((q) => q.plate === 'aile' && partIn('aile', q.id).region === 'nervures')).toBe(true);
+  });
+
+  it('tire dans toutes les planches quand on le demande, en gardant la planche de chaque question', () => {
+    const settings = { plate: 'aile', regions: ['nervures'], questionCount: 'all', ignoreAccents: true, allPlates: true } as const;
+    const qs = buildQuestions({ ...settings, regions: [...settings.regions] });
+    expect(qs).toHaveLength(partsFor('fr').length);
+    expect(new Set(qs.map((q) => q.plate))).toEqual(new Set(PLATES.map((p) => p.id)));
+    expect(qs.every((q) => partIn(q.plate, q.id) !== undefined)).toBe(true);
   });
 
   it('calcule score, série et erreurs', () => {
     const s = summarize([
-      { asked: 'scape', picked: 'scape', correct: true },
-      { asked: 'tibia', picked: 'tibia', correct: true },
-      { asked: 'femur', picked: 'tibia', correct: false },
-      { asked: 'tarse', picked: 'tarse', correct: true },
+      { plate: 'antenne', asked: 'scape', picked: 'scape', correct: true },
+      { plate: 'patte', asked: 'tibia', picked: 'tibia', correct: true },
+      { plate: 'patte', asked: 'femur', picked: 'tibia', correct: false },
+      { plate: 'patte', asked: 'tarse', picked: 'tarse', correct: true },
     ]);
-    expect(s).toEqual({ score: 3, total: 4, accuracy: 75, bestStreak: 2, missed: ['femur'] });
+    expect(s).toEqual({ score: 3, total: 4, accuracy: 75, bestStreak: 2, missed: [{ plate: 'patte', id: 'femur' }] });
   });
 
   it('formate une durée', () => {

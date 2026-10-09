@@ -65,8 +65,9 @@ moment. Animations coupées si `prefers-reduced-motion`.
     de mot voisin). `variants` : autres formes acceptées comme réponse sans être affichées (singulier/pluriel,
     « 1re submarginale », notation « m1 », forme latine ou anglaise). En anglais, les variantes ne sont pas héritées
     du français.
-  - `REGIONS_FR` (chaque région rattachée à une planche) et `LAYOUT` (termes de chaque région, dans l'ordre de la
-    légende). Un terme peut figurer sur plusieurs planches, une fois par planche, ou sur aucune (glossaire
+  - `REGIONS_FR` et `LAYOUT` (termes de chaque région, dans l'ordre de la légende). Une seule région par planche,
+    portant l'id de la planche, sauf l'aile (`cellules`, `nervures`), seule à proposer un choix de régions dans les
+    paramètres ; l'indice de région (Trouver) et la région dans la légende de l'accueil ne s'affichent que là. Un terme peut figurer sur plusieurs planches, une fois par planche, ou sur aucune (glossaire
     seulement : termes de Bolton en attente d'une planche) ; le glossaire le liste une seule fois avec un lien par planche. Une structure (`Part`) = un terme placé dans une région ; `PartId` = `TermId`, donc
     toujours chercher une structure avec sa planche (`partIn(plate, id)`). `PLATE_NAMES_FR` / `PLATE_NAMES_EN` : nom d'un
     terme propre à une planche (singulier ou pluriel selon le nombre d'exemplaires dessinés). Une planche sans taxon
@@ -77,7 +78,11 @@ moment. Animations coupées si `prefers-reduced-motion`.
     sélectionnée et un zoom (`.plate-focus`) parti de l'endroit où elle se trouvait. À compléter à chaque planche détaillée. Les id de régions sont uniques toutes planches
     confondues.
 - `src/lib/answers.ts` : normalisation et validation des réponses tapées.
-- `src/lib/session.ts` : réglages (dont la planche choisie), tirage des questions, bilan (score, série, erreurs).
+- `src/lib/session.ts` : réglages (dont la planche choisie et `allPlates`), tirage des questions, bilan (score, série,
+  erreurs). Une question est un couple `{ plate, id }` (`Question`) ; une réponse garde sa planche. Avec `allPlates`
+  (« Planches : Toutes » dans les paramètres), Trouver tire dans toutes les planches et affiche la planche de chaque
+  question, le bilan montre une planche par planche ratée, Nommer propose des onglets de planche (`sessionPlates`) et
+  Relier pioche dans toutes les planches.
 - `src/components/AntPlate.tsx` : planche interactive (clic, clavier, états visuels).
 - `src/screens/` : `Home`, `FindMode`, `NameMode`, `MatchMode` (Relier ; le terme est masqué dans sa définition par
   `maskTerm` de `src/lib/quiz.ts`), `Results`, `Glossary` (tous les termes du dictionnaire par ordre
@@ -93,8 +98,8 @@ Les règles ci-dessous valent pour la planche de l'ouvrière. La planche de l'ai
 l'utilisateur (EAnathos), sous licence CC BY-NC 4.0 affichée sous le texte de l'accueil, qu'on peut retoucher. Ses `id` internes sont préfixés `aile-` pour éviter les
 collisions une fois injectés dans la page.
 
-- Deux régions seulement, `cellules` et `nervures`, choisies comme les autres régions dans les paramètres de session
-  (l'une, l'autre ou les deux). Le titre et l'accroche de l'accueil suivent ce choix.
+- Deux régions, `cellules` et `nervures`, choisies dans les paramètres de session (l'une, l'autre ou les deux) : la
+  seule planche à régions. Le titre et l'accroche de l'accueil suivent ce choix.
 - Cellules : `data-part` sur des surfaces blanches sans contour, découpées par le `clipPath` du contour. Ptérostigma cliquable.
 - Nervures : nomenclature de la figure de référence de l'utilisateur (aile antérieure de reine d'*Odontomachus* sp. :
   costa, sous-costale, radius, secteur radial et ses branches, média 1-4, cubitus 1-3, anales, transverses 2r-rs, 3r-rs,
@@ -134,8 +139,8 @@ collisions une fois injectés dans la page.
 Bolton (1994) (proportions et ordre des dents, pas le trait). Base en col étroit au raccord droit, bord basal droit
 puis coudé à la verticale, bord externe presque droit avec un dernier tronçon droit jusqu'à l'apex.
 
-- Régions `lame` (lame, bords masticateur, basal, externe, angle basal) et `dents` (apicale, préapicale, denticules,
-  prébasale, basale, diastème). Dents de l'apex vers la base : apicale, préapicale (t2), 3 denticules, t3 (sans nom,
+- Structures : lame, bords masticateur, basal, externe, angle basal, puis dents (apicale, préapicale, denticules,
+  prébasale, basale) et diastème. Dents de l'apex vers la base : apicale, préapicale (t2), 3 denticules, t3 (sans nom,
   non cliquable : un clic sélectionne le bord masticateur), diastème en V, prébasale (t4), basale.
 - Une silhouette grise sans `pointer-events` sous les surfaces évite les liserés entre dents et lame.
 - Bords et diastème : des traits comme les nervures de l'aile (`.nerv-core` visible + `.nerv-hit` transparent), le
@@ -154,7 +159,7 @@ figures 523 à 526 de Bolton (1994) (CC BY-NC 4.0). Formes décrites pour la moi
   frontales, scrobes en pointillés, bord occipital et coins occipitaux.
 - B (droite) : moitié antérieure (`clipPath` et pointillé de coupe), sans lobes frontaux : torulus (anneau),
   fossette antennaire, fossette tentoriale antérieure, sillon paraoculo-clypéal, carènes courtes.
-- Régions `capsule`, `region-frontale`, `clypeus-insertion`. Le fond de la tête est un décor : pas de structure
+- Le fond de la tête est un décor : pas de structure
   « Tête » sur cette planche. Les structures des deux têtes (yeux, genas, clypéus…) forment une seule structure, au
   pluriel sur cette planche (`PLATE_NAMES_*`).
 - Œil : l'intérieur porte `ommatidies` (grille de facettes découpée par un `clipPath`), le contour porte `oeil`
@@ -162,7 +167,7 @@ figures 523 à 526 de Bolton (1994) (CC BY-NC 4.0). Formes décrites pour la moi
   tête redessiné par-dessus en décor. Le bord antérieur est fait de tronçons partagés avec les surfaces du clypéus.
 - Coins occipitaux : cercles transparents colorés à la sélection.
 - Sur l'ouvrière, lobe frontal, clypéus et œil (ommatidies) sont fondus dans la structure `tete`, qui ouvre cette
-  planche ; la région Tête de l'ouvrière ne garde que Tête et Mandibules.
+  planche. Le sillon paraoculo-clypéal est cliquable sur les deux têtes.
 
 ## Planche de l'antenne : règles
 
@@ -170,7 +175,7 @@ figures 523 à 526 de Bolton (1994) (CC BY-NC 4.0). Formes décrites pour la moi
 scape (fin à la base, courbe, s'épaississant), coude d'environ 125°, funicule de 11 articles (pédicelle, 7 articles,
 massue de 3 dont le dernier en ogive). Base : bulbe condylaire et col du bulbe.
 
-- Régions `scape-base` (bulbe condylaire, col du bulbe, scape) et `funicule-massue` (pédicelle, funicule, massue).
+- Structures : bulbe condylaire, col du bulbe, scape, pédicelle, funicule, massue.
 - Le funicule comprend en réalité le pédicelle et la massue, mais un tracé n'a qu'un `data-part` : `funicule` est porté
   par les 7 articles du milieu, et la vue légendée montre son étendue complète par une accolade (`data-extent-for`).
 - Chaque article est un tracé à contour ; dessinés de l'apex vers la base, chacun recouvre la base du suivant.
@@ -180,8 +185,8 @@ massue de 3 dont le dernier en ogive). Base : bulbe condylaire et col du bulbe.
 
 `leg.svg` : patte postérieure d'ouvrière, vue latérale, dessin composite d'EAnathos (CC BY-NC 4.0). Coxa en haut,
 fémur presque horizontal, tibia descendant, tarse étalé vers l'avant ; articles dessinés de l'extrémité vers la base.
-- Régions `coxa-tibia` (coxa, trochanter, fémur, tibia, éperons) et `tarse-pretarse` (basitarse, tarse = articles 2
-  à 4, prétarse, griffes, arolium). Accolade `data-extent-for="tarse"` du basitarse au prétarse.
+- Structures : coxa, trochanter, fémur, tibia, éperons, basitarse, tarse (articles 2 à 4), prétarse, griffes,
+  arolium. Accolade `data-extent-for="tarse"` du basitarse au prétarse.
 - Deux éperons à l'apex du tibia, sur sa face inférieure, sous le tarse : le grand en lame courbe pectinée (peigne
   sur le bord intérieur), le petit simple. Base enfoncée dans le tibia, éperons et peigne dessinés avant le tarse.
 - Griffes en crochet recourbées vers le bas, arolium entre elles ; zones de clic élargies pour griffes et éperons.
