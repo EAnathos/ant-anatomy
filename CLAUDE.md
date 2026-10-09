@@ -194,7 +194,7 @@ massue de 3 dont le dernier en ogive). Base : bulbe condylaire et col du bulbe.
 dans les deux surfaces qu'elle sépare.
 - Structures : pronotum, suture promésonotale, mésonotum, sillon métanotal, propodéum, spiracle propodéal, déclivité
   propodéale, lobe propodéal, propleure, anépisterne, katépisterne, métapleure, bulle et orifice de la glande
-  métapleurale, coxas (« Coxas » sur cette planche).
+  métapleurale.
 - Surfaces sans contour posées sur une silhouette grise (pas de liseré) ; frontières, contour et hachures en décor,
   en trait plein ou en pointillés comme sur la figure.
 - Propleure : bande en S sous le pronotum, de l'avant jusqu'à la procoxa.
@@ -203,7 +203,8 @@ dans les deux surfaces qu'elle sépare.
 - Suture promésonotale et déclivité : des traits (`.nerv-core` + `.nerv-hit`). Sillon métanotal : même principe, mais
   cœur transparent au repos (seules les hachures se voient, comme sur la figure).
 - Bulle en pointillés par-dessus la frontière métapleure / propodéum ; orifice et spiracle avec zone de clic élargie.
-- Coxas dessinées sous le mésosoma, chacune avec l'encoche en trou de serrure du trochanter.
+- Coxas dessinées sous le mésosoma, chacune avec l'encoche en trou de serrure du trochanter : décor blanc, non
+  sélectionnable, car la coxa appartient à la patte et non au mésosoma.
 - Sur l'ouvrière, pronotum, mésonotum, mésopleure et propodéum sont fondus dans `mesosoma`, qui ouvre cette planche ;
   le spiracle y est un décor.
 

@@ -42,7 +42,6 @@ export const PLATE_NAMES_EN: Partial<Record<PlateId, Partial<Record<TermId, stri
   },
   mandibule: { mandibule: 'Mandible', denticule: 'Denticles' },
   antenne: { massue: 'Club' },
-  mesosoma: { coxa: 'Coxae' },
   gastre: { 'spiracles-abdominaux': 'Spiracles' },
 };
 

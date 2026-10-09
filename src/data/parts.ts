@@ -266,7 +266,7 @@ const LAYOUT: Record<RegionId, TermId[]> = {
   mesosoma: [
     'pronotum', 'suture-promesonotale', 'mesonotum', 'sillon-metanotal', 'propodeum', 'spiracle', 'declivite-propodeale',
     'lobe-propodeal', 'propleure', 'anepisterne', 'katepisterne', 'metapleure', 'bulle-metapleurale',
-    'orifice-metapleural', 'coxa',
+    'orifice-metapleural',
   ],
   gastre: [
     'petiole', 'processus-subpetiolaire', 'helcium', 'tergite', 'sternite', 'presclerite', 'constriction',
@@ -296,7 +296,6 @@ const PLATE_NAMES_FR: Partial<Record<PlateId, Partial<Record<TermId, string>>>> 
   },
   mandibule: { mandibule: 'Mandibule', denticule: 'Denticules' },
   antenne: { massue: 'Massue' },
-  mesosoma: { coxa: 'Coxas' },
   gastre: { 'spiracles-abdominaux': 'Spiracles' },
 };
 
