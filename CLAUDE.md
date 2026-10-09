@@ -202,7 +202,6 @@ dans les deux surfaces qu'elle sépare.
 - Suture promésonotale et déclivité : des traits (`.nerv-core` + `.nerv-hit`). Sillon métanotal : même principe, mais
   cœur transparent au repos (seules les hachures se voient, comme sur la figure).
 - Bulle en pointillés par-dessus la frontière métapleure / propodéum ; orifice et spiracle avec zone de clic élargie.
-  Petit spiracle métathoracique en décor.
 - Coxas dessinées sous le mésosoma, chacune avec l'encoche en trou de serrure du trochanter.
 - Sur l'ouvrière, pronotum, mésonotum, mésopleure et propodéum sont fondus dans `mesosoma`, qui ouvre cette planche ;
   le spiracle y est un décor.
