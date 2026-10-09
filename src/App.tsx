@@ -3,8 +3,8 @@ import { Footer } from './components/Footer';
 import { Header, type NavTarget } from './components/Header';
 import { Launch } from './components/Launch';
 import { PlateName } from './components/PlateName';
-import { PLATE_BY_ID, partIn, regionsOf, type PartId, type PlateId } from './data/parts';
-import { GLOSSARY_HASH, isGlossaryHash, t } from './i18n';
+import { PLATES, PLATE_BY_ID, partIn, regionsOf, type PartId, type PlateId } from './data/parts';
+import { GLOSSARY_HASH, PLATE_PARAM, isGlossaryHash, t } from './i18n';
 import { buildQuestions, playableParts, shuffle, type Answer, type Settings } from './lib/session';
 import { FindMode } from './screens/FindMode';
 import { Glossary } from './screens/Glossary';
@@ -21,12 +21,12 @@ type Screen =
   | { name: 'match'; run: number }
   | { name: 'results'; log: Answer[]; durationMs: number };
 
-const DEFAULT_SETTINGS: Settings = {
-  plate: 'ouvriere',
-  regions: regionsOf('ouvriere').map((r) => r.id),
-  questionCount: 10,
-  ignoreAccents: true,
-};
+// Planche de départ : celle transmise par le lien de changement de langue (?planche=…), sinon l'ouvrière.
+function initialSettings(): Settings {
+  const asked = new URLSearchParams(location.search).get(PLATE_PARAM);
+  const plate = PLATES.find((p) => p.id === asked)?.id ?? 'ouvriere';
+  return { plate, regions: regionsOf(plate).map((r) => r.id), questionCount: 10, ignoreAccents: true };
+}
 
 const T = t(
   { find: 'Trouver', name: 'Nommer', match: 'Relier', glossary: 'Tout le glossaire' },
@@ -36,7 +36,15 @@ const T = t(
 type GameScreen = 'find' | 'name' | 'match';
 
 export function App() {
-  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
+  const [settings, setSettings] = useState<Settings>(initialSettings);
+
+  // Le paramètre a servi : on le retire de l'adresse, qui reste propre (la planche est dans l'état de l'app).
+  useEffect(() => {
+    const url = new URL(location.href);
+    if (!url.searchParams.has(PLATE_PARAM)) return;
+    url.searchParams.delete(PLATE_PARAM);
+    history.replaceState(null, '', url.pathname + url.search + url.hash);
+  }, []);
   const [screen, setScreen] = useState<Screen>(() => (isGlossaryHash(location.hash) ? { name: 'glossary' } : { name: 'home' }));
   const [run, setRun] = useState(0);
   const [matchSource, setMatchSource] = useState<MatchSource>('plate');
@@ -118,7 +126,7 @@ export function App() {
   return (
     <>
       <div className="container">
-        <Header current={current} onNavigate={navigate} />
+        <Header current={current} plate={settings.plate} onNavigate={navigate} />
       </div>
       {screen.name === 'home' && (
         <Home

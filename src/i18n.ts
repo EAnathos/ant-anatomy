@@ -20,6 +20,9 @@ export const GLOSSARY_HASH = GLOSSARY_HASHES[LANG];
 
 export const isGlossaryHash = (hash: string) => hash === '#glossaire' || hash === '#glossary';
 
+/** Paramètre d'adresse qui garde la planche choisie quand on change de langue (`/en/?planche=antenne`). */
+export const PLATE_PARAM = 'planche';
+
 /** Mémorise le choix explicite de langue (lu par le script de redirection de `index.html`). */
 export function rememberLang(lang: Lang) {
   try {

@@ -29,6 +29,8 @@ la CI (`.github/workflows/ci.yml`) est déployé automatiquement par la CD (`.gi
 - Deux pages HTML : `index.html` (fr) et `en/index.html` (en), déclarées dans `vite.config.ts` (`build.rollupOptions.input`).
   Chacune porte son `lang`, ses balises d'aperçu et son image (`public/og.png`, `public/og-en.png`). Garder les deux
   fichiers alignés quand on modifie le `<head>`.
+- Le lien de langue transmet la planche choisie (`?planche=antenne`, `PLATE_PARAM`) ; `App` la lit au démarrage puis
+  retire le paramètre de l'adresse. Le glossaire passe par son ancre (`#glossaire` / `#glossary`).
 - `index.html` redirige vers `/en/` si l'anglais a été choisi (`localStorage.lang`) ou si le navigateur n'est pas en
   français et qu'aucun choix n'est mémorisé. Le sélecteur FR / EN de l'en-tête mémorise le choix.
 - Textes d'interface : `const T = t({ ...fr }, { ...en })` dans chaque composant. `en` doit avoir la forme exacte de `fr`

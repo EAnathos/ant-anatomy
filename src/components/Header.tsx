@@ -1,9 +1,12 @@
-import { GLOSSARY_HASH, GLOSSARY_HASHES, LANG, LANG_URLS, rememberLang, t, type Lang } from '../i18n';
+import type { PlateId } from '../data/parts';
+import { GLOSSARY_HASH, GLOSSARY_HASHES, LANG, LANG_URLS, PLATE_PARAM, rememberLang, t, type Lang } from '../i18n';
 
 export type NavTarget = 'home' | 'find' | 'name' | 'match' | 'glossary';
 
 interface HeaderProps {
   current: NavTarget | null;
+  /** Planche choisie : le lien vers l'autre langue la transmet, pour la retrouver après le changement. */
+  plate: PlateId;
   onNavigate: (target: NavTarget) => void;
 }
 
@@ -17,7 +20,7 @@ const LANGS: { id: Lang; short: string; label: string }[] = [
   { id: 'en', short: 'EN', label: 'English' },
 ];
 
-export function Header({ current, onNavigate }: HeaderProps) {
+export function Header({ current, plate, onNavigate }: HeaderProps) {
   return (
     <header className="site-header">
       <button type="button" className="brand" onClick={() => onNavigate('home')}>
@@ -65,7 +68,11 @@ export function Header({ current, onNavigate }: HeaderProps) {
           {LANGS.map((l) => (
             <a
               key={l.id}
-              href={LANG_URLS[l.id] + (current === 'glossary' ? GLOSSARY_HASHES[l.id] : '')}
+              href={
+                LANG_URLS[l.id] +
+                (plate !== 'ouvriere' ? `?${PLATE_PARAM}=${plate}` : '') +
+                (current === 'glossary' ? GLOSSARY_HASHES[l.id] : '')
+              }
               hrefLang={l.id}
               lang={l.id}
               aria-label={l.label}
