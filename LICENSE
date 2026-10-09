@@ -18,10 +18,14 @@ Exceptions :
   Attribution - Pas d'utilisation commerciale 4.0 International (CC BY-NC 4.0),
   https://creativecommons.org/licenses/by-nc/4.0/deed.fr
   Réutilisation permise à des fins non commerciales, en citant l'auteur. Cette licence ne s'étend à aucun autre
-  fichier du dépôt que la planche de la mandibule ci-dessous.
+  fichier du dépôt que les planches de la mandibule et de l'antenne ci-dessous.
 
 - Planche de la mandibule (src/assets/mandible.svg) : dessin composite d'EAnathos, d'après la figure 527 de
   Bolton (1994), sous la même licence CC BY-NC 4.0, https://creativecommons.org/licenses/by-nc/4.0/deed.fr
+  Réutilisation permise à des fins non commerciales, en citant l'auteur.
+
+- Planche de l'antenne (src/assets/antenna.svg) : dessin composite d'EAnathos, sous la même licence CC BY-NC 4.0,
+  https://creativecommons.org/licenses/by-nc/4.0/deed.fr
   Réutilisation permise à des fins non commerciales, en citant l'auteur.
 
 - Planche de l'ouvrière (src/assets/ant.svg) : « Scheme ant worker anatomy-clean », par LadyofHats et Sophivorus,
@@ -47,10 +51,14 @@ Exceptions:
 - Wing plate (src/assets/wing.svg): drawing by EAnathos, licensed under Creative Commons
   Attribution-NonCommercial 4.0 International (CC BY-NC 4.0), https://creativecommons.org/licenses/by-nc/4.0/
   Reuse is permitted for non-commercial purposes, with credit to the author. This licence does not extend to any
-  other file in the repository than the mandible plate below.
+  other file in the repository than the mandible and antenna plates below.
 
 - Mandible plate (src/assets/mandible.svg): composite drawing by EAnathos, after figure 527 of Bolton (1994),
   under the same CC BY-NC 4.0 licence, https://creativecommons.org/licenses/by-nc/4.0/
+  Reuse is permitted for non-commercial purposes, with credit to the author.
+
+- Antenna plate (src/assets/antenna.svg): composite drawing by EAnathos, under the same CC BY-NC 4.0 licence,
+  https://creativecommons.org/licenses/by-nc/4.0/
   Reuse is permitted for non-commercial purposes, with credit to the author.
 
 - Worker plate (src/assets/ant.svg): "Scheme ant worker anatomy-clean" by LadyofHats and Sophivorus, public domain,

@@ -142,7 +142,7 @@ describe('sessions', () => {
 
   it('limite les questions aux régions choisies', () => {
     const qs = buildQuestions({ plate: 'ouvriere', regions: ['antenne'], questionCount: 10, ignoreAccents: true });
-    expect(qs.sort()).toEqual(['funicule', 'scape']);
+    expect(qs).toEqual(['antenne']);
   });
 
   it('sépare cellules et nervures de l’aile', () => {
@@ -168,7 +168,7 @@ describe('sessions', () => {
 });
 
 describe('planche SVG', () => {
-  const FILES = { ouvriere: 'ant.svg', aile: 'wing.svg', mandibule: 'mandible.svg' } as const;
+  const FILES = { ouvriere: 'ant.svg', aile: 'wing.svg', mandibule: 'mandible.svg', antenne: 'antenna.svg' } as const;
 
   it.each(PLATES.map((p) => p.id))('%s : contient exactement les structures déclarées', (plate) => {
     const svg = readFileSync(new URL(`../assets/${FILES[plate]}`, import.meta.url), 'utf8');

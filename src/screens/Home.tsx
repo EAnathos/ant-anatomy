@@ -34,7 +34,7 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
   {
     ouvriere: {
       title: () => 'Anatomie de la fourmi',
-      lead: () => `${WORKER_COUNT} structures anatomiques, du scape à l’aiguillon. Repère-les sur la planche, puis nomme-les sans aide.`,
+      lead: () => `${WORKER_COUNT} structures anatomiques, des antennes à l’aiguillon. Repère-les sur la planche, puis nomme-les sans aide.`,
       note: (
         <>
           La planche représente une ouvrière de <em>Neoponera verenae</em>, une Ponerinae. D’une fourmi à l’autre, l’anatomie varie : certaines structures manquent, comme
@@ -106,11 +106,38 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         </>
       ),
     },
+    antenne: {
+      title: (regions) => (only(regions, 'funicule-massue') ? 'Funicule de l’antenne' : only(regions, 'scape-base') ? 'Scape de l’antenne' : 'Anatomie de l’antenne'),
+      lead: (n, regions) =>
+        `${n} ${
+          only(regions, 'scape-base')
+            ? 'parties de la base de l’antenne, du bulbe condylaire au scape'
+            : only(regions, 'funicule-massue')
+              ? 'parties du funicule, du pédicelle à la massue'
+              : 'parties de l’antenne, du bulbe condylaire à la massue'
+        }. Repère-les sur la planche, puis nomme-les sans aide.`,
+      note: (
+        <>
+          La planche montre une antenne gauche d’ouvrière, vue de côté. C’est un dessin composite, qui ne représente aucune espèce : 12 articles, le scape puis un
+          funicule de 11 articles, dont le premier est le pédicelle et les trois derniers forment la massue. Le nombre d’articles varie de 4 à 12 selon les genres,
+          et la massue, de un à quatre articles, manque chez beaucoup de fourmis.
+        </>
+      ),
+      credit: (
+        <>
+          Planche : dessin composite d’EAnathos, sous licence{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          {' '}: réutilisation libre à des fins non commerciales, en citant l’auteur.
+        </>
+      ),
+    },
   },
   {
     ouvriere: {
       title: () => 'Ant anatomy',
-      lead: () => `${WORKER_COUNT} anatomical structures, from scape to sting. Find them on the plate, then name them unaided.`,
+      lead: () => `${WORKER_COUNT} anatomical structures, from antennae to sting. Find them on the plate, then name them unaided.`,
       note: (
         <>
           The plate shows a worker of <em>Neoponera verenae</em>, a member of the Ponerinae. Anatomy varies from one ant to another: some structures are missing, such as
@@ -173,6 +200,33 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       credit: (
         <>
           Plate: composite drawing by EAnathos, after figure 527 of Bolton (1994), licensed under{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          : free to reuse for non-commercial purposes, with credit to the author.
+        </>
+      ),
+    },
+    antenne: {
+      title: (regions) => (only(regions, 'funicule-massue') ? 'Antennal funiculus' : only(regions, 'scape-base') ? 'Antennal scape' : 'Antenna anatomy'),
+      lead: (n, regions) =>
+        `${n} ${
+          only(regions, 'scape-base')
+            ? 'parts of the base of the antenna, from the condylar bulb to the scape'
+            : only(regions, 'funicule-massue')
+              ? 'parts of the funiculus, from the pedicel to the club'
+              : 'parts of the antenna, from the condylar bulb to the club'
+        }. Find them on the plate, then name them unaided.`,
+      note: (
+        <>
+          The plate shows the left antenna of a worker, seen from the side. It is a composite drawing, not based on any species: 12 segments, the scape then an
+          11-segmented funiculus, whose first segment is the pedicel and last three form the club. The number of segments ranges from 4 to 12 depending on the genus,
+          and the club, of one to four segments, is absent in many ants.
+        </>
+      ),
+      credit: (
+        <>
+          Plate: composite drawing by EAnathos, licensed under{' '}
           <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">
             CC BY-NC 4.0
           </a>

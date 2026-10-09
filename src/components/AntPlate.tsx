@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, type KeyboardEvent, type MouseEvent } from 'react';
 import antSvg from '../assets/ant.svg?raw';
+import antennaSvg from '../assets/antenna.svg?raw';
 import mandibleSvg from '../assets/mandible.svg?raw';
 import wingSvg from '../assets/wing.svg?raw';
 import { partsOf, type PartId, type PlateId } from '../data/parts';
@@ -23,8 +24,9 @@ const LABELS = t<Record<PlateId, string>>(
     ouvriere: 'Planche : fourmi ouvrière en vue latérale',
     aile: 'Planche : aile antérieure de reine',
     mandibule: 'Planche : mandibule gauche ouverte, vue dorsale',
+    antenne: 'Planche : antenne d’ouvrière, vue latérale',
   },
-  { ouvriere: 'Plate: worker ant, side view', aile: 'Plate: queen forewing', mandibule: 'Plate: open left mandible, dorsal view' },
+  { ouvriere: 'Plate: worker ant, side view', aile: 'Plate: queen forewing', mandibule: 'Plate: open left mandible, dorsal view', antenne: 'Plate: worker antenna, side view' },
 );
 
 const withLabel = (svg: string, label: string) => svg.replace(/aria-label="[^"]*"/, `aria-label="${label}"`);
@@ -33,6 +35,7 @@ const SVG_BY_PLATE: Record<PlateId, string> = {
   ouvriere: withLabel(antSvg, LABELS.ouvriere),
   aile: withLabel(wingSvg, LABELS.aile),
   mandibule: withLabel(mandibleSvg, LABELS.mandibule),
+  antenne: withLabel(antennaSvg, LABELS.antenne),
 };
 
 const EMPTY_MARKS: Marks = {};
@@ -85,12 +88,16 @@ export function AntPlate({ plate, marks = EMPTY_MARKS, onPick, locked = EMPTY_LO
     const names = Object.fromEntries(partsOf(plate).map((p) => [p.id, p.name]));
     const draw = () => drawLabels(svg, names, selected);
     draw();
-    // La taille du texte dépend de la place à l'écran : on recalcule quand le cadre change de taille.
+    // La taille du texte dépend de la place à l'écran : on recalcule quand le cadre change de taille, en largeur
+    // comme en hauteur (un dessin calculé pendant un chargement, cadre encore aplati, resterait sinon minuscule).
     let width = ref.current?.clientWidth ?? 0;
+    let height = ref.current?.clientHeight ?? 0;
     const observer = new ResizeObserver(() => {
       const w = ref.current?.clientWidth ?? 0;
-      if (Math.abs(w - width) > 1) {
+      const h = ref.current?.clientHeight ?? 0;
+      if (Math.abs(w - width) > 1 || Math.abs(h - height) > 1) {
         width = w;
+        height = h;
         draw();
       }
     });

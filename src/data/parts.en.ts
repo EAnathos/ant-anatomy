@@ -13,6 +13,7 @@ export const PLATES_EN: Record<PlateId, { subject: string; example: string; deta
   ouvriere: { subject: 'Worker', example: 'mandible' },
   aile: { subject: 'Queen wing', example: 'costal cell' },
   mandibule: { subject: 'Mandible', detail: 'composite view', example: 'basal margin' },
+  antenne: { subject: 'Antenna', detail: 'composite view', example: 'scape' },
 };
 
 export const REGIONS_EN: Record<RegionId, string> = {
@@ -26,10 +27,14 @@ export const REGIONS_EN: Record<RegionId, string> = {
   nervures: 'Veins',
   lame: 'Blade and margins',
   dents: 'Teeth',
+  'scape-base': 'Scape and base',
+  'funicule-massue': 'Funiculus and club',
 };
 
 export const PLATE_NAMES_EN: Partial<Record<PlateId, Partial<Record<TermId, string>>>> = {
+  ouvriere: { antenne: 'Antennae' },
   mandibule: { mandibule: 'Mandible', denticule: 'Denticles' },
+  antenne: { massue: 'Club' },
 };
 
 export const TERMS_EN: Record<TermId, TermText> = {
@@ -38,8 +43,11 @@ export const TERMS_EN: Record<TermId, TermText> = {
   lobe: { name: 'Frontal lobe', definition: 'Dorsolateral expansion of the front of the frontal carina, partly or entirely covering the antennal insertion (torulus and antennal socket). Keller (2011) restricts the name to this structure alone: in many Ponerinae, the large lobe so called is actually a torular lobe.', synonyms: [], variants: ['frontal lobes'] },
   clypeus: { name: 'Clypeus', definition: 'Anterior sclerite of the dorsal head, bounded behind by the fronto-clypeal suture. Its anterior margin usually forms the front margin of the head, above the mandibles. It consists of a median portion and two lateral portions.', synonyms: [] },
   mandibule: { name: 'Mandibles', definition: 'Paired mouthparts with which the ant grasps, cuts and carries. Their shape and dentition vary greatly and matter a lot in taxonomy.', synonyms: [], variants: ['mandible', 'jaws', 'jaw'] },
-  scape: { name: 'Scapes', definition: 'First segment of the antenna, elongate, jointed to the head in the antennal socket by a condylar bulb.', synonyms: [] },
-  funicule: { name: 'Funiculi', definition: 'All the antennal segments beyond the scape: 3 to 11 depending on the genus, giving 4 to 12 antennal segments in all. The apical ones may form a club.', synonyms: ['funiculus', 'funicle', 'flagellum'], variants: ['funicles'] },
+  antenne: { name: 'Antenna', definition: 'Paired sensory appendage of the head, elbowed in ants: a long basal segment, the scape, then the funiculus of 3 to 11 segments, 4 to 12 segments in all.', synonyms: [], variants: ['antennae', 'antennas'] },
+  scape: { name: 'Scape', definition: 'First segment of the antenna, elongate, jointed to the head in the antennal socket by a condylar bulb.', synonyms: [], variants: ['scapes'] },
+  funicule: { name: 'Funiculus', definition: 'All the antennal segments beyond the scape: 3 to 11 depending on the genus, giving 4 to 12 antennal segments in all. The apical ones may form a club.', synonyms: ['funicle', 'flagellum'], variants: ['funiculi', 'funicles'] },
+  pedicelle: { name: 'Pedicel', definition: 'First segment of the funiculus, jointed to the tip of the scape at the elbow of the antenna. In insects it houses Johnston’s organ, which senses movements of the funiculus. Keys often call it the first funicular segment.', synonyms: ['first funicular segment'], variants: ['pedicels'] },
+  'col-bulbe': { name: 'Bulbus neck', definition: 'Short constriction between the condylar bulb and the shaft of the scape. Its shape, straight, curved or lobed, varies between groups; Keller (2011) uses it as a phylogenetic character.', synonyms: ['neck of the bulbus'] },
   pronotum: { name: 'Pronotum', definition: 'Tergite of the prothorax (first thoracic segment). It covers the top of the segment and extends down its sides, mostly concealing the propleuron.', synonyms: [] },
   mesonotum: { name: 'Mesonotum', definition: 'Tergite of the mesothorax (second thoracic segment). A promesonotal suture separates it from the pronotum, or the two are fused into a promesonotum.', synonyms: [] },
   mesopleure: { name: 'Mesopleuron', definition: 'Pleurite of the mesothorax, on the side of the mesosoma above the middle coxa. It is the largest pleurite; a groove sometimes divides it into an anepisternum (above) and a katepisternum (below). Keller (2011) calls it the mesepisternum.', synonyms: ['mesepisternum'], variants: ['mesopleura'] },
@@ -146,7 +154,7 @@ export const TERMS_EN: Record<TermId, TermText> = {
   abdomen: { name: 'Abdomen', definition: 'Third tagma of the insect. In the worker it has seven visible segments, each bearing a spiracle; the first, the propodeum, is fused to the thorax, and the others form the waist and gaster.', synonyms: [] },
   metasoma: { name: 'Metasoma', definition: 'Abdominal segments behind the mesosoma (II to VII): the waist and gaster. Bolton (1994) saw little use for it in ants; Keller (2011) adopts it as in other Hymenoptera and numbers the segments instead of speaking of a gaster.', synonyms: [] },
   gastre: { name: 'Gaster', definition: 'Terminal, enlarged tagma: abdominal segments 3 to 7 when the waist is the petiole alone, 4 to 7 with a postpetiole. Gastral is preferred to gastric, which refers to the gut.', synonyms: [] },
-  taille: { name: 'Waist', definition: 'One or two isolated abdominal segments between the mesosoma and the gaster: the petiole alone, or the petiole and postpetiole. Pedicel is an older term best avoided, as it names an antennal segment in other Hymenoptera.', synonyms: ['pedicel'] },
+  taille: { name: 'Waist', definition: 'One or two isolated abdominal segments between the mesosoma and the gaster: the petiole alone, or the petiole and postpetiole. Pedicel is an older term best avoided, as it names an antennal segment in other Hymenoptera.', synonyms: [] },
   postpetiole: { name: 'Postpetiole', definition: 'Third abdominal segment, when it is reduced and separated from both the petiole and the following segment, as in Myrmicinae.', synonyms: [] },
   helcium: { name: 'Helcium', definition: 'Very reduced, specialised presclerites of the third abdominal segment, forming a complex articulation within the posterior opening of the petiole. It is usually partly or entirely concealed.', synonyms: [] },
   pedoncule: { name: 'Peduncle', definition: 'Narrow anterior part of the petiole, between the articulation with the propodeum and the node or scale. A petiole without a peduncle is called sessile.', synonyms: [], variants: ['petiolar peduncle'] },

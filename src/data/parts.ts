@@ -1,17 +1,18 @@
 import { LANG, type Lang } from '../i18n';
 import { PLATES_EN, PLATE_NAMES_EN, REGIONS_EN, TERMS_EN } from './parts.en';
 
-export type PlateId = 'ouvriere' | 'aile' | 'mandibule';
+export type PlateId = 'ouvriere' | 'aile' | 'mandibule' | 'antenne';
 
 export type RegionId =
   | 'tete' | 'antenne' | 'mesosoma' | 'petiole' | 'gastre' | 'pattes'
   | 'cellules' | 'nervures'
-  | 'lame' | 'dents';
+  | 'lame' | 'dents'
+  | 'scape-base' | 'funicule-massue';
 
 /** Terme du glossaire. */
 export type TermId =
   | 'tete' | 'ommatidies' | 'lobe' | 'clypeus' | 'mandibule'
-  | 'scape' | 'funicule'
+  | 'antenne' | 'scape' | 'funicule' | 'pedicelle' | 'col-bulbe'
   | 'pronotum' | 'mesonotum' | 'mesopleure' | 'propodeum' | 'spiracle'
   | 'petiole'
   | 'tergite' | 'sternite' | 'pygidium' | 'hypopygium' | 'aiguillon'
@@ -86,6 +87,7 @@ const PLATES_FR: Plate[] = [
   { id: 'ouvriere', subject: 'Ouvrière', taxon: 'Neoponera verenae', example: 'mandibule' },
   { id: 'aile', subject: 'Aile de reine', taxon: 'Odontomachus', sp: true, example: 'cellule costale' },
   { id: 'mandibule', subject: 'Mandibule', detail: 'vue composite', example: 'bord basal' },
+  { id: 'antenne', subject: 'Antenne', detail: 'vue composite', example: 'scape' },
 ];
 
 const REGIONS_FR: Region[] = [
@@ -99,6 +101,8 @@ const REGIONS_FR: Region[] = [
   { id: 'nervures', label: 'Nervures', plate: 'aile' },
   { id: 'lame', label: 'Lame et bords', plate: 'mandibule' },
   { id: 'dents', label: 'Dents', plate: 'mandibule' },
+  { id: 'scape-base', label: 'Scape et base', plate: 'antenne' },
+  { id: 'funicule-massue', label: 'Funicule et massue', plate: 'antenne' },
 ];
 
 const TERMS_FR: Term[] = [
@@ -107,8 +111,11 @@ const TERMS_FR: Term[] = [
   { id: 'lobe', name: 'Lobe frontal', definition: 'Expansion dorsolatérale de l’avant de la carène frontale, qui recouvre en partie ou en totalité l’insertion de l’antenne (torulus et fossette antennaire). Keller (2011) réserve ce nom à cette seule structure : chez beaucoup de Ponerinae, le grand lobe ainsi nommé est en réalité un lobe torulaire.', synonyms: [], variants: ['lobe', 'lobes frontaux'] },
   { id: 'clypeus', name: 'Clypéus', definition: 'Sclérite antérieur de la face dorsale de la tête, limité en arrière par la suture fronto-clypéale. Son bord antérieur forme en général le bord antérieur de la tête, au-dessus des mandibules. Il se compose d’une partie médiane et de deux parties latérales.', synonyms: [] },
   { id: 'mandibule', name: 'Mandibules', definition: 'Pièces buccales paires avec lesquelles la fourmi saisit, coupe et transporte. Leur forme et leur denture, très variables, comptent beaucoup en taxonomie.', synonyms: [] },
-  { id: 'scape', name: 'Scapes', definition: 'Premier article de l’antenne, allongé, articulé à la tête dans la fossette antennaire par un bulbe condylaire.', synonyms: [] },
-  { id: 'funicule', name: 'Funicules', definition: 'Ensemble des articles de l’antenne situés après le scape : de 3 à 11 selon les genres, qui portent l’antenne à 4 à 12 articles. Les derniers peuvent former une massue.', synonyms: ['funiculus', 'flagelle'], variants: ['funiculi'] },
+  { id: 'antenne', name: 'Antenne', definition: 'Appendice sensoriel pair de la tête, coudé chez les fourmis : un long article basal, le scape, puis le funicule, de 3 à 11 articles, soit 4 à 12 articles en tout.', synonyms: [], variants: ['antennes'] },
+  { id: 'scape', name: 'Scape', definition: 'Premier article de l’antenne, allongé, articulé à la tête dans la fossette antennaire par un bulbe condylaire.', synonyms: [], variants: ['scapes'] },
+  { id: 'funicule', name: 'Funicule', definition: 'Ensemble des articles de l’antenne situés après le scape : de 3 à 11 selon les genres, qui portent l’antenne à 4 à 12 articles. Les derniers peuvent former une massue.', synonyms: ['funiculus', 'flagelle'], variants: ['funicules', 'funiculi'] },
+  { id: 'pedicelle', name: 'Pédicelle', definition: 'Premier article du funicule, articulé au bout du scape, au coude de l’antenne. Chez les insectes, il porte l’organe de Johnston, qui perçoit les mouvements du funicule. Les clés parlent souvent de premier article funiculaire.', synonyms: ['premier article funiculaire'], variants: ['pédicelles'] },
+  { id: 'col-bulbe', name: 'Col du bulbe', definition: 'Court étranglement entre le bulbe condylaire et la tige du scape. Sa forme, droite, courbée ou munie d’un lobe, varie selon les groupes ; Keller (2011) s’en sert comme caractère phylogénétique.', synonyms: [] },
   { id: 'pronotum', name: 'Pronotum', definition: 'Tergite du prothorax (premier segment thoracique). Il couvre le dessus du segment et descend sur ses côtés, en cachant presque entièrement le propleure.', synonyms: [] },
   { id: 'mesonotum', name: 'Mésonotum', definition: 'Tergite du mésothorax (deuxième segment thoracique). Une suture promésonotale le sépare du pronotum, ou bien les deux sont soudés en un promésonotum.', synonyms: [] },
   { id: 'mesopleure', name: 'Mésopleure', definition: 'Pleurite du mésothorax, sur le côté du mésosoma au-dessus de la coxa médiane. C’est le plus grand pleurite ; un sillon le divise parfois en anépisterne (en haut) et katépisterne (en bas). Keller (2011) l’appelle mésépisterne.', synonyms: ['mésopleuron', 'mésépisterne'] },
@@ -216,7 +223,7 @@ const TERMS_FR: Term[] = [
   { id: 'abdomen', name: 'Abdomen', definition: 'Troisième tagme de l’insecte. Chez l’ouvrière, il compte sept segments visibles portant chacun un spiracle ; le premier, le propodéum, est soudé au thorax, les suivants forment la taille et le gastre.', synonyms: [] },
   { id: 'metasoma', name: 'Métasoma', definition: 'Segments abdominaux situés en arrière du mésosoma (II à VII) : la taille et le gastre. Bolton (1994) le jugeait peu utile chez les fourmis ; Keller (2011) l’adopte comme dans le reste des Hyménoptères et numérote les segments plutôt que de parler de gastre.', synonyms: [] },
   { id: 'gastre', name: 'Gastre', definition: 'Tagme terminal, élargi : segments abdominaux 3 à 7 quand la taille ne compte que le pétiole, 4 à 7 avec un postpétiole. On dit gastral plutôt que gastrique, réservé à l’intestin.', synonyms: [] },
-  { id: 'taille', name: 'Taille', definition: 'Un ou deux segments abdominaux isolés entre le mésosoma et le gastre : le pétiole seul, ou le pétiole et le postpétiole. Pédicelle est un terme ancien à éviter, qui désigne un article de l’antenne chez les autres Hyménoptères.', synonyms: ['pédicelle'] },
+  { id: 'taille', name: 'Taille', definition: 'Un ou deux segments abdominaux isolés entre le mésosoma et le gastre : le pétiole seul, ou le pétiole et le postpétiole. Pédicelle est un terme ancien à éviter, qui désigne un article de l’antenne chez les autres Hyménoptères.', synonyms: [] },
   { id: 'postpetiole', name: 'Postpétiole', definition: 'Troisième segment abdominal, quand il est réduit et séparé à la fois du pétiole et du segment suivant, par exemple chez les Myrmicinae.', synonyms: [] },
   { id: 'helcium', name: 'Helcium', definition: 'Présclérites très réduits et spécialisés du troisième segment abdominal, qui forment une articulation complexe dans l’orifice postérieur du pétiole. Il est en général caché, en partie ou en totalité.', synonyms: [] },
   { id: 'pedoncule', name: 'Pédoncule', definition: 'Partie antérieure étroite du pétiole, entre l’articulation avec le propodéum et le nœud ou l’écaille. Un pétiole sans pédoncule est dit sessile.', synonyms: [], variants: ['pédoncule du pétiole'] },
@@ -243,7 +250,7 @@ const TERMS_FR: Term[] = [
 // Un même terme peut figurer sur plusieurs planches (une fois par planche).
 const LAYOUT: Record<RegionId, TermId[]> = {
   tete: ['tete', 'ommatidies', 'lobe', 'clypeus', 'mandibule'],
-  antenne: ['scape', 'funicule'],
+  antenne: ['antenne'],
   mesosoma: ['pronotum', 'mesonotum', 'mesopleure', 'propodeum', 'spiracle'],
   petiole: ['petiole'],
   gastre: ['tergite', 'sternite', 'pygidium', 'hypopygium', 'aiguillon'],
@@ -259,17 +266,22 @@ const LAYOUT: Record<RegionId, TermId[]> = {
   ],
   lame: ['mandibule', 'bord-masticateur', 'bord-basal', 'bord-externe', 'angle-basal'],
   dents: ['dent-apicale', 'dent-preapicale', 'denticule', 'dent-prebasale', 'dent-basale', 'diasteme'],
+  'scape-base': ['bulbe-condylaire', 'col-bulbe', 'scape'],
+  'funicule-massue': ['pedicelle', 'funicule', 'massue'],
 };
 
 // Nom d'un terme sur une planche donnée, quand il diffère du glossaire : au pluriel s'il y figure plusieurs fois,
 // au singulier s'il n'y figure qu'une fois (« Mandibules » sur l'ouvrière, « Mandibule » sur sa planche).
 const PLATE_NAMES_FR: Partial<Record<PlateId, Partial<Record<TermId, string>>>> = {
+  ouvriere: { antenne: 'Antennes' },
   mandibule: { mandibule: 'Mandibule', denticule: 'Denticules' },
+  antenne: { massue: 'Massue' },
 };
 
 // Planche détaillée d'une structure : depuis la vue d'ensemble (l'ouvrière), un lien ouvre la planche dédiée.
 const DETAIL_PLATES: Partial<Record<TermId, PlateId>> = {
   mandibule: 'mandibule',
+  antenne: 'antenne',
 };
 
 /** Planche détaillée de la structure `id`, s'il y en a une autre que celle où l'on se trouve. */
