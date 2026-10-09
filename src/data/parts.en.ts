@@ -15,6 +15,7 @@ export const PLATES_EN: Record<PlateId, { subject: string; example: string; deta
   tete: { subject: 'Head', detail: 'composite view', example: 'gena' },
   mandibule: { subject: 'Mandible', detail: 'composite view', example: 'basal margin' },
   antenne: { subject: 'Antenna', detail: 'composite view', example: 'scape' },
+  mesosoma: { subject: 'Mesosoma', detail: 'composite view', example: 'propleuron' },
   patte: { subject: 'Leg', detail: 'composite view', example: 'basitarsus' },
 };
 
@@ -23,6 +24,7 @@ export const REGIONS_EN: Record<RegionId, string> = {
   tete: 'Head',
   mandibule: 'Mandible',
   antenne: 'Antenna',
+  mesosoma: 'Mesosoma',
   patte: 'Leg',
   cellules: 'Cells',
   nervures: 'Veins',
@@ -38,6 +40,7 @@ export const PLATE_NAMES_EN: Partial<Record<PlateId, Partial<Record<TermId, stri
   },
   mandibule: { mandibule: 'Mandible', denticule: 'Denticles' },
   antenne: { massue: 'Club' },
+  mesosoma: { coxa: 'Coxae' },
 };
 
 export const TERMS_EN: Record<TermId, TermText> = {

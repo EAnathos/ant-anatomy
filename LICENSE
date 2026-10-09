@@ -18,7 +18,8 @@ Exceptions :
   Attribution - Pas d'utilisation commerciale 4.0 International (CC BY-NC 4.0),
   https://creativecommons.org/licenses/by-nc/4.0/deed.fr
   Réutilisation permise à des fins non commerciales, en citant l'auteur. Cette licence ne s'étend à aucun autre
-  fichier du dépôt que les planches de la tête, de la mandibule, de l'antenne et de la patte ci-dessous.
+  fichier du dépôt que les planches de la tête, de la mandibule, de l'antenne, du mésosoma et de la patte
+  ci-dessous.
 
 - Planche de la tête (src/assets/head.svg) : dessin composite d'EAnathos, d'après les figures 523 à 526 de
   Bolton (1994), sous la même licence CC BY-NC 4.0, https://creativecommons.org/licenses/by-nc/4.0/deed.fr
@@ -30,6 +31,10 @@ Exceptions :
 
 - Planche de l'antenne (src/assets/antenna.svg) : dessin composite d'EAnathos, sous la même licence CC BY-NC 4.0,
   https://creativecommons.org/licenses/by-nc/4.0/deed.fr
+  Réutilisation permise à des fins non commerciales, en citant l'auteur.
+
+- Planche du mésosoma (src/assets/mesosoma.svg) : dessin composite d'EAnathos, d'après la figure 529 de
+  Bolton (1994), sous la même licence CC BY-NC 4.0, https://creativecommons.org/licenses/by-nc/4.0/deed.fr
   Réutilisation permise à des fins non commerciales, en citant l'auteur.
 
 - Planche de la patte (src/assets/leg.svg) : dessin composite d'EAnathos, sous la même licence CC BY-NC 4.0,

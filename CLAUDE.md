@@ -1,7 +1,7 @@
 # CLAUDE.md
 
-Atlas anatomique interactif de la fourmi, avec six planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
-(vue latérale), puis tête, mandibule, antenne et patte (vues composites), et enfin aile antérieure de reine
+Atlas anatomique interactif de la fourmi, avec sept planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
+(vue latérale), puis tête, mandibule, antenne, mésosoma et patte (vues composites), et enfin aile antérieure de reine
 d'*Odontomachus* sp. Trois modes de jeu :
 **Trouver** (un nom est donné, on clique la structure), **Nommer** (on clique une structure, on tape son nom) et
 **Relier** (associer des mots à leur définition, par séries de 5, avec les structures de la planche ou tout le glossaire).
@@ -51,7 +51,7 @@ moment. Animations coupées si `prefers-reduced-motion`.
 ## Structure
 
 - `src/assets/ant.svg` (ouvrière), `src/assets/wing.svg` (aile) et `src/assets/head.svg` (tête), `src/assets/mandible.svg` (mandibule), `src/assets/antenna.svg`
-  (antenne), `src/assets/leg.svg` (patte) :
+  (antenne), `src/assets/mesosoma.svg` (mésosoma), `src/assets/leg.svg` (patte) :
   **sources uniques des dessins**. Importés en `?raw`
   et injectés par `AntPlate` selon la planche (`PlateId`). L'ouvrière est incluse dans le code principal (planche affichée
   à l'arrivée) ; les autres sont chargées à la demande (`import()` dans `LOADERS`, un fichier par dessin) et
@@ -73,7 +73,7 @@ moment. Animations coupées si `prefers-reduced-motion`.
     terme propre à une planche (singulier ou pluriel selon le nombre d'exemplaires dessinés). Une planche sans taxon
     (dessin composite) a un `detail` en romain à la place ; `PlateName` / `plateText` affichent son libellé.
   - `DETAIL_PLATES` : planche détaillée d'une structure de la vue d'ensemble (`tete` → planche `tete`,
-    `mandibule` → planche `mandibule`, `antenne` → planche `antenne`, `patte` → planche `patte`).
+    `mandibule` → planche `mandibule`, `antenne` → planche `antenne`, `patte` → planche `patte`, `mesosoma` → planche `mesosoma`).
     Sur l'accueil, la légende de la structure propose « Voir en détail », qui ouvre cette planche avec la structure
     sélectionnée et un zoom (`.plate-focus`) parti de l'endroit où elle se trouvait. À compléter à chaque planche détaillée. Les id de régions sont uniques toutes planches
     confondues.
@@ -120,11 +120,12 @@ collisions une fois injectés dans la page.
   (`rest | sel | ok | ko | done | off`) et `data-hover`, et `global.css` les colore avec `!important`.
 - Ajouts au dessin d'origine : une grille hexagonale d'ommatidies dans l'œil (découpée par `clipPath`, sans
   `pointer-events`) et une marge de 6 unités dans le `viewBox` pour que l'antenne gauche ne soit pas rognée.
-- Structures fondues : sur cette vue d'ensemble, tête (avec lobe frontal, clypéus et œil), antennes et pattes (coxa à
-  griffes) ne sont chacune qu'une structure (`tete`, `antenne`, `patte`) qui ouvre sa planche détaillée. Les tracés
+- Structures fondues : sur cette vue d'ensemble, tête (avec lobe frontal, clypéus et œil), antennes, mésosoma (pronotum,
+  mésonotum, mésopleure, propodéum) et pattes (coxa à griffes) ne sont chacune qu'une structure (`tete`, `antenne`,
+  `mesosoma`, `patte`) qui ouvre sa planche détaillée. Le spiracle propodéal y reste dessiné, en décor. Les tracés
   d'origine (griffes doublées par-dessus le tarse, zones de clic élargies des éperons et griffes) portent tous
   `data-part="patte"`.
-- Petites structures (spiracle) : un tracé transparent à contour épais (`stroke:transparent`) avec le même
+- Petites structures : un tracé transparent à contour épais (`stroke:transparent`) avec le même
   `data-part` élargit la zone cliquable.
 - Éléments décoratifs (ombre de fond, croissants noirs des coxas, trait de la joue, détail du propodéum, fémur
   postérieur caché derrière le gastre, bande entre le 1er et le 2e tergite) : pas de `data-part`, `pointer-events="none"`.
@@ -184,6 +185,27 @@ massue de 3 dont le dernier en ogive). Base : bulbe condylaire et col du bulbe.
   par les 7 articles du milieu, et la vue légendée montre son étendue complète par une accolade (`data-extent-for`).
 - Chaque article est un tracé à contour ; dessinés de l'apex vers la base, chacun recouvre la base du suivant.
 - Sur l'ouvrière, les deux antennes ne forment qu'une structure, `antenne` (« Antennes »), qui ouvre cette planche.
+
+## Planche du mésosoma : règles
+
+`mesosoma.svg` : mésosoma d'ouvrière, vue latérale, dessin composite d'EAnathos d'après la figure 529 de Bolton (1994)
+(CC BY-NC 4.0). Points relevés sur la figure, même repère (image de 567 × 390) ; chaque frontière est le même tronçon
+dans les deux surfaces qu'elle sépare.
+- Structures : pronotum, suture promésonotale, mésonotum, sillon métanotal, propodéum, spiracle propodéal, déclivité
+  propodéale, lobe propodéal, propleure, anépisterne, katépisterne, métapleure, bulle et orifice de la glande
+  métapleurale, coxas (« Coxas » sur cette planche).
+- Surfaces sans contour posées sur une silhouette grise (pas de liseré) ; frontières, contour et hachures en décor,
+  en trait plein ou en pointillés comme sur la figure.
+- Propleure : bande en S sous le pronotum, de l'avant jusqu'à la procoxa.
+- La mésopleure n'y est pas une structure : le sillon hachuré la partage en anépisterne et katépisterne. Le bord
+  postérieur de l'anépisterne se prolonge (pointillés puis trait plein) en frontière katépisterne / métapleure.
+- Suture promésonotale et déclivité : des traits (`.nerv-core` + `.nerv-hit`). Sillon métanotal : même principe, mais
+  cœur transparent au repos (seules les hachures se voient, comme sur la figure).
+- Bulle en pointillés par-dessus la frontière métapleure / propodéum ; orifice et spiracle avec zone de clic élargie.
+  Petit spiracle métathoracique en décor.
+- Coxas dessinées sous le mésosoma, chacune avec l'encoche en trou de serrure du trochanter.
+- Sur l'ouvrière, pronotum, mésonotum, mésopleure et propodéum sont fondus dans `mesosoma`, qui ouvre cette planche ;
+  le spiracle y est un décor.
 
 ## Planche de la patte : règles
 

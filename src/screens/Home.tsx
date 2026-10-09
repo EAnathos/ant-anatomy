@@ -139,6 +139,26 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         </>
       ),
     },
+    mesosoma: {
+      title: () => 'Anatomie du mésosoma',
+      lead: (n) => `${n} structures du mésosoma, du pronotum aux lobes propodéaux. Repère-les sur la planche, puis nomme-les sans aide.`,
+      note: (
+        <>
+          La planche montre le mésosoma d’une ouvrière, vue de côté, d’après la figure 529 de Bolton (1994). C’est un dessin composite, qui ne représente
+          aucune espèce. Il réunit les trois segments du thorax et le propodéum, premier segment de l’abdomen soudé au thorax. Ici, un sillon divise la
+          mésopleure en anépisterne et katépisterne, et la bulle de la glande métapleurale s’ouvre par un orifice au-dessus de la coxa postérieure.
+        </>
+      ),
+      credit: (
+        <>
+          Planche : dessin composite d’EAnathos, sous licence{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          {' '}: réutilisation libre à des fins non commerciales, en citant l’auteur.
+        </>
+      ),
+    },
     patte: {
       title: () => 'Anatomie de la patte',
       lead: (n) => `${n} parties de la patte, de la coxa aux griffes. Repère-les sur la planche, puis nomme-les sans aide.`,
@@ -254,6 +274,26 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
           The plate shows the left antenna of a worker, seen from the side. It is a composite drawing, not based on any species: 12 segments, the scape then an
           11-segmented funiculus, whose first segment is the pedicel and last three form the club. The number of segments ranges from 4 to 12 depending on the genus,
           and the club, of one to four segments, is absent in many ants.
+        </>
+      ),
+      credit: (
+        <>
+          Plate: composite drawing by EAnathos, licensed under{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          : free to reuse for non-commercial purposes, with credit to the author.
+        </>
+      ),
+    },
+    mesosoma: {
+      title: () => 'Mesosoma anatomy',
+      lead: (n) => `${n} structures of the mesosoma, from the pronotum to the propodeal lobes. Find them on the plate, then name them unaided.`,
+      note: (
+        <>
+          The plate shows the mesosoma of a worker, seen from the side, after figure 529 of Bolton (1994). It is a composite drawing, not based on any
+          species. It combines the three thoracic segments and the propodeum, the first abdominal segment fused to the thorax. Here a groove divides the
+          mesopleuron into anepisternum and katepisternum, and the metapleural gland bulla opens through an orifice above the hind coxa.
         </>
       ),
       credit: (

@@ -12,6 +12,8 @@ sur des planches interactives. Six planches au choix :
   Bolton (1994) : bords, angle basal, dents et diastème.
 - **Antenne**, vue composite d'une antenne d'ouvrière de 12 articles : bulbe condylaire, col du bulbe, scape,
   pédicelle, funicule et massue.
+- **Mésosoma**, vue composite d'un mésosoma d'ouvrière de profil, d'après la figure 529 de Bolton (1994) : pronotum,
+  mésonotum, propodéum, pleurites (propleure, anépisterne, katépisterne, métapleure), glande métapleurale et coxas.
 - **Patte**, vue composite d'une patte postérieure d'ouvrière : coxa, trochanter, fémur, tibia et ses éperons,
   basitarse, tarse, prétarse, griffes et arolium.
 - **Aile de reine *Odontomachus* sp.** (Ponerinae), aile antérieure, avec ses cellules et ses nervures. La nervation varie selon les genres
@@ -19,10 +21,10 @@ sur des planches interactives. Six planches au choix :
 
 ## Fonctionnalités
 
-- **Planches interactives** : 15 structures sur l'ouvrière (sur les deux antennes et les six pattes), 16 sur la tête,
-  11 sur la mandibule, 6 sur l'antenne, 10 sur la patte, et sur l'aile 2 régions au choix : cellules (10 cellules et le
+- **Planches interactives** : 11 structures sur l'ouvrière (sur les deux antennes et les six pattes), 16 sur la tête,
+  11 sur la mandibule, 6 sur l'antenne, 15 sur le mésosoma, 10 sur la patte, et sur l'aile 2 régions au choix : cellules (10 cellules et le
   ptérostigma) et nervures (22).
-  La tête, les mandibules, les antennes et les pattes de l'ouvrière ouvrent leur planche détaillée.
+  La tête, les mandibules, les antennes, le mésosoma et les pattes de l'ouvrière ouvrent leur planche détaillée.
   Un clic sur l'accueil affiche le nom et une définition.
 - **Mode Trouver** : un nom s'affiche, il faut cliquer la bonne structure. Indice de région sur l'aile, correction immédiate,
   progression et bilan détaillé (score, précision, durée, meilleure série), avec la possibilité de rejouer ses erreurs.
@@ -81,6 +83,7 @@ src/
   assets/head.svg       planche de la tête, même principe
   assets/mandible.svg   planche de la mandibule, même principe
   assets/antenna.svg    planche de l'antenne, même principe
+  assets/mesosoma.svg   planche du mésosoma, même principe
   assets/leg.svg        planche de la patte, même principe
   i18n.ts               langue de la page et helper de traduction t(fr, en)
   data/parts.ts         planches, régions, dictionnaire des termes et placement sur les planches (français)
@@ -124,6 +127,9 @@ Planche de l'antenne : dessin composite d'EAnathos, sous la même licence CC BY-
 
 Planche de la patte : dessin composite d'EAnathos, sous la même licence CC BY-NC 4.0.
 
+Planche du mésosoma : dessin composite d'EAnathos, d'après la figure 529 de Bolton (1994), sous la même licence
+CC BY-NC 4.0.
+
 Planche de la tête : dessin composite d'EAnathos, d'après les figures 523 à 526 de Bolton (1994), sous la même
 licence CC BY-NC 4.0.
 
@@ -134,7 +140,7 @@ Pour aller plus loin : [Morphology and Terminology](https://antwiki.org/wiki/Mor
 ## Licence
 
 Tous droits réservés : le code, les textes et les données de ce dépôt ne peuvent pas être réutilisés sans
-autorisation. Seules les planches de l'aile, de la tête, de la mandibule, de l'antenne et de la patte sont réutilisables, sous licence CC BY-NC 4.0, et le dessin d'origine de
+autorisation. Seules les planches de l'aile, de la tête, de la mandibule, de l'antenne, du mésosoma et de la patte sont réutilisables, sous licence CC BY-NC 4.0, et le dessin d'origine de
 l'ouvrière reste dans le domaine public. Détails dans [LICENSE](LICENSE).
 
 ## Contribuer

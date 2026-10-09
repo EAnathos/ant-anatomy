@@ -1,11 +1,11 @@
 import { LANG, type Lang } from '../i18n';
 import { PLATES_EN, PLATE_NAMES_EN, REGIONS_EN, TERMS_EN } from './parts.en';
 
-export type PlateId = 'ouvriere' | 'aile' | 'tete' | 'mandibule' | 'antenne' | 'patte';
+export type PlateId = 'ouvriere' | 'aile' | 'tete' | 'mandibule' | 'antenne' | 'mesosoma' | 'patte';
 
 // Une région par planche, sauf l'aile, où l'on choisit cellules, nervures ou les deux. Une région de planche porte
 // l'id de sa planche.
-export type RegionId = 'ouvriere' | 'tete' | 'mandibule' | 'antenne' | 'patte' | 'cellules' | 'nervures';
+export type RegionId = 'ouvriere' | 'tete' | 'mandibule' | 'antenne' | 'mesosoma' | 'patte' | 'cellules' | 'nervures';
 
 /** Terme du glossaire. */
 export type TermId =
@@ -86,6 +86,7 @@ const PLATES_FR: Plate[] = [
   { id: 'tete', subject: 'Tête', detail: 'vue composite', example: 'gena' },
   { id: 'mandibule', subject: 'Mandibule', detail: 'vue composite', example: 'bord basal' },
   { id: 'antenne', subject: 'Antenne', detail: 'vue composite', example: 'scape' },
+  { id: 'mesosoma', subject: 'Mésosoma', detail: 'vue composite', example: 'propleure' },
   { id: 'patte', subject: 'Patte', detail: 'vue composite', example: 'basitarse' },
   { id: 'aile', subject: 'Aile de reine', taxon: 'Odontomachus', sp: true, example: 'cellule costale' },
 ];
@@ -95,6 +96,7 @@ const REGIONS_FR: Region[] = [
   { id: 'tete', label: 'Tête', plate: 'tete' },
   { id: 'mandibule', label: 'Mandibule', plate: 'mandibule' },
   { id: 'antenne', label: 'Antenne', plate: 'antenne' },
+  { id: 'mesosoma', label: 'Mésosoma', plate: 'mesosoma' },
   { id: 'patte', label: 'Patte', plate: 'patte' },
   { id: 'cellules', label: 'Cellules', plate: 'aile' },
   { id: 'nervures', label: 'Nervures', plate: 'aile' },
@@ -246,7 +248,7 @@ const TERMS_FR: Term[] = [
 // Un même terme peut figurer sur plusieurs planches (une fois par planche).
 const LAYOUT: Record<RegionId, TermId[]> = {
   ouvriere: [
-    'tete', 'mandibule', 'antenne', 'pronotum', 'mesonotum', 'mesopleure', 'propodeum', 'spiracle', 'petiole',
+    'tete', 'mandibule', 'antenne', 'mesosoma', 'petiole',
     'tergite', 'sternite', 'pygidium', 'hypopygium', 'aiguillon', 'patte',
   ],
   tete: [
@@ -259,6 +261,11 @@ const LAYOUT: Record<RegionId, TermId[]> = {
     'dent-apicale', 'dent-preapicale', 'denticule', 'dent-prebasale', 'dent-basale', 'diasteme',
   ],
   antenne: ['bulbe-condylaire', 'col-bulbe', 'scape', 'pedicelle', 'funicule', 'massue'],
+  mesosoma: [
+    'pronotum', 'suture-promesonotale', 'mesonotum', 'sillon-metanotal', 'propodeum', 'spiracle', 'declivite-propodeale',
+    'lobe-propodeal', 'propleure', 'anepisterne', 'katepisterne', 'metapleure', 'bulle-metapleurale',
+    'orifice-metapleural', 'coxa',
+  ],
   patte: ['coxa', 'trochanter', 'femur', 'tibia', 'eperon', 'basitarse', 'tarse', 'pretarse', 'griffe', 'arolium'],
   cellules: [
     'pterostigma', 'costale', 'marginale', 'submarginale-1', 'submarginale-2', 'submarginale-3',
@@ -283,6 +290,7 @@ const PLATE_NAMES_FR: Partial<Record<PlateId, Partial<Record<TermId, string>>>> 
   },
   mandibule: { mandibule: 'Mandibule', denticule: 'Denticules' },
   antenne: { massue: 'Massue' },
+  mesosoma: { coxa: 'Coxas' },
 };
 
 // Planche détaillée d'une structure : depuis la vue d'ensemble (l'ouvrière), un lien ouvre la planche dédiée.
@@ -290,6 +298,7 @@ const DETAIL_PLATES: Partial<Record<TermId, PlateId>> = {
   tete: 'tete',
   mandibule: 'mandibule',
   antenne: 'antenne',
+  mesosoma: 'mesosoma',
   patte: 'patte',
 };
 
