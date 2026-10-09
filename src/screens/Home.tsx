@@ -1,9 +1,10 @@
-import { useState, type ReactNode } from 'react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
 import { AntPlate } from '../components/AntPlate';
 import { ArrowIcon, DiceIcon, MagnifierIcon } from '../components/icons';
 import { Rich } from '../components/Rich';
+import { PlateName, plateText } from '../components/PlateName';
 import { SettingsPanel } from '../components/SettingsPanel';
-import { PLATES, REGION_BY_ID, partsInRegions, partsOf, regionsOf, partIn, type PartId, type PlateId, type RegionId } from '../data/parts';
+import { PLATES, PLATE_BY_ID, REGION_BY_ID, detailPlateOf, partsInRegions, partsOf, regionsOf, partIn, type PartId, type PlateId, type RegionId } from '../data/parts';
 import { t } from '../i18n';
 import { playableParts, type Settings } from '../lib/session';
 
@@ -78,6 +79,33 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         </>
       ),
     },
+    mandibule: {
+      title: (regions) => (only(regions, 'dents') ? 'Dents de la mandibule' : 'Anatomie de la mandibule'),
+      lead: (n, regions) =>
+        `${n} ${
+          only(regions, 'dents')
+            ? 'éléments de l’armature de la mandibule, de la dent apicale au diastème'
+            : only(regions, 'lame')
+              ? 'éléments de la lame de la mandibule, ses bords et son angle basal'
+              : 'structures de la mandibule, de la dent apicale à l’angle basal'
+        }. Repère-les sur la planche, puis nomme-les sans aide.`,
+      note: (
+        <>
+          La planche montre une mandibule gauche triangulaire, grande ouverte, vue de dessus. C’est un dessin composite, qui ne représente aucune espèce, d’après la
+          figure 527 de Bolton (1994). Les dents se comptent depuis l’apex. La forme de la mandibule varie beaucoup selon les genres : triangulaire chez la plupart
+          des fourmis, longue et étroite chez <em>Odontomachus</em>, en faux et presque sans dents chez <em>Polyergus</em>.
+        </>
+      ),
+      credit: (
+        <>
+          Planche : dessin composite d’EAnathos, d’après la figure 527 de Bolton (1994), sous licence{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          {' '}: réutilisation libre à des fins non commerciales, en citant l’auteur.
+        </>
+      ),
+    },
   },
   {
     ouvriere: {
@@ -125,6 +153,33 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         </>
       ),
     },
+    mandibule: {
+      title: (regions) => (only(regions, 'dents') ? 'Mandible teeth' : 'Mandible anatomy'),
+      lead: (n, regions) =>
+        `${n} ${
+          only(regions, 'dents')
+            ? 'parts of the mandible’s armament, from the apical tooth to the diastema'
+            : only(regions, 'lame')
+              ? 'parts of the mandible’s blade, its margins and basal angle'
+              : 'structures of the mandible, from the apical tooth to the basal angle'
+        }. Find them on the plate, then name them unaided.`,
+      note: (
+        <>
+          The plate shows a fully opened triangular left mandible, seen from above. It is a composite drawing, not based on any species, after figure 527 of
+          Bolton (1994). Teeth are counted from the apex. Mandible shape varies widely between genera: triangular in most ants, long and narrow in{' '}
+          <em>Odontomachus</em>, sickle-shaped and nearly toothless in <em>Polyergus</em>.
+        </>
+      ),
+      credit: (
+        <>
+          Plate: composite drawing by EAnathos, after figure 527 of Bolton (1994), licensed under{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          : free to reuse for non-commercial purposes, with credit to the author.
+        </>
+      ),
+    },
   },
 );
 
@@ -135,6 +190,7 @@ const T = t(
     showLabels: 'Afficher tous les noms sur la planche',
     legend: 'Structures numérotées sur la planche',
     pickHint: 'Clique une structure de la planche pour l’identifier.',
+    detail: 'Voir en détail : ',
     chooseMode: 'Choisis un mode',
     find: 'Trouver',
     findText: 'Un nom s’affiche. Clique la structure correspondante sur la planche. Si elle existe en plusieurs exemplaires, n’importe laquelle compte.',
@@ -152,6 +208,7 @@ const T = t(
     showLabels: 'Show every name on the plate',
     legend: 'Structures numbered on the plate',
     pickHint: 'Click a structure on the plate to identify it.',
+    detail: 'See in detail: ',
     chooseMode: 'Choose a mode',
     find: 'Find',
     findText: 'A name appears. Click the matching structure on the plate. If it occurs several times, any of them counts.',
@@ -188,6 +245,21 @@ export function Home({ initialSelected, settings, onSettingsChange, onStartFind,
     onSettingsChange({ ...settings, plate, regions: regionsOf(plate).map((r) => r.id) });
   };
 
+  // Zoom vers la planche détaillée : la nouvelle planche grandit depuis l'endroit de la structure sur l'ancienne.
+  const [focus, setFocus] = useState<{ n: number; origin: string } | null>(null);
+  const detail = part ? detailPlateOf(settings.plate, part.id) : null;
+  const openDetail = (plate: PlateId, id: PartId) => {
+    const frame = document.querySelector('.hero__plate .ant-plate')?.getBoundingClientRect();
+    const target = document.querySelector(`.hero__plate [data-part="${CSS.escape(id)}"]`)?.getBoundingClientRect();
+    const origin =
+      frame && target && frame.width > 0
+        ? `${(((target.left + target.width / 2 - frame.left) / frame.width) * 100).toFixed(1)}% ${(((target.top + target.height / 2 - frame.top) / frame.height) * 100).toFixed(1)}%`
+        : '50% 50%';
+    onSettingsChange({ ...settings, plate, regions: regionsOf(plate).map((r) => r.id) });
+    setSelected(id);
+    setFocus((f) => ({ n: (f?.n ?? 0) + 1, origin }));
+  };
+
   return (
     <main className="container">
       <section className="hero hero--top">
@@ -204,7 +276,7 @@ export function Home({ initialSelected, settings, onSettingsChange, onStartFind,
               <select value={settings.plate} onChange={(e) => choosePlate(e.target.value as PlateId)}>
                 {PLATES.map((p) => (
                   <option key={p.id} value={p.id}>
-                    {p.subject} · {p.taxon}{p.sp ? ' sp.' : ''}
+                    {plateText(p)}
                   </option>
                 ))}
               </select>
@@ -226,7 +298,13 @@ export function Home({ initialSelected, settings, onSettingsChange, onStartFind,
             </div>
           </div>
           <figure className="plate">
-          <AntPlate plate={settings.plate} marks={selected ? { [selected]: 'sel' } : undefined} onPick={setSelected} labels={labels} />
+          <div
+            key={focus?.n ?? 0}
+            className={focus ? 'plate-focus' : undefined}
+            style={focus ? ({ '--focus-origin': focus.origin } as CSSProperties) : undefined}
+          >
+            <AntPlate plate={settings.plate} marks={selected ? { [selected]: 'sel' } : undefined} onPick={setSelected} labels={labels} />
+          </div>
           <figcaption className="plate__caption" aria-live="polite">
             {part ? (
               <>
@@ -235,6 +313,13 @@ export function Home({ initialSelected, settings, onSettingsChange, onStartFind,
                   <span className="eyebrow">{REGION_BY_ID[part.region].label}</span>
                 </div>
                 <span className="muted"><Rich text={part.definition} /></span>
+                {detail && (
+                  <button type="button" className="plate-ref" onClick={() => openDetail(detail, part.id)}>
+                    {T.detail}
+                    <PlateName plate={PLATE_BY_ID[detail]} />
+                    <ArrowIcon size={14} />
+                  </button>
+                )}
               </>
             ) : (
               <span className="muted">{T.pickHint}</span>

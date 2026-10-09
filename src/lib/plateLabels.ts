@@ -62,11 +62,39 @@ function insidePoint(svg: SVGSVGElement, el: SVGGeometryElement, clip: SVGGeomet
   return best ? toRoot(svg, el, best.x, best.y) : toRoot(svg, el, cx, cy);
 }
 
+/** Étendue d'une structure longue (bord masticateur) : segment invisible du SVG (`data-extent-for`), affiché en
+ *  accolade dans la vue légendée. `data-extent-tick` donne la direction des petits retours vers la structure. */
+interface Extent { id: string; a: DOMPoint; b: DOMPoint; tick: [number, number] }
+
+function extentsOf(svg: SVGSVGElement): Map<string, Extent> {
+  const out = new Map<string, Extent>();
+  for (const el of svg.querySelectorAll<SVGGeometryElement>('[data-extent-for]')) {
+    const id = el.getAttribute('data-extent-for') ?? '';
+    const [tx, ty] = (el.getAttribute('data-extent-tick') ?? '0 0').split(/\s+/).map(Number);
+    const a = el.getPointAtLength(0);
+    const b = el.getPointAtLength(el.getTotalLength());
+    out.set(id, { id, a: toRoot(svg, el, a.x, a.y), b: toRoot(svg, el, b.x, b.y), tick: [tx, ty] });
+  }
+  return out;
+}
+
+/** Accolade d'une étendue : un trait et deux petits retours vers la structure. */
+function drawExtent(layer: SVGGElement, e: Extent, size: number, selected: boolean) {
+  const t = size * 1.1;
+  const line = document.createElementNS(NS, 'polyline');
+  line.setAttribute(
+    'points',
+    `${e.a.x + e.tick[0] * t},${e.a.y + e.tick[1] * t} ${e.a.x},${e.a.y} ${e.b.x},${e.b.y} ${e.b.x + e.tick[0] * t},${e.b.y + e.tick[1] * t}`,
+  );
+  line.setAttribute('class', `plate-label__extent${selected ? ' plate-label__extent--sel' : ''}`);
+  layer.appendChild(line);
+}
+
 function anchorOf(svg: SVGSVGElement, id: string, clip: SVGGeometryElement | null): Anchor | null {
   const els = Array.from(svg.querySelectorAll<SVGGeometryElement>(`[data-part="${CSS.escape(id)}"]`)).filter(
     (el) => !el.classList.contains('nerv-hit') && !el.classList.contains('nerv-halo'),
   );
-  // Surfaces : la plus grande. Nervures (traits) : le milieu du plus long cœur.
+  // Surfaces : la plus grande. Nervures et bords (traits) : le milieu du plus long cœur.
   const surfaces = els.filter((el) => !el.classList.contains('nerv') && isVisibleFill(el));
   if (surfaces.length > 0) {
     const area = (el: SVGGeometryElement) => {
@@ -78,7 +106,13 @@ function anchorOf(svg: SVGSVGElement, id: string, clip: SVGGeometryElement | nul
     return { id, x: p.x, y: p.y };
   }
   const cores = els.filter((el) => el.classList.contains('nerv-core'));
-  if (cores.length === 0) return null;
+  if (cores.length === 0) {
+    // Zone transparente (angle basal de la mandibule) : le centre de sa boîte.
+    if (els.length === 0) return null;
+    const b = els[0].getBBox();
+    const p = toRoot(svg, els[0], b.x + b.width / 2, b.y + b.height / 2);
+    return { id, x: p.x, y: p.y };
+  }
   const el = cores.reduce((a, b) => (b.getTotalLength() > a.getTotalLength() ? b : a));
   const mid = el.getPointAtLength(el.getTotalLength() / 2);
   const p = toRoot(svg, el, mid.x, mid.y);
@@ -107,10 +141,18 @@ export function drawLabels(svg: SVGSVGElement, names: Record<string, string>, se
   const ids = [...new Set(Array.from(svg.querySelectorAll('[data-part]'), (el) => el.getAttribute('data-part') ?? ''))].filter(
     (id) => id in names,
   );
-  const anchors = ids.map((id) => anchorOf(svg, id, clip)).filter((a): a is Anchor => a !== null);
+  // Une structure avec une étendue est repérée au milieu de son accolade, pas sur un point du dessin.
+  const extents = extentsOf(svg);
+  const anchors = ids
+    .map((id): Anchor | null => {
+      const e = extents.get(id);
+      return e ? { id, x: (e.a.x + e.b.x) / 2, y: (e.a.y + e.b.y) / 2 } : anchorOf(svg, id, clip);
+    })
+    .filter((a): a is Anchor => a !== null);
+  const visibleExtents = [...extents.values()].filter((e) => ids.includes(e.id));
 
   if (window.matchMedia(COMPACT_LABELS).matches) {
-    drawNumbers(svg, base, anchors, Object.keys(names), selected);
+    drawNumbers(svg, base, anchors, Object.keys(names), selected, visibleExtents);
     return;
   }
 
@@ -129,6 +171,7 @@ export function drawLabels(svg: SVGSVGElement, names: Record<string, string>, se
   svg.appendChild(layer);
 
   const rect = svg.getBoundingClientRect();
+  for (const e of visibleExtents) drawExtent(layer, e, TARGET_PX * (base.w / Math.max(rect.width, 1)), e.id === selected);
   const texts = new Map<string, SVGTextElement>();
   for (const a of anchors) {
     const text = document.createElementNS(NS, 'text');
@@ -187,13 +230,21 @@ export function drawLabels(svg: SVGSVGElement, names: Record<string, string>, se
   svg.setAttribute('viewBox', `${box.x} ${box.y} ${box.w} ${box.h}`);
 }
 
-function drawNumbers(svg: SVGSVGElement, base: Box, anchors: Anchor[], order: string[], selected: string | null) {
+function drawNumbers(
+  svg: SVGSVGElement,
+  base: Box,
+  anchors: Anchor[],
+  order: string[],
+  selected: string | null,
+  extents: Extent[],
+) {
   const rect = svg.getBoundingClientRect();
   const scale = Math.min(rect.width / base.w, rect.height / base.h) || 1;
   const fs = 8 / scale;
   const layer = document.createElementNS(NS, 'g');
   layer.setAttribute('class', LAYER);
   layer.setAttribute('aria-hidden', 'true');
+  for (const e of extents) drawExtent(layer, e, fs, e.id === selected);
   for (const a of anchors) {
     const sel = a.id === selected;
     const g = document.createElementNS(NS, 'g');

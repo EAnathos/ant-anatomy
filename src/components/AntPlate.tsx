@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, type KeyboardEvent, type MouseEvent } from 'react';
 import antSvg from '../assets/ant.svg?raw';
+import mandibleSvg from '../assets/mandible.svg?raw';
 import wingSvg from '../assets/wing.svg?raw';
 import { partsOf, type PartId, type PlateId } from '../data/parts';
 import { t } from '../i18n';
@@ -18,8 +19,12 @@ interface AntPlateProps {
 }
 
 const LABELS = t<Record<PlateId, string>>(
-  { ouvriere: 'Planche : fourmi ouvrière en vue latérale', aile: 'Planche : aile antérieure de reine' },
-  { ouvriere: 'Plate: worker ant, side view', aile: 'Plate: queen forewing' },
+  {
+    ouvriere: 'Planche : fourmi ouvrière en vue latérale',
+    aile: 'Planche : aile antérieure de reine',
+    mandibule: 'Planche : mandibule gauche ouverte, vue dorsale',
+  },
+  { ouvriere: 'Plate: worker ant, side view', aile: 'Plate: queen forewing', mandibule: 'Plate: open left mandible, dorsal view' },
 );
 
 const withLabel = (svg: string, label: string) => svg.replace(/aria-label="[^"]*"/, `aria-label="${label}"`);
@@ -27,6 +32,7 @@ const withLabel = (svg: string, label: string) => svg.replace(/aria-label="[^"]*
 const SVG_BY_PLATE: Record<PlateId, string> = {
   ouvriere: withLabel(antSvg, LABELS.ouvriere),
   aile: withLabel(wingSvg, LABELS.aile),
+  mandibule: withLabel(mandibleSvg, LABELS.mandibule),
 };
 
 const EMPTY_MARKS: Marks = {};

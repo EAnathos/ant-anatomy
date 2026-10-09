@@ -1,11 +1,12 @@
 import { LANG, type Lang } from '../i18n';
-import { PLATES_EN, REGIONS_EN, TERMS_EN } from './parts.en';
+import { PLATES_EN, PLATE_NAMES_EN, REGIONS_EN, TERMS_EN } from './parts.en';
 
-export type PlateId = 'ouvriere' | 'aile';
+export type PlateId = 'ouvriere' | 'aile' | 'mandibule';
 
 export type RegionId =
   | 'tete' | 'antenne' | 'mesosoma' | 'petiole' | 'gastre' | 'pattes'
-  | 'cellules' | 'nervures';
+  | 'cellules' | 'nervures'
+  | 'lame' | 'dents';
 
 /** Terme du glossaire. */
 export type TermId =
@@ -45,7 +46,10 @@ export interface Plate {
   id: PlateId;
   /** Caste et taxon affichés dans le sélecteur : « Ouvrière » + *Neoponera verenae*. */
   subject: string;
-  taxon: string;
+  /** Genre ou espèce, en italique. Absent pour un dessin composite, qui a un `detail` à la place. */
+  taxon?: string;
+  /** Précision en romain quand il n'y a pas de taxon : « vue composite ». */
+  detail?: string;
   /** Espèce non déterminée : « sp. » ajouté après le genre, hors italique. */
   sp?: boolean;
   /** Exemple de saisie en mode Nommer. */
@@ -81,6 +85,7 @@ export interface Part extends Term {
 const PLATES_FR: Plate[] = [
   { id: 'ouvriere', subject: 'Ouvrière', taxon: 'Neoponera verenae', example: 'mandibule' },
   { id: 'aile', subject: 'Aile de reine', taxon: 'Odontomachus', sp: true, example: 'cellule costale' },
+  { id: 'mandibule', subject: 'Mandibule', detail: 'vue composite', example: 'bord basal' },
 ];
 
 const REGIONS_FR: Region[] = [
@@ -92,6 +97,8 @@ const REGIONS_FR: Region[] = [
   { id: 'pattes', label: 'Pattes', plate: 'ouvriere' },
   { id: 'cellules', label: 'Cellules', plate: 'aile' },
   { id: 'nervures', label: 'Nervures', plate: 'aile' },
+  { id: 'lame', label: 'Lame et bords', plate: 'mandibule' },
+  { id: 'dents', label: 'Dents', plate: 'mandibule' },
 ];
 
 const TERMS_FR: Term[] = [
@@ -250,7 +257,26 @@ const LAYOUT: Record<RegionId, TermId[]> = {
     'media-1', 'media-2', 'media-3', 'media-4', 'm-plus-cu', 'm-cu', 'cubitus-1', 'cubitus-2', 'cubitus-3', 'cu-a',
     'anale-1', 'anale-2',
   ],
+  lame: ['mandibule', 'bord-masticateur', 'bord-basal', 'bord-externe', 'angle-basal'],
+  dents: ['dent-apicale', 'dent-preapicale', 'denticule', 'dent-prebasale', 'dent-basale', 'diasteme'],
 };
+
+// Nom d'un terme sur une planche donnée, quand il diffère du glossaire : au pluriel s'il y figure plusieurs fois,
+// au singulier s'il n'y figure qu'une fois (« Mandibules » sur l'ouvrière, « Mandibule » sur sa planche).
+const PLATE_NAMES_FR: Partial<Record<PlateId, Partial<Record<TermId, string>>>> = {
+  mandibule: { mandibule: 'Mandibule', denticule: 'Denticules' },
+};
+
+// Planche détaillée d'une structure : depuis la vue d'ensemble (l'ouvrière), un lien ouvre la planche dédiée.
+const DETAIL_PLATES: Partial<Record<TermId, PlateId>> = {
+  mandibule: 'mandibule',
+};
+
+/** Planche détaillée de la structure `id`, s'il y en a une autre que celle où l'on se trouve. */
+export function detailPlateOf(plate: PlateId, id: PartId): PlateId | null {
+  const target = DETAIL_PLATES[id];
+  return target && target !== plate ? target : null;
+}
 
 /** Dictionnaire dans la langue demandée (les tests vérifient les deux langues). */
 export function termsFor(lang: Lang): Term[] {
@@ -262,7 +288,11 @@ const plateOf = (region: RegionId) => REGIONS_FR.find((r) => r.id === region)!.p
 /** Structures de toutes les planches dans la langue demandée, dans l'ordre des planches et de leurs légendes. */
 export function partsFor(lang: Lang): Part[] {
   const byId = Object.fromEntries(termsFor(lang).map((t) => [t.id, t])) as Record<TermId, Term>;
-  return REGIONS_FR.flatMap((r) => LAYOUT[r.id].map((id) => ({ ...byId[id], region: r.id, plate: plateOf(r.id) })));
+  const names = lang === 'fr' ? PLATE_NAMES_FR : PLATE_NAMES_EN;
+  return REGIONS_FR.flatMap((r) => {
+    const plate = plateOf(r.id);
+    return LAYOUT[r.id].map((id) => ({ ...byId[id], name: names[plate]?.[id] ?? byId[id].name, region: r.id, plate }));
+  });
 }
 
 export const PLATES: Plate[] = LANG === 'fr' ? PLATES_FR : PLATES_FR.map((p) => ({ ...p, ...PLATES_EN[p.id] }));

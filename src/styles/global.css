@@ -352,7 +352,7 @@ main.container {
 .ant-plate [data-part]:focus-visible { stroke-width: 2.5px; }
 
 /* Aile : les cellules n'ont pas de contour, le focus clavier en dessine un. */
-.ant-plate[data-plate='aile'] [data-part]:focus-visible { stroke: var(--prusse) !important; stroke-width: 4px !important; }
+.ant-plate:is([data-plate='aile'], [data-plate='mandibule']) [data-part]:focus-visible { stroke: var(--prusse) !important; stroke-width: 4px !important; }
 
 .ant-plate [data-state='off'] {
   opacity: 0.25;
@@ -493,6 +493,16 @@ main.container {
 }
 
 .plate-label__dot { fill: var(--prusse); pointer-events: none; }
+/* Accolade d'une structure longue (bord masticateur), de son début à sa fin. */
+.plate-label__extent {
+  fill: none;
+  stroke: var(--prusse);
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+.plate-label__extent--sel { stroke: var(--amber); stroke-width: 3px; }
 .plate-label__dot--sel { fill: var(--amber); }
 
 .plate-label__text {
@@ -1288,6 +1298,18 @@ main.container {
 }
 
 .plate-ref em { font-weight: 500; }
+.plate__caption .plate-ref { align-self: flex-start; }
+
+/* Ouverture d'une planche détaillée depuis l'accueil : elle grandit depuis l'endroit de la structure. */
+.plate-focus { animation: plate-focus 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; transform-origin: var(--focus-origin, 50% 50%); }
+
+@keyframes plate-focus {
+  from { opacity: 0; transform: scale(0.35); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plate-focus { animation: none; }
+}
 
 .glossary__off {
   display: inline-flex;

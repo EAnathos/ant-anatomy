@@ -21,7 +21,7 @@ const T = t(
     results: 'Voir le bilan',
     next: 'Question suivante',
     help: 'Survole la planche : les structures s’éclairent au passage.',
-    helpRepeated: ' Pour une structure présente plusieurs fois (fémur, griffe…), n’importe laquelle compte.',
+    helpRepeated: ' Pour une structure présente plusieurs fois (fémurs, denticules…), n’importe laquelle compte.',
     plate: 'Planche anatomique',
   },
   {
@@ -37,7 +37,7 @@ const T = t(
     results: 'See results',
     next: 'Next question',
     help: 'Hover over the plate: structures light up as you go.',
-    helpRepeated: ' For a structure present several times (femur, claw…), any of them counts.',
+    helpRepeated: ' For a structure present several times (femora, denticles…), any of them counts.',
     plate: 'Anatomical plate',
   },
 );
@@ -138,7 +138,7 @@ export function FindMode({ plate, questions, onFinish }: FindModeProps) {
         ) : (
           <p className="muted play__help">
             {T.help}
-            {plate === 'ouvriere' && T.helpRepeated}
+            {plate !== 'aile' && T.helpRepeated}
           </p>
         )}
       </section>

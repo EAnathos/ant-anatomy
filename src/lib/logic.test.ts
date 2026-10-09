@@ -168,7 +168,7 @@ describe('sessions', () => {
 });
 
 describe('planche SVG', () => {
-  const FILES = { ouvriere: 'ant.svg', aile: 'wing.svg' } as const;
+  const FILES = { ouvriere: 'ant.svg', aile: 'wing.svg', mandibule: 'mandible.svg' } as const;
 
   it.each(PLATES.map((p) => p.id))('%s : contient exactement les structures déclarées', (plate) => {
     const svg = readFileSync(new URL(`../assets/${FILES[plate]}`, import.meta.url), 'utf8');

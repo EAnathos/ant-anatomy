@@ -1,7 +1,7 @@
 # CLAUDE.md
 
-Atlas anatomique interactif de la fourmi, avec deux planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
-(vue latérale) et aile antérieure de reine d'*Odontomachus* sp. Trois modes de jeu :
+Atlas anatomique interactif de la fourmi, avec trois planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
+(vue latérale), aile antérieure de reine d'*Odontomachus* sp. et mandibule (vue composite). Trois modes de jeu :
 **Trouver** (un nom est donné, on clique la structure), **Nommer** (on clique une structure, on tape son nom) et
 **Relier** (associer des mots à leur définition, par séries de 5, avec les structures de la planche ou tout le glossaire).
 Interface bilingue : français sur `/`, anglais sur `/en/`.
@@ -47,7 +47,7 @@ moment. Animations coupées si `prefers-reduced-motion`.
 
 ## Structure
 
-- `src/assets/ant.svg` (ouvrière) et `src/assets/wing.svg` (aile) : **sources uniques des dessins**. Importés en `?raw`
+- `src/assets/ant.svg` (ouvrière), `src/assets/wing.svg` (aile) et `src/assets/mandible.svg` (mandibule) : **sources uniques des dessins**. Importés en `?raw`
   et injectés par `AntPlate` selon la planche (`PlateId`).
 - `src/i18n.ts` : langue de la page (`LANG`, lue dans `<html lang>`), helper `t(fr, en)`, URLs des langues.
 - `src/data/parts.en.ts` : traduction anglaise des planches, régions et termes (`Record` par id).
@@ -61,7 +61,12 @@ moment. Animations coupées si `prefers-reduced-motion`.
   - `REGIONS_FR` (chaque région rattachée à une planche) et `LAYOUT` (termes de chaque région, dans l'ordre de la
     légende). Un terme peut figurer sur plusieurs planches, une fois par planche, ou sur aucune (glossaire
     seulement : termes de Bolton en attente d'une planche) ; le glossaire le liste une seule fois avec un lien par planche. Une structure (`Part`) = un terme placé dans une région ; `PartId` = `TermId`, donc
-    toujours chercher une structure avec sa planche (`partIn(plate, id)`). Les id de régions sont uniques toutes planches
+    toujours chercher une structure avec sa planche (`partIn(plate, id)`). `PLATE_NAMES_FR` / `PLATE_NAMES_EN` : nom d'un
+    terme propre à une planche (singulier ou pluriel selon le nombre d'exemplaires dessinés). Une planche sans taxon
+    (dessin composite) a un `detail` en romain à la place ; `PlateName` / `plateText` affichent son libellé.
+  - `DETAIL_PLATES` : planche détaillée d'une structure de la vue d'ensemble (`mandibule` → planche `mandibule`).
+    Sur l'accueil, la légende de la structure propose « Voir en détail », qui ouvre cette planche avec la structure
+    sélectionnée et un zoom (`.plate-focus`) parti de l'endroit où elle se trouvait. À compléter à chaque planche détaillée. Les id de régions sont uniques toutes planches
     confondues.
 - `src/lib/answers.ts` : normalisation et validation des réponses tapées.
 - `src/lib/session.ts` : réglages (dont la planche choisie), tirage des questions, bilan (score, série, erreurs).
@@ -112,6 +117,24 @@ collisions une fois injectés dans la page.
   des réponses traite singulier et pluriel comme équivalents.
 - Ajouter ou renommer une structure = modifier le SVG de la planche **et** `TermId` + `TERMS_FR` + `LAYOUT`.
   Le test `planche SVG` échoue, pour chaque planche, si les deux divergent.
+
+## Planche de la mandibule : règles
+
+`mandible.svg` : mandibule gauche triangulaire grande ouverte, vue dorsale, dessin composite d'après la figure 527 de
+Bolton (1994) (proportions et ordre des dents, pas le trait). Base en col étroit au raccord droit, bord basal droit
+puis coudé à la verticale, bord externe presque droit avec un dernier tronçon droit jusqu'à l'apex.
+
+- Régions `lame` (lame, bords masticateur, basal, externe, angle basal) et `dents` (apicale, préapicale, denticules,
+  prébasale, basale, diastème). Dents de l'apex vers la base : apicale, préapicale (t2), 3 denticules, t3 (sans nom,
+  non cliquable : un clic sélectionne le bord masticateur), diastème en V, prébasale (t4), basale.
+- Une silhouette grise sans `pointer-events` sous les surfaces évite les liserés entre dents et lame.
+- Bords et diastème : des traits comme les nervures de l'aile (`.nerv-core` visible + `.nerv-hit` transparent), le
+  diastème posé sur le tronçon en V du bord masticateur. Angle basal : cercle transparent, coloré à la sélection.
+- Vue légendée : le bord masticateur est montré par une accolade de l'apex à l'angle basal, d'après un segment
+  invisible du SVG (`data-extent-for`, `data-extent-tick` pour le sens des retours) que `plateLabels` dessine.
+  Mécanisme générique, utilisable sur d'autres planches pour une structure longue.
+- Trulleum retiré pour le moment, à la demande de l'utilisateur (le terme reste au glossaire).
+- Dessin d'EAnathos sous licence CC BY-NC 4.0, comme l'aile : crédit sous le texte de l'accueil, LICENSE et README.
 
 ## Charte graphique « planche cyanotype »
 

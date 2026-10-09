@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowIcon } from '../components/icons';
+import { PlateName } from '../components/PlateName';
 import { Rich } from '../components/Rich';
 import { PLATE_BY_ID, TERMS, placementsOf, type PartId, type PlateId, type Term } from '../data/parts';
 import { LANG, t } from '../i18n';
@@ -129,8 +130,7 @@ export function Glossary({ onShowPart, onStartMatch }: GlossaryProps) {
                       return (
                         <button key={id} type="button" className="plate-ref" onClick={() => onShowPart(id, p.id)} title={T.show}>
                           <span className="sr-only">{T.plate}</span>
-                          {plate.subject} · <em>{plate.taxon}</em>
-                          {plate.sp ? ' sp.' : ''}
+                          <PlateName plate={plate} />
                           <ArrowIcon size={14} />
                         </button>
                       );

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { Footer } from './components/Footer';
 import { Header, type NavTarget } from './components/Header';
 import { Launch } from './components/Launch';
+import { PlateName } from './components/PlateName';
 import { PLATE_BY_ID, partIn, regionsOf, type PartId, type PlateId } from './data/parts';
 import { GLOSSARY_HASH, isGlossaryHash, t } from './i18n';
 import { buildQuestions, playableParts, shuffle, type Answer, type Settings } from './lib/session';
@@ -67,15 +68,7 @@ export function App() {
 
   const canPlay = playableParts(settings).length > 0;
 
-  const plateLabel = (plate: PlateId) => {
-    const p = PLATE_BY_ID[plate];
-    return (
-      <>
-        {p.subject} · <em>{p.taxon}</em>
-        {p.sp ? ' sp.' : ''}
-      </>
-    );
-  };
+  const plateLabel = (plate: PlateId) => <PlateName plate={PLATE_BY_ID[plate]} />;
 
   const launch = (game: GameScreen, subtitle: ReactNode = plateLabel(settings.plate)) => {
     setLaunching({ title: T[game], subtitle });

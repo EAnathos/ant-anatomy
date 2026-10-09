@@ -9,9 +9,10 @@ interface TermText {
 
 // Traduction anglaise de parts.ts. Les Record imposent une entrée par id : le typecheck échoue s'il en manque une.
 
-export const PLATES_EN: Record<PlateId, { subject: string; example: string }> = {
+export const PLATES_EN: Record<PlateId, { subject: string; example: string; detail?: string }> = {
   ouvriere: { subject: 'Worker', example: 'mandible' },
   aile: { subject: 'Queen wing', example: 'costal cell' },
+  mandibule: { subject: 'Mandible', detail: 'composite view', example: 'basal margin' },
 };
 
 export const REGIONS_EN: Record<RegionId, string> = {
@@ -23,6 +24,12 @@ export const REGIONS_EN: Record<RegionId, string> = {
   pattes: 'Legs',
   cellules: 'Cells',
   nervures: 'Veins',
+  lame: 'Blade and margins',
+  dents: 'Teeth',
+};
+
+export const PLATE_NAMES_EN: Partial<Record<PlateId, Partial<Record<TermId, string>>>> = {
+  mandibule: { mandibule: 'Mandible', denticule: 'Denticles' },
 };
 
 export const TERMS_EN: Record<TermId, TermText> = {
