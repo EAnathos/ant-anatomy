@@ -1,7 +1,8 @@
 # CLAUDE.md
 
-Atlas anatomique interactif de la fourmi, avec cinq planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
-(vue latérale), aile antérieure de reine d'*Odontomachus* sp., tête, mandibule et antenne (vues composites). Trois modes de jeu :
+Atlas anatomique interactif de la fourmi, avec six planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
+(vue latérale), puis tête, mandibule, antenne et patte (vues composites), et enfin aile antérieure de reine
+d'*Odontomachus* sp. Trois modes de jeu :
 **Trouver** (un nom est donné, on clique la structure), **Nommer** (on clique une structure, on tape son nom) et
 **Relier** (associer des mots à leur définition, par séries de 5, avec les structures de la planche ou tout le glossaire).
 Interface bilingue : français sur `/`, anglais sur `/en/`.
@@ -48,7 +49,7 @@ moment. Animations coupées si `prefers-reduced-motion`.
 ## Structure
 
 - `src/assets/ant.svg` (ouvrière), `src/assets/wing.svg` (aile) et `src/assets/head.svg` (tête), `src/assets/mandible.svg` (mandibule), `src/assets/antenna.svg`
-  (antenne) :
+  (antenne), `src/assets/leg.svg` (patte) :
   **sources uniques des dessins**. Importés en `?raw`
   et injectés par `AntPlate` selon la planche (`PlateId`). L'ouvrière est incluse dans le code principal (planche affichée
   à l'arrivée) ; les autres sont chargées à la demande (`import()` dans `LOADERS`, un fichier par dessin) et
@@ -69,7 +70,7 @@ moment. Animations coupées si `prefers-reduced-motion`.
     terme propre à une planche (singulier ou pluriel selon le nombre d'exemplaires dessinés). Une planche sans taxon
     (dessin composite) a un `detail` en romain à la place ; `PlateName` / `plateText` affichent son libellé.
   - `DETAIL_PLATES` : planche détaillée d'une structure de la vue d'ensemble (`tete` → planche `tete`,
-    `mandibule` → planche `mandibule`, `antenne` → planche `antenne`).
+    `mandibule` → planche `mandibule`, `antenne` → planche `antenne`, `patte` → planche `patte`).
     Sur l'accueil, la légende de la structure propose « Voir en détail », qui ouvre cette planche avec la structure
     sélectionnée et un zoom (`.plate-focus`) parti de l'endroit où elle se trouvait. À compléter à chaque planche détaillée. Les id de régions sont uniques toutes planches
     confondues.
@@ -112,10 +113,12 @@ collisions une fois injectés dans la page.
   (`rest | sel | ok | ko | done | off`) et `data-hover`, et `global.css` les colore avec `!important`.
 - Ajouts au dessin d'origine : une grille hexagonale d'ommatidies dans l'œil (découpée par `clipPath`, sans
   `pointer-events`) et une marge de 6 unités dans le `viewBox` pour que l'antenne gauche ne soit pas rognée.
-- Griffes : dans l'original, elles forment un seul tracé avec le dernier article du tarse. Chacune est doublée par
-  un tracé `data-part="griffe"` (même géométrie, même couleur) plus un contour sans `data-part` posés par-dessus.
-- Petites structures (éperons, spiracle, griffes) : un tracé transparent à contour épais (`stroke:transparent`)
-  avec le même `data-part` élargit la zone cliquable.
+- Structures fondues : sur cette vue d'ensemble, tête (avec lobe frontal, clypéus et œil), antennes et pattes (coxa à
+  griffes) ne sont chacune qu'une structure (`tete`, `antenne`, `patte`) qui ouvre sa planche détaillée. Les tracés
+  d'origine (griffes doublées par-dessus le tarse, zones de clic élargies des éperons et griffes) portent tous
+  `data-part="patte"`.
+- Petites structures (spiracle) : un tracé transparent à contour épais (`stroke:transparent`) avec le même
+  `data-part` élargit la zone cliquable.
 - Éléments décoratifs (ombre de fond, croissants noirs des coxas, trait de la joue, détail du propodéum, fémur
   postérieur caché derrière le gastre, bande entre le 1er et le 2e tergite) : pas de `data-part`, `pointer-events="none"`.
 - Noms : au pluriel pour les structures présentes plusieurs fois sur la planche (Fémurs, Tergites…). La validation
@@ -170,6 +173,17 @@ massue de 3 dont le dernier en ogive). Base : bulbe condylaire et col du bulbe.
   par les 7 articles du milieu, et la vue légendée montre son étendue complète par une accolade (`data-extent-for`).
 - Chaque article est un tracé à contour ; dessinés de l'apex vers la base, chacun recouvre la base du suivant.
 - Sur l'ouvrière, les deux antennes ne forment qu'une structure, `antenne` (« Antennes »), qui ouvre cette planche.
+
+## Planche de la patte : règles
+
+`leg.svg` : patte postérieure d'ouvrière, vue latérale, dessin composite d'EAnathos (CC BY-NC 4.0). Coxa en haut,
+fémur presque horizontal, tibia descendant, tarse étalé vers l'avant ; articles dessinés de l'extrémité vers la base.
+- Régions `coxa-tibia` (coxa, trochanter, fémur, tibia, éperons) et `tarse-pretarse` (basitarse, tarse = articles 2
+  à 4, prétarse, griffes, arolium). Accolade `data-extent-for="tarse"` du basitarse au prétarse.
+- Deux éperons à l'apex du tibia, sur sa face inférieure, sous le tarse : le grand en lame courbe pectinée (peigne
+  sur le bord intérieur), le petit simple. Base enfoncée dans le tibia, éperons et peigne dessinés avant le tarse.
+- Griffes en crochet recourbées vers le bas, arolium entre elles ; zones de clic élargies pour griffes et éperons.
+- Sur l'ouvrière, toutes les parties des six pattes sont fondues dans `patte` (« Pattes »), qui ouvre cette planche.
 
 ## Charte graphique « planche cyanotype »
 

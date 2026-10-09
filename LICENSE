@@ -18,7 +18,7 @@ Exceptions :
   Attribution - Pas d'utilisation commerciale 4.0 International (CC BY-NC 4.0),
   https://creativecommons.org/licenses/by-nc/4.0/deed.fr
   Réutilisation permise à des fins non commerciales, en citant l'auteur. Cette licence ne s'étend à aucun autre
-  fichier du dépôt que les planches de la tête, de la mandibule et de l'antenne ci-dessous.
+  fichier du dépôt que les planches de la tête, de la mandibule, de l'antenne et de la patte ci-dessous.
 
 - Planche de la tête (src/assets/head.svg) : dessin composite d'EAnathos, d'après les figures 523 à 526 de
   Bolton (1994), sous la même licence CC BY-NC 4.0, https://creativecommons.org/licenses/by-nc/4.0/deed.fr
@@ -29,6 +29,10 @@ Exceptions :
   Réutilisation permise à des fins non commerciales, en citant l'auteur.
 
 - Planche de l'antenne (src/assets/antenna.svg) : dessin composite d'EAnathos, sous la même licence CC BY-NC 4.0,
+  https://creativecommons.org/licenses/by-nc/4.0/deed.fr
+  Réutilisation permise à des fins non commerciales, en citant l'auteur.
+
+- Planche de la patte (src/assets/leg.svg) : dessin composite d'EAnathos, sous la même licence CC BY-NC 4.0,
   https://creativecommons.org/licenses/by-nc/4.0/deed.fr
   Réutilisation permise à des fins non commerciales, en citant l'auteur.
 
@@ -55,7 +59,7 @@ Exceptions:
 - Wing plate (src/assets/wing.svg): drawing by EAnathos, licensed under Creative Commons
   Attribution-NonCommercial 4.0 International (CC BY-NC 4.0), https://creativecommons.org/licenses/by-nc/4.0/
   Reuse is permitted for non-commercial purposes, with credit to the author. This licence does not extend to any
-  other file in the repository than the head, mandible and antenna plates below.
+  other file in the repository than the head, mandible, antenna and leg plates below.
 
 - Head plate (src/assets/head.svg): composite drawing by EAnathos, after figures 523 to 526 of Bolton (1994),
   under the same CC BY-NC 4.0 licence, https://creativecommons.org/licenses/by-nc/4.0/
@@ -66,6 +70,10 @@ Exceptions:
   Reuse is permitted for non-commercial purposes, with credit to the author.
 
 - Antenna plate (src/assets/antenna.svg): composite drawing by EAnathos, under the same CC BY-NC 4.0 licence,
+  https://creativecommons.org/licenses/by-nc/4.0/
+  Reuse is permitted for non-commercial purposes, with credit to the author.
+
+- Leg plate (src/assets/leg.svg): composite drawing by EAnathos, under the same CC BY-NC 4.0 licence,
   https://creativecommons.org/licenses/by-nc/4.0/
   Reuse is permitted for non-commercial purposes, with credit to the author.
 

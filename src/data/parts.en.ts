@@ -15,6 +15,7 @@ export const PLATES_EN: Record<PlateId, { subject: string; example: string; deta
   tete: { subject: 'Head', detail: 'composite view', example: 'gena' },
   mandibule: { subject: 'Mandible', detail: 'composite view', example: 'basal margin' },
   antenne: { subject: 'Antenna', detail: 'composite view', example: 'scape' },
+  patte: { subject: 'Leg', detail: 'composite view', example: 'basitarsus' },
 };
 
 export const REGIONS_EN: Record<RegionId, string> = {
@@ -33,10 +34,12 @@ export const REGIONS_EN: Record<RegionId, string> = {
   dents: 'Teeth',
   'scape-base': 'Scape and base',
   'funicule-massue': 'Funiculus and club',
+  'coxa-tibia': 'Coxa to tibia',
+  'tarse-pretarse': 'Tarsus and pretarsus',
 };
 
 export const PLATE_NAMES_EN: Partial<Record<PlateId, Partial<Record<TermId, string>>>> = {
-  ouvriere: { antenne: 'Antennae' },
+  ouvriere: { antenne: 'Antennae', patte: 'Legs' },
   tete: {
     oeil: 'Compound eyes', gena: 'Genae', scrobe: 'Antennal scrobes', 'carene-frontale': 'Frontal carinae',
     lobe: 'Frontal lobes', 'clypeus-lateral': 'Lateral portions of clypeus',
@@ -69,12 +72,13 @@ export const TERMS_EN: Record<TermId, TermText> = {
   pygidium: { name: 'Pygidium', definition: 'Tergite of abdominal segment 7: the last visible tergite, at the tip of the gaster.', synonyms: [] },
   hypopygium: { name: 'Hypopygium', definition: 'Sternite of abdominal segment 7: the last visible sternite of the gaster.', synonyms: [] },
   aiguillon: { name: 'Sting', definition: 'Venomous stinger at the tip of the gaster.', synonyms: ['aculeus'], variants: ['stinger'] },
-  coxa: { name: 'Coxae', definition: 'First, most basal segment of the leg, jointed to the mesosoma.', synonyms: [], variants: ['coxa', 'coxas'] },
-  trochanter: { name: 'Trochanters', definition: 'Second segment of the leg, small, between the coxa and the femur.', synonyms: [], variants: ['trochanter'] },
-  femur: { name: 'Femora', definition: 'Third segment of the leg, generally the longest and stoutest, separated from the coxa only by the trochanter.', synonyms: [], variants: ['femur', 'femurs'] },
-  tibia: { name: 'Tibiae', definition: 'Fourth segment of the leg, long, between the femur and the tarsus.', synonyms: [], variants: ['tibia', 'tibias'] },
+  patte: { name: 'Leg', definition: 'Walking appendage, in three pairs jointed to the mesosoma. From base to tip: the coxa, the trochanter, the femur, the tibia, often armed with spurs, and the five-segmented tarsus ending in the claws.', synonyms: [], variants: ['legs'] },
+  coxa: { name: 'Coxa', definition: 'First, most basal segment of the leg, jointed to the mesosoma.', synonyms: [], variants: ['coxa', 'coxas', 'coxae'] },
+  trochanter: { name: 'Trochanter', definition: 'Second segment of the leg, small, between the coxa and the femur.', synonyms: [], variants: ['trochanter', 'trochanters'] },
+  femur: { name: 'Femur', definition: 'Third segment of the leg, generally the longest and stoutest, separated from the coxa only by the trochanter.', synonyms: [], variants: ['femur', 'femurs', 'femora'] },
+  tibia: { name: 'Tibia', definition: 'Fourth segment of the leg, long, between the femur and the tarsus.', synonyms: [], variants: ['tibia', 'tibias', 'tibiae'] },
   eperon: { name: 'Tibial spurs', definition: 'Socketed spine at the apex of the tibia. The one on the foreleg, pectinate, called the calcar, forms with the basitarsal notch the strigil that cleans the antenna; the middle and hind tibiae bear two, one or none.', synonyms: [], variants: ['tibial spur', 'spur', 'spurs'] },
-  tarse: { name: 'Tarsi', definition: 'End of the leg, made of five small segments: the first, jointed to the tibia, is the basitarsus; the last, the pretarsus, bears the claws.', synonyms: [], variants: ['tarsus'] },
+  tarse: { name: 'Tarsus', definition: 'End of the leg, made of five small segments: the first, jointed to the tibia, is the basitarsus; the last, the pretarsus, bears the claws.', synonyms: [], variants: ['tarsus', 'tarsi'] },
   griffe: { name: 'Tarsal claws', definition: 'Pair of hooks borne by the pretarsus, the last tarsal segment, on either side of the arolium. Usually simple, they may bear a preapical tooth, be pectinate or carry basal spines.', synonyms: ['pretarsal claws'], variants: ['tarsal claw', 'claw', 'claws'] },
 
   pterostigma: { name: 'Pterostigma', definition: 'Sclerotized, pigmented thickening of the leading edge of the forewing, at the end of the costal cell.', synonyms: ['stigma'] },

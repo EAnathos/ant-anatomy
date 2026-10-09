@@ -23,8 +23,9 @@ const LABELS = t<Record<PlateId, string>>(
     tete: 'Planche : têtes d’ouvrière en vue de face',
     mandibule: 'Planche : mandibule gauche ouverte, vue dorsale',
     antenne: 'Planche : antenne d’ouvrière, vue latérale',
+    patte: 'Planche : patte postérieure d’ouvrière, vue latérale',
   },
-  { ouvriere: 'Plate: worker ant, side view', aile: 'Plate: queen forewing', tete: 'Plate: worker heads, full-face view', mandibule: 'Plate: open left mandible, dorsal view', antenne: 'Plate: worker antenna, side view' },
+  { ouvriere: 'Plate: worker ant, side view', aile: 'Plate: queen forewing', tete: 'Plate: worker heads, full-face view', mandibule: 'Plate: open left mandible, dorsal view', antenne: 'Plate: worker antenna, side view', patte: 'Plate: worker hind leg, side view' },
 );
 
 const withLabel = (svg: string, label: string) => svg.replace(/aria-label="[^"]*"/, `aria-label="${label}"`);
@@ -36,6 +37,7 @@ const LOADERS: Record<Exclude<PlateId, 'ouvriere'>, () => Promise<{ default: str
   tete: () => import('../assets/head.svg?raw'),
   mandibule: () => import('../assets/mandible.svg?raw'),
   antenne: () => import('../assets/antenna.svg?raw'),
+  patte: () => import('../assets/leg.svg?raw'),
 };
 
 const SVG_CACHE = new Map<PlateId, string>([['ouvriere', withLabel(antSvg, LABELS.ouvriere)]]);

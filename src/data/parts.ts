@@ -1,14 +1,15 @@
 import { LANG, type Lang } from '../i18n';
 import { PLATES_EN, PLATE_NAMES_EN, REGIONS_EN, TERMS_EN } from './parts.en';
 
-export type PlateId = 'ouvriere' | 'aile' | 'tete' | 'mandibule' | 'antenne';
+export type PlateId = 'ouvriere' | 'aile' | 'tete' | 'mandibule' | 'antenne' | 'patte';
 
 export type RegionId =
   | 'tete' | 'antenne' | 'mesosoma' | 'petiole' | 'gastre' | 'pattes'
   | 'cellules' | 'nervures'
   | 'lame' | 'dents'
   | 'scape-base' | 'funicule-massue'
-  | 'capsule' | 'region-frontale' | 'clypeus-insertion';
+  | 'capsule' | 'region-frontale' | 'clypeus-insertion'
+  | 'coxa-tibia' | 'tarse-pretarse';
 
 /** Terme du glossaire. */
 export type TermId =
@@ -17,7 +18,7 @@ export type TermId =
   | 'pronotum' | 'mesonotum' | 'mesopleure' | 'propodeum' | 'spiracle'
   | 'petiole'
   | 'tergite' | 'sternite' | 'pygidium' | 'hypopygium' | 'aiguillon'
-  | 'coxa' | 'trochanter' | 'femur' | 'tibia' | 'eperon' | 'tarse' | 'griffe'
+  | 'patte' | 'coxa' | 'trochanter' | 'femur' | 'tibia' | 'eperon' | 'tarse' | 'griffe'
   | 'pterostigma' | 'costale' | 'marginale'
   | 'submarginale-1' | 'submarginale-2' | 'submarginale-3'
   | 'discoidale' | 'subdiscoidale-1' | 'subdiscoidale-2'
@@ -86,10 +87,11 @@ export interface Part extends Term {
 
 const PLATES_FR: Plate[] = [
   { id: 'ouvriere', subject: 'Ouvrière', taxon: 'Neoponera verenae', example: 'mandibule' },
-  { id: 'aile', subject: 'Aile de reine', taxon: 'Odontomachus', sp: true, example: 'cellule costale' },
   { id: 'tete', subject: 'Tête', detail: 'vue composite', example: 'gena' },
   { id: 'mandibule', subject: 'Mandibule', detail: 'vue composite', example: 'bord basal' },
   { id: 'antenne', subject: 'Antenne', detail: 'vue composite', example: 'scape' },
+  { id: 'patte', subject: 'Patte', detail: 'vue composite', example: 'basitarse' },
+  { id: 'aile', subject: 'Aile de reine', taxon: 'Odontomachus', sp: true, example: 'cellule costale' },
 ];
 
 const REGIONS_FR: Region[] = [
@@ -99,8 +101,6 @@ const REGIONS_FR: Region[] = [
   { id: 'petiole', label: 'Pétiole', plate: 'ouvriere' },
   { id: 'gastre', label: 'Gastre', plate: 'ouvriere' },
   { id: 'pattes', label: 'Pattes', plate: 'ouvriere' },
-  { id: 'cellules', label: 'Cellules', plate: 'aile' },
-  { id: 'nervures', label: 'Nervures', plate: 'aile' },
   { id: 'capsule', label: 'Capsule', plate: 'tete' },
   { id: 'region-frontale', label: 'Région frontale', plate: 'tete' },
   { id: 'clypeus-insertion', label: 'Clypéus et insertion antennaire', plate: 'tete' },
@@ -108,6 +108,10 @@ const REGIONS_FR: Region[] = [
   { id: 'dents', label: 'Dents', plate: 'mandibule' },
   { id: 'scape-base', label: 'Scape et base', plate: 'antenne' },
   { id: 'funicule-massue', label: 'Funicule et massue', plate: 'antenne' },
+  { id: 'coxa-tibia', label: 'De la coxa au tibia', plate: 'patte' },
+  { id: 'tarse-pretarse', label: 'Tarse et prétarse', plate: 'patte' },
+  { id: 'cellules', label: 'Cellules', plate: 'aile' },
+  { id: 'nervures', label: 'Nervures', plate: 'aile' },
 ];
 
 const TERMS_FR: Term[] = [
@@ -132,12 +136,13 @@ const TERMS_FR: Term[] = [
   { id: 'pygidium', name: 'Pygidium', definition: 'Tergite du septième segment abdominal : le dernier tergite visible, à l’extrémité du gastre.', synonyms: [] },
   { id: 'hypopygium', name: 'Hypopygium', definition: 'Sternite du septième segment abdominal : le dernier sternite visible du gastre.', synonyms: [] },
   { id: 'aiguillon', name: 'Aiguillon', definition: 'Dard venimeux à l’extrémité du gastre.', synonyms: ['dard'] },
-  { id: 'coxa', name: 'Coxas', definition: 'Premier article de la patte, le plus basal, articulé au mésosoma.', synonyms: ['hanche'], variants: ['coxa', 'coxae', 'hanches'] },
-  { id: 'trochanter', name: 'Trochanters', definition: 'Deuxième article de la patte, petit, entre la coxa et le fémur.', synonyms: [], variants: ['trochanter'] },
-  { id: 'femur', name: 'Fémurs', definition: 'Troisième article de la patte, en général le plus long et robuste, séparé de la coxa par le seul trochanter.', synonyms: [] },
-  { id: 'tibia', name: 'Tibias', definition: 'Quatrième article de la patte, long, entre le fémur et le tarse.', synonyms: [] },
+  { id: 'patte', name: 'Patte', definition: 'Appendice locomoteur, en trois paires articulées au mésosoma. De la base à l’extrémité : la coxa, le trochanter, le fémur, le tibia, souvent armé d’éperons, et le tarse de cinq articles terminé par les griffes.', synonyms: [], variants: ['pattes'] },
+  { id: 'coxa', name: 'Coxa', definition: 'Premier article de la patte, le plus basal, articulé au mésosoma.', synonyms: ['hanche'], variants: ['coxa', 'coxae', 'hanches', 'coxas'] },
+  { id: 'trochanter', name: 'Trochanter', definition: 'Deuxième article de la patte, petit, entre la coxa et le fémur.', synonyms: [], variants: ['trochanter', 'trochanters'] },
+  { id: 'femur', name: 'Fémur', definition: 'Troisième article de la patte, en général le plus long et robuste, séparé de la coxa par le seul trochanter.', synonyms: [], variants: ['fémurs'] },
+  { id: 'tibia', name: 'Tibia', definition: 'Quatrième article de la patte, long, entre le fémur et le tarse.', synonyms: [], variants: ['tibias'] },
   { id: 'eperon', name: 'Éperons tibiaux', definition: 'Épine articulée à l’apex du tibia. Celui de la patte antérieure, pectiné, appelé calcar, forme avec l’encoche du basitarse le strigile qui nettoie l’antenne ; les tibias médians et postérieurs en portent deux, un ou aucun.', synonyms: [], variants: ['éperon tibial', 'éperon'] },
-  { id: 'tarse', name: 'Tarses', definition: 'Extrémité de la patte, formée de cinq petits articles : le premier, articulé au tibia, est le basitarse, le dernier, le prétarse, porte les griffes.', synonyms: [] },
+  { id: 'tarse', name: 'Tarse', definition: 'Extrémité de la patte, formée de cinq petits articles : le premier, articulé au tibia, est le basitarse, le dernier, le prétarse, porte les griffes.', synonyms: [], variants: ['tarses'] },
   { id: 'griffe', name: 'Griffes', definition: 'Paire de crochets portée par le prétarse, dernier article du tarse, de part et d’autre de l’arolium. Simples le plus souvent, elles peuvent porter une dent préapicale, être pectinées ou armées d’épines à la base.', synonyms: ['griffes tarsales', 'griffes prétarsales'], variants: ['griffe tarsale', 'griffe prétarsale'] },
 
   { id: 'pterostigma', name: 'Ptérostigma', definition: 'Épaississement sclérifié et pigmenté du bord antérieur de l’aile antérieure, au bout de la cellule costale.', synonyms: ['stigma', 'ptérostigme'] },
@@ -259,7 +264,7 @@ const LAYOUT: Record<RegionId, TermId[]> = {
   mesosoma: ['pronotum', 'mesonotum', 'mesopleure', 'propodeum', 'spiracle'],
   petiole: ['petiole'],
   gastre: ['tergite', 'sternite', 'pygidium', 'hypopygium', 'aiguillon'],
-  pattes: ['coxa', 'trochanter', 'femur', 'tibia', 'eperon', 'tarse', 'griffe'],
+  pattes: ['patte'],
   cellules: [
     'pterostigma', 'costale', 'marginale', 'submarginale-1', 'submarginale-2', 'submarginale-3',
     'discoidale', 'subdiscoidale-1', 'subdiscoidale-2', 'basale', 'subbasale',
@@ -279,12 +284,14 @@ const LAYOUT: Record<RegionId, TermId[]> = {
   dents: ['dent-apicale', 'dent-preapicale', 'denticule', 'dent-prebasale', 'dent-basale', 'diasteme'],
   'scape-base': ['bulbe-condylaire', 'col-bulbe', 'scape'],
   'funicule-massue': ['pedicelle', 'funicule', 'massue'],
+  'coxa-tibia': ['coxa', 'trochanter', 'femur', 'tibia', 'eperon'],
+  'tarse-pretarse': ['basitarse', 'tarse', 'pretarse', 'griffe', 'arolium'],
 };
 
 // Nom d'un terme sur une planche donnée, quand il diffère du glossaire : au pluriel s'il y figure plusieurs fois,
 // au singulier s'il n'y figure qu'une fois (« Mandibules » sur l'ouvrière, « Mandibule » sur sa planche).
 const PLATE_NAMES_FR: Partial<Record<PlateId, Partial<Record<TermId, string>>>> = {
-  ouvriere: { antenne: 'Antennes' },
+  ouvriere: { antenne: 'Antennes', patte: 'Pattes' },
   tete: {
     oeil: 'Yeux composés', gena: 'Genas', scrobe: 'Scrobes antennaires', 'carene-frontale': 'Carènes frontales',
     lobe: 'Lobes frontaux', 'clypeus-lateral': 'Parties latérales du clypéus',
@@ -300,6 +307,7 @@ const DETAIL_PLATES: Partial<Record<TermId, PlateId>> = {
   tete: 'tete',
   mandibule: 'mandibule',
   antenne: 'antenne',
+  patte: 'patte',
 };
 
 /** Planche détaillée de la structure `id`, s'il y en a une autre que celle où l'on se trouve. */

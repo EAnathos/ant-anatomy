@@ -154,6 +154,33 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         </>
       ),
     },
+    patte: {
+      title: (regions) => (only(regions, 'tarse-pretarse') ? 'Tarse de la patte' : 'Anatomie de la patte'),
+      lead: (n, regions) =>
+        `${n} ${
+          only(regions, 'coxa-tibia')
+            ? 'parties de la patte, de la coxa aux éperons tibiaux'
+            : only(regions, 'tarse-pretarse')
+              ? 'parties du tarse, du basitarse aux griffes'
+              : 'parties de la patte, de la coxa aux griffes'
+        }. Repère-les sur la planche, puis nomme-les sans aide.`,
+      note: (
+        <>
+          La planche montre une patte postérieure d’ouvrière, vue de côté. C’est un dessin composite, qui ne représente aucune espèce. Le tibia porte à son
+          apex deux éperons, un grand pectiné et un petit simple ; selon les genres, il en porte un seul ou aucun. Sur la patte antérieure, l’éperon forme avec
+          l’encoche du basitarse le strigile, qui sert à nettoyer les antennes.
+        </>
+      ),
+      credit: (
+        <>
+          Planche : dessin composite d’EAnathos, sous licence{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          {' '}: réutilisation libre à des fins non commerciales, en citant l’auteur.
+        </>
+      ),
+    },
   },
   {
     ouvriere: {
@@ -264,6 +291,33 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
           The plate shows the left antenna of a worker, seen from the side. It is a composite drawing, not based on any species: 12 segments, the scape then an
           11-segmented funiculus, whose first segment is the pedicel and last three form the club. The number of segments ranges from 4 to 12 depending on the genus,
           and the club, of one to four segments, is absent in many ants.
+        </>
+      ),
+      credit: (
+        <>
+          Plate: composite drawing by EAnathos, licensed under{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          : free to reuse for non-commercial purposes, with credit to the author.
+        </>
+      ),
+    },
+    patte: {
+      title: (regions) => (only(regions, 'tarse-pretarse') ? 'Leg tarsus' : 'Leg anatomy'),
+      lead: (n, regions) =>
+        `${n} ${
+          only(regions, 'coxa-tibia')
+            ? 'parts of the leg, from the coxa to the tibial spurs'
+            : only(regions, 'tarse-pretarse')
+              ? 'parts of the tarsus, from the basitarsus to the claws'
+              : 'parts of the leg, from the coxa to the claws'
+        }. Find them on the plate, then name them unaided.`,
+      note: (
+        <>
+          The plate shows the hind leg of a worker, seen from the side. It is a composite drawing, not based on any species. The tibia bears two spurs at its
+          apex, a large pectinate one and a small simple one; depending on the genus there may be one or none. On the foreleg, the spur and the notch of the
+          basitarsus form the strigil, used to clean the antennae.
         </>
       ),
       credit: (
