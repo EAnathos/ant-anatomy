@@ -12,6 +12,7 @@ interface TermText {
 export const PLATES_EN: Record<PlateId, { subject: string; example: string; detail?: string }> = {
   ouvriere: { subject: 'Worker', example: 'mandible' },
   aile: { subject: 'Queen wing', example: 'costal cell' },
+  tete: { subject: 'Head', detail: 'composite view', example: 'gena' },
   mandibule: { subject: 'Mandible', detail: 'composite view', example: 'basal margin' },
   antenne: { subject: 'Antenna', detail: 'composite view', example: 'scape' },
 };
@@ -25,6 +26,9 @@ export const REGIONS_EN: Record<RegionId, string> = {
   pattes: 'Legs',
   cellules: 'Cells',
   nervures: 'Veins',
+  capsule: 'Capsule',
+  'region-frontale': 'Frontal region',
+  'clypeus-insertion': 'Clypeus and antennal insertion',
   lame: 'Blade and margins',
   dents: 'Teeth',
   'scape-base': 'Scape and base',
@@ -33,6 +37,12 @@ export const REGIONS_EN: Record<RegionId, string> = {
 
 export const PLATE_NAMES_EN: Partial<Record<PlateId, Partial<Record<TermId, string>>>> = {
   ouvriere: { antenne: 'Antennae' },
+  tete: {
+    oeil: 'Compound eyes', gena: 'Genae', scrobe: 'Antennal scrobes', 'carene-frontale': 'Frontal carinae',
+    lobe: 'Frontal lobes', 'clypeus-lateral': 'Lateral portions of clypeus',
+    'fossette-tentoriale': 'Anterior tentorial pits', 'sillon-paraoculo-clypeal': 'Paroculoclypeal sulci',
+    torulus: 'Toruli', 'fossette-antennaire': 'Antennal sockets',
+  },
   mandibule: { mandibule: 'Mandible', denticule: 'Denticles' },
   antenne: { massue: 'Club' },
 };

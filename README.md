@@ -1,13 +1,15 @@
 # Atlas anatomique *Formicidae*
 
 Application web pour apprendre l'anatomie externe de la fourmi, structure par structure,
-sur des planches interactives. Quatre planches au choix :
+sur des planches interactives. Cinq planches au choix :
 
 - **Ouvrière *Neoponera verenae*** (Ponerinae), en vue latérale. L'anatomie varie selon les fourmis : certaines
   structures manquent chez d'autres espèces (l'aiguillon chez les Formicinae, par exemple) et d'autres s'ajoutent
   (le postpétiole chez les Myrmicinae).
 - **Aile de reine *Odontomachus* sp.** (Ponerinae), aile antérieure, avec ses cellules et ses nervures. La nervation varie selon les genres
   (nervures absentes, cellules fusionnées ou ouvertes) et entre reines et mâles ; les ouvrières n'ont pas d'ailes.
+- **Tête**, vue composite de deux têtes de face d'après les figures 523 à 526 de Bolton (1994) : l'une entière avec
+  lobes frontaux et scrobes, l'autre sans lobes, montrant l'insertion des antennes.
 - **Mandibule**, vue composite d'une mandibule gauche triangulaire grande ouverte, d'après la figure 527 de
   Bolton (1994) : bords, angle basal, dents et diastème.
 - **Antenne**, vue composite d'une antenne d'ouvrière de 12 articles : bulbe condylaire, col du bulbe, scape,
@@ -15,10 +17,11 @@ sur des planches interactives. Quatre planches au choix :
 
 ## Fonctionnalités
 
-- **Planches interactives** : sur l'ouvrière, 24 structures cliquables réparties en 6 régions (tête, antenne, mésosoma,
+- **Planches interactives** : sur l'ouvrière, 21 structures cliquables réparties en 6 régions (tête, antenne, mésosoma,
   pétiole, gastre, pattes), sur les deux antennes et les six pattes ; sur l'aile, 2 régions : cellules (10 cellules et le
   ptérostigma) et nervures (22) ; sur la mandibule, 2 régions : lame et bords (5), dents (6) ; sur l'antenne, 2 régions : scape et base (3),
-  funicule et massue (3). Les antennes et les mandibules de l'ouvrière ouvrent leur planche détaillée.
+  funicule et massue (3). Sur la tête, 3 régions : capsule (6), région frontale (3), clypéus et
+  insertion antennaire (7). La tête, les antennes et les mandibules de l'ouvrière ouvrent leur planche détaillée.
   Un clic sur l'accueil affiche le nom, la région et une définition.
 - **Mode Trouver** : un nom s'affiche, il faut cliquer la bonne structure. Indice de région, correction immédiate,
   progression et bilan détaillé (score, précision, durée, meilleure série), avec la possibilité de rejouer ses erreurs.
@@ -29,7 +32,7 @@ sur des planches interactives. Quatre planches au choix :
   planche ou tout le glossaire.
 - **Glossaire** : tous les termes par ordre alphabétique, avec définition et synonymes, d'après Bolton (1994) et
   Keller (2011), et un lien vers chaque planche où le terme figure.
-- **Paramètres de session** : choix de la planche (sur l'accueil), des régions (pour l'aile : cellules, nervures ou les deux ; pour la mandibule : lame, dents ou les deux ; pour l'antenne : base, funicule ou les deux), nombre de questions (10, 20 ou toutes), tolérance aux accents.
+- **Paramètres de session** : choix de la planche (sur l'accueil), des régions (pour l'aile : cellules, nervures ou les deux ; pour la tête : capsule, région frontale, clypéus ; pour la mandibule : lame, dents ou les deux ; pour l'antenne : base, funicule ou les deux), nombre de questions (10, 20 ou toutes), tolérance aux accents.
 - En français (`/`) et en anglais (`/en/`), avec un sélecteur dans l'en-tête et des aperçus de liens traduits.
 - Utilisable au clavier et sur mobile.
 
@@ -73,6 +76,7 @@ Le domaine est configuré dans les réglages Pages du dépôt et pointe via un e
 src/
   assets/ant.svg        planche de l'ouvrière, data-part="…" sur chaque tracé cliquable
   assets/wing.svg       planche de l'aile, même principe
+  assets/head.svg       planche de la tête, même principe
   assets/mandible.svg   planche de la mandibule, même principe
   assets/antenna.svg    planche de l'antenne, même principe
   i18n.ts               langue de la page et helper de traduction t(fr, en)
@@ -115,6 +119,9 @@ Planche de la mandibule : dessin composite d'EAnathos, d'après la figure 527 de
 
 Planche de l'antenne : dessin composite d'EAnathos, sous la même licence CC BY-NC 4.0.
 
+Planche de la tête : dessin composite d'EAnathos, d'après les figures 523 à 526 de Bolton (1994), sous la même
+licence CC BY-NC 4.0.
+
 Les mentions sont affichées sur l'accueil, sous le texte de la planche choisie.
 
 Pour aller plus loin : [Morphology and Terminology](https://antwiki.org/wiki/Morphology_and_Terminology) sur AntWiki.
@@ -122,7 +129,7 @@ Pour aller plus loin : [Morphology and Terminology](https://antwiki.org/wiki/Mor
 ## Licence
 
 Tous droits réservés : le code, les textes et les données de ce dépôt ne peuvent pas être réutilisés sans
-autorisation. Seules les planches de l'aile, de la mandibule et de l'antenne sont réutilisables, sous licence CC BY-NC 4.0, et le dessin d'origine de
+autorisation. Seules les planches de l'aile, de la tête, de la mandibule et de l'antenne sont réutilisables, sous licence CC BY-NC 4.0, et le dessin d'origine de
 l'ouvrière reste dans le domaine public. Détails dans [LICENSE](LICENSE).
 
 ## Contribuer

@@ -1,13 +1,14 @@
 import { LANG, type Lang } from '../i18n';
 import { PLATES_EN, PLATE_NAMES_EN, REGIONS_EN, TERMS_EN } from './parts.en';
 
-export type PlateId = 'ouvriere' | 'aile' | 'mandibule' | 'antenne';
+export type PlateId = 'ouvriere' | 'aile' | 'tete' | 'mandibule' | 'antenne';
 
 export type RegionId =
   | 'tete' | 'antenne' | 'mesosoma' | 'petiole' | 'gastre' | 'pattes'
   | 'cellules' | 'nervures'
   | 'lame' | 'dents'
-  | 'scape-base' | 'funicule-massue';
+  | 'scape-base' | 'funicule-massue'
+  | 'capsule' | 'region-frontale' | 'clypeus-insertion';
 
 /** Terme du glossaire. */
 export type TermId =
@@ -86,6 +87,7 @@ export interface Part extends Term {
 const PLATES_FR: Plate[] = [
   { id: 'ouvriere', subject: 'Ouvrière', taxon: 'Neoponera verenae', example: 'mandibule' },
   { id: 'aile', subject: 'Aile de reine', taxon: 'Odontomachus', sp: true, example: 'cellule costale' },
+  { id: 'tete', subject: 'Tête', detail: 'vue composite', example: 'gena' },
   { id: 'mandibule', subject: 'Mandibule', detail: 'vue composite', example: 'bord basal' },
   { id: 'antenne', subject: 'Antenne', detail: 'vue composite', example: 'scape' },
 ];
@@ -99,6 +101,9 @@ const REGIONS_FR: Region[] = [
   { id: 'pattes', label: 'Pattes', plate: 'ouvriere' },
   { id: 'cellules', label: 'Cellules', plate: 'aile' },
   { id: 'nervures', label: 'Nervures', plate: 'aile' },
+  { id: 'capsule', label: 'Capsule', plate: 'tete' },
+  { id: 'region-frontale', label: 'Région frontale', plate: 'tete' },
+  { id: 'clypeus-insertion', label: 'Clypéus et insertion antennaire', plate: 'tete' },
   { id: 'lame', label: 'Lame et bords', plate: 'mandibule' },
   { id: 'dents', label: 'Dents', plate: 'mandibule' },
   { id: 'scape-base', label: 'Scape et base', plate: 'antenne' },
@@ -249,7 +254,7 @@ const TERMS_FR: Term[] = [
 // Placement des termes sur les planches : régions dans l'ordre de REGIONS_FR, termes dans l'ordre de la légende.
 // Un même terme peut figurer sur plusieurs planches (une fois par planche).
 const LAYOUT: Record<RegionId, TermId[]> = {
-  tete: ['tete', 'ommatidies', 'lobe', 'clypeus', 'mandibule'],
+  tete: ['tete', 'mandibule'],
   antenne: ['antenne'],
   mesosoma: ['pronotum', 'mesonotum', 'mesopleure', 'propodeum', 'spiracle'],
   petiole: ['petiole'],
@@ -264,6 +269,12 @@ const LAYOUT: Record<RegionId, TermId[]> = {
     'media-1', 'media-2', 'media-3', 'media-4', 'm-plus-cu', 'm-cu', 'cubitus-1', 'cubitus-2', 'cubitus-3', 'cu-a',
     'anale-1', 'anale-2',
   ],
+  capsule: ['bord-occipital', 'coins-occipitaux', 'oeil', 'ommatidies', 'gena', 'scrobe'],
+  'region-frontale': ['carene-frontale', 'lobe', 'triangle-frontal'],
+  'clypeus-insertion': [
+    'clypeus-median', 'clypeus-lateral', 'suture-fronto-clypeale', 'fossette-tentoriale', 'sillon-paraoculo-clypeal',
+    'torulus', 'fossette-antennaire',
+  ],
   lame: ['mandibule', 'bord-masticateur', 'bord-basal', 'bord-externe', 'angle-basal'],
   dents: ['dent-apicale', 'dent-preapicale', 'denticule', 'dent-prebasale', 'dent-basale', 'diasteme'],
   'scape-base': ['bulbe-condylaire', 'col-bulbe', 'scape'],
@@ -274,12 +285,19 @@ const LAYOUT: Record<RegionId, TermId[]> = {
 // au singulier s'il n'y figure qu'une fois (« Mandibules » sur l'ouvrière, « Mandibule » sur sa planche).
 const PLATE_NAMES_FR: Partial<Record<PlateId, Partial<Record<TermId, string>>>> = {
   ouvriere: { antenne: 'Antennes' },
+  tete: {
+    oeil: 'Yeux composés', gena: 'Genas', scrobe: 'Scrobes antennaires', 'carene-frontale': 'Carènes frontales',
+    lobe: 'Lobes frontaux', 'clypeus-lateral': 'Parties latérales du clypéus',
+    'fossette-tentoriale': 'Fossettes tentoriales antérieures', 'sillon-paraoculo-clypeal': 'Sillons paraoculo-clypéaux',
+    torulus: 'Toruli', 'fossette-antennaire': 'Fossettes antennaires',
+  },
   mandibule: { mandibule: 'Mandibule', denticule: 'Denticules' },
   antenne: { massue: 'Massue' },
 };
 
 // Planche détaillée d'une structure : depuis la vue d'ensemble (l'ouvrière), un lien ouvre la planche dédiée.
 const DETAIL_PLATES: Partial<Record<TermId, PlateId>> = {
+  tete: 'tete',
   mandibule: 'mandibule',
   antenne: 'antenne',
 };

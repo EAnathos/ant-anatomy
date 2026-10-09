@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, type KeyboardEvent, type MouseEvent } from 'react';
 import antSvg from '../assets/ant.svg?raw';
 import antennaSvg from '../assets/antenna.svg?raw';
+import headSvg from '../assets/head.svg?raw';
 import mandibleSvg from '../assets/mandible.svg?raw';
 import wingSvg from '../assets/wing.svg?raw';
 import { partsOf, type PartId, type PlateId } from '../data/parts';
@@ -23,10 +24,11 @@ const LABELS = t<Record<PlateId, string>>(
   {
     ouvriere: 'Planche : fourmi ouvrière en vue latérale',
     aile: 'Planche : aile antérieure de reine',
+    tete: 'Planche : têtes d’ouvrière en vue de face',
     mandibule: 'Planche : mandibule gauche ouverte, vue dorsale',
     antenne: 'Planche : antenne d’ouvrière, vue latérale',
   },
-  { ouvriere: 'Plate: worker ant, side view', aile: 'Plate: queen forewing', mandibule: 'Plate: open left mandible, dorsal view', antenne: 'Plate: worker antenna, side view' },
+  { ouvriere: 'Plate: worker ant, side view', aile: 'Plate: queen forewing', tete: 'Plate: worker heads, full-face view', mandibule: 'Plate: open left mandible, dorsal view', antenne: 'Plate: worker antenna, side view' },
 );
 
 const withLabel = (svg: string, label: string) => svg.replace(/aria-label="[^"]*"/, `aria-label="${label}"`);
@@ -34,6 +36,7 @@ const withLabel = (svg: string, label: string) => svg.replace(/aria-label="[^"]*
 const SVG_BY_PLATE: Record<PlateId, string> = {
   ouvriere: withLabel(antSvg, LABELS.ouvriere),
   aile: withLabel(wingSvg, LABELS.aile),
+  tete: withLabel(headSvg, LABELS.tete),
   mandibule: withLabel(mandibleSvg, LABELS.mandibule),
   antenne: withLabel(antennaSvg, LABELS.antenne),
 };

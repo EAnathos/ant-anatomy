@@ -79,6 +79,27 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         </>
       ),
     },
+    tete: {
+      title: (regions) =>
+        only(regions, 'capsule') ? 'Capsule céphalique' : only(regions, 'clypeus-insertion') ? 'Clypéus et insertion des antennes' : 'Anatomie de la tête',
+      lead: (n) => `${n} structures de la tête vue de face, du bord occipital au clypéus. Repère-les sur la planche, puis nomme-les sans aide.`,
+      note: (
+        <>
+          La planche montre deux têtes d’ouvrière de face, sans mandibules ni antennes, d’après les figures 523 à 526 de Bolton (1994). À gauche, une tête
+          entière dont les lobes frontaux cachent l’insertion des antennes, avec de longues carènes frontales bordant des scrobes. À droite, la moitié antérieure
+          d’une tête sans lobes frontaux, où l’on voit le torulus et la fossette antennaire. Ces structures varient beaucoup d’un genre à l’autre.
+        </>
+      ),
+      credit: (
+        <>
+          Planche : dessin composite d’EAnathos, d’après Bolton (1994), sous licence{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          {' '}: réutilisation libre à des fins non commerciales, en citant l’auteur.
+        </>
+      ),
+    },
     mandibule: {
       title: (regions) => (only(regions, 'dents') ? 'Dents de la mandibule' : 'Anatomie de la mandibule'),
       lead: (n, regions) =>
@@ -173,6 +194,27 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       credit: (
         <>
           Plate: drawing by EAnathos, licensed under{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          : free to reuse for non-commercial purposes, with credit to the author.
+        </>
+      ),
+    },
+    tete: {
+      title: (regions) =>
+        only(regions, 'capsule') ? 'Head capsule' : only(regions, 'clypeus-insertion') ? 'Clypeus and antennal insertion' : 'Head anatomy',
+      lead: (n) => `${n} structures of the head in full-face view, from the occipital margin to the clypeus. Find them on the plate, then name them unaided.`,
+      note: (
+        <>
+          The plate shows two worker heads in full-face view, without mandibles or antennae, after figures 523 to 526 of Bolton (1994). On the left, a whole head
+          whose frontal lobes conceal the antennal insertions, with long frontal carinae bordering scrobes. On the right, the front half of a head without frontal
+          lobes, showing the torulus and antennal socket. These structures vary widely between genera.
+        </>
+      ),
+      credit: (
+        <>
+          Plate: composite drawing by EAnathos, after Bolton (1994), licensed under{' '}
           <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">
             CC BY-NC 4.0
           </a>

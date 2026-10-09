@@ -1,7 +1,7 @@
 # CLAUDE.md
 
-Atlas anatomique interactif de la fourmi, avec quatre planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
-(vue latérale), aile antérieure de reine d'*Odontomachus* sp., mandibule et antenne (vues composites). Trois modes de jeu :
+Atlas anatomique interactif de la fourmi, avec cinq planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
+(vue latérale), aile antérieure de reine d'*Odontomachus* sp., tête, mandibule et antenne (vues composites). Trois modes de jeu :
 **Trouver** (un nom est donné, on clique la structure), **Nommer** (on clique une structure, on tape son nom) et
 **Relier** (associer des mots à leur définition, par séries de 5, avec les structures de la planche ou tout le glossaire).
 Interface bilingue : français sur `/`, anglais sur `/en/`.
@@ -47,7 +47,8 @@ moment. Animations coupées si `prefers-reduced-motion`.
 
 ## Structure
 
-- `src/assets/ant.svg` (ouvrière), `src/assets/wing.svg` (aile) et `src/assets/mandible.svg` (mandibule), `src/assets/antenna.svg` (antenne) :
+- `src/assets/ant.svg` (ouvrière), `src/assets/wing.svg` (aile) et `src/assets/head.svg` (tête), `src/assets/mandible.svg` (mandibule), `src/assets/antenna.svg`
+  (antenne) :
   **sources uniques des dessins**. Importés en `?raw`
   et injectés par `AntPlate` selon la planche (`PlateId`).
 - `src/i18n.ts` : langue de la page (`LANG`, lue dans `<html lang>`), helper `t(fr, en)`, URLs des langues.
@@ -65,8 +66,8 @@ moment. Animations coupées si `prefers-reduced-motion`.
     toujours chercher une structure avec sa planche (`partIn(plate, id)`). `PLATE_NAMES_FR` / `PLATE_NAMES_EN` : nom d'un
     terme propre à une planche (singulier ou pluriel selon le nombre d'exemplaires dessinés). Une planche sans taxon
     (dessin composite) a un `detail` en romain à la place ; `PlateName` / `plateText` affichent son libellé.
-  - `DETAIL_PLATES` : planche détaillée d'une structure de la vue d'ensemble (`mandibule` → planche `mandibule`,
-    `antenne` → planche `antenne`).
+  - `DETAIL_PLATES` : planche détaillée d'une structure de la vue d'ensemble (`tete` → planche `tete`,
+    `mandibule` → planche `mandibule`, `antenne` → planche `antenne`).
     Sur l'accueil, la légende de la structure propose « Voir en détail », qui ouvre cette planche avec la structure
     sélectionnée et un zoom (`.plate-focus`) parti de l'endroit où elle se trouvait. À compléter à chaque planche détaillée. Les id de régions sont uniques toutes planches
     confondues.
@@ -137,6 +138,24 @@ puis coudé à la verticale, bord externe presque droit avec un dernier tronçon
   Mécanisme générique, utilisable sur d'autres planches pour une structure longue.
 - Trulleum retiré pour le moment, à la demande de l'utilisateur (le terme reste au glossaire).
 - Dessin d'EAnathos sous licence CC BY-NC 4.0, comme l'aile : crédit sous le texte de l'accueil, LICENSE et README.
+
+## Planche de la tête : règles
+
+`head.svg` : deux têtes d'ouvrière de face, sans mandibules ni antennes, dessin composite d'EAnathos d'après les
+figures 523 à 526 de Bolton (1994) (CC BY-NC 4.0). Formes décrites pour la moitié droite puis reflétées.
+- A (gauche) : tête entière, lobes frontaux qui cachent l'insertion antennaire (dessinés en dernier), longues carènes
+  frontales, scrobes en pointillés, bord occipital et coins occipitaux.
+- B (droite) : moitié antérieure (`clipPath` et pointillé de coupe), sans lobes frontaux : torulus (anneau),
+  fossette antennaire, fossette tentoriale antérieure, sillon paraoculo-clypéal, carènes courtes.
+- Régions `capsule`, `region-frontale`, `clypeus-insertion`. Le fond de la tête est un décor : pas de structure
+  « Tête » sur cette planche. Les structures des deux têtes (yeux, genas, clypéus…) forment une seule structure, au
+  pluriel sur cette planche (`PLATE_NAMES_*`).
+- Œil : l'intérieur porte `ommatidies` (grille de facettes découpée par un `clipPath`), le contour porte `oeil`
+  (trait `.nerv-core` + `.nerv-hit`, on le choisit en touchant le bord). Genas sans contour propre ; contour de la
+  tête redessiné par-dessus en décor. Le bord antérieur est fait de tronçons partagés avec les surfaces du clypéus.
+- Coins occipitaux : cercles transparents colorés à la sélection.
+- Sur l'ouvrière, lobe frontal, clypéus et œil (ommatidies) sont fondus dans la structure `tete`, qui ouvre cette
+  planche ; la région Tête de l'ouvrière ne garde que Tête et Mandibules.
 
 ## Planche de l'antenne : règles
 
