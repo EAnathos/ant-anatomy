@@ -1,11 +1,11 @@
 import { LANG, type Lang } from '../i18n';
 import { PLATES_EN, PLATE_NAMES_EN, REGIONS_EN, TERMS_EN } from './parts.en';
 
-export type PlateId = 'ouvriere' | 'aile' | 'tete' | 'mandibule' | 'antenne' | 'mesosoma' | 'patte';
+export type PlateId = 'ouvriere' | 'aile' | 'tete' | 'mandibule' | 'antenne' | 'mesosoma' | 'gastre' | 'patte';
 
 // Une région par planche, sauf l'aile, où l'on choisit cellules, nervures ou les deux. Une région de planche porte
 // l'id de sa planche.
-export type RegionId = 'ouvriere' | 'tete' | 'mandibule' | 'antenne' | 'mesosoma' | 'patte' | 'cellules' | 'nervures';
+export type RegionId = 'ouvriere' | 'tete' | 'mandibule' | 'antenne' | 'mesosoma' | 'gastre' | 'patte' | 'cellules' | 'nervures';
 
 /** Terme du glossaire. */
 export type TermId =
@@ -36,7 +36,7 @@ export type TermId =
   | 'taille' | 'postpetiole' | 'helcium' | 'pedoncule' | 'processus-subpetiolaire' | 'presclerite'
   | 'acidopore' | 'constriction' | 'appareil-stridulatoire' | 'basitarse' | 'pretarse' | 'strigile' | 'soie'
   | 'pubescence' | 'psammophore' | 'lobe-torulaire' | 'sillon-paraoculo-clypeal' | 'ocelles' | 'arolium' | 'suture'
-  | 'sulcus';
+  | 'sulcus' | 'spiracles-abdominaux';
 
 /** Structure d'une planche : identifiée par son terme (`data-part` du SVG), unique au sein d'une planche. */
 export type PartId = TermId;
@@ -87,6 +87,7 @@ const PLATES_FR: Plate[] = [
   { id: 'mandibule', subject: 'Mandibule', detail: 'vue composite', example: 'bord basal' },
   { id: 'antenne', subject: 'Antenne', detail: 'vue composite', example: 'scape' },
   { id: 'mesosoma', subject: 'Mésosoma', detail: 'vue composite', example: 'propleure' },
+  { id: 'gastre', subject: 'Gastre', detail: 'vue composite', example: 'helcium' },
   { id: 'patte', subject: 'Patte', detail: 'vue composite', example: 'basitarse' },
   { id: 'aile', subject: 'Aile de reine', taxon: 'Odontomachus', sp: true, example: 'cellule costale' },
 ];
@@ -97,6 +98,7 @@ const REGIONS_FR: Region[] = [
   { id: 'mandibule', label: 'Mandibule', plate: 'mandibule' },
   { id: 'antenne', label: 'Antenne', plate: 'antenne' },
   { id: 'mesosoma', label: 'Mésosoma', plate: 'mesosoma' },
+  { id: 'gastre', label: 'Gastre', plate: 'gastre' },
   { id: 'patte', label: 'Patte', plate: 'patte' },
   { id: 'cellules', label: 'Cellules', plate: 'aile' },
   { id: 'nervures', label: 'Nervures', plate: 'aile' },
@@ -241,6 +243,7 @@ const TERMS_FR: Term[] = [
   { id: 'ocelles', name: 'Ocelles', definition: 'Petits yeux simples sur le dessus de la tête, au nombre de trois. Toujours présents chez les mâles et les reines, ils manquent chez la plupart des ouvrières mais existent dans certains groupes, surtout chez les Formicinae.', synonyms: [], variants: ['ocelle'] },
   { id: 'arolium', name: 'Arolium', definition: 'Petite pelote adhésive membraneuse du prétarse, entre les griffes. Bien développée chez certaines fourmis, notamment arboricoles, elle est vestigiale ou absente chez d’autres.', synonyms: [], variants: ['arolia'] },
   { id: 'suture', name: 'Suture', definition: 'Ligne de jonction entre deux sclérites. Au sens strict (Keller 2011), sillon né de la soudure de deux sclérites autrefois distincts, par opposition à une articulation, qui reste mobile.', synonyms: [], variants: ['sutures'] },
+  { id: 'spiracles-abdominaux', name: 'Spiracles abdominaux', definition: 'Orifices respiratoires des segments de l’abdomen, une paire par segment. Le premier est le spiracle propodéal ; ceux du pétiole et des premiers segments du gastre s’ouvrent sur les côtés, ceux des segments 5 à 7 sont en général cachés sous le bord du tergite précédent.', synonyms: ['stigmates abdominaux'], variants: ['spiracle abdominal', 'spiracles', 'spiracle', 'stigmates', 'stigmate'] },
   { id: 'sulcus', name: 'Sillon', definition: 'Rainure externe de la cuticule qui correspond à une crête interne. On le distingue d’une suture, qui sépare deux sclérites soudés, et d’une ligne, simple marque sans repli interne (Keller 2011).', synonyms: ['sulcus'], variants: ['sulci'] },
 ];
 
@@ -265,6 +268,10 @@ const LAYOUT: Record<RegionId, TermId[]> = {
     'pronotum', 'suture-promesonotale', 'mesonotum', 'sillon-metanotal', 'propodeum', 'spiracle', 'declivite-propodeale',
     'lobe-propodeal', 'propleure', 'anepisterne', 'katepisterne', 'metapleure', 'bulle-metapleurale',
     'orifice-metapleural', 'coxa',
+  ],
+  gastre: [
+    'petiole', 'processus-subpetiolaire', 'helcium', 'tergite', 'sternite', 'presclerite', 'constriction',
+    'spiracles-abdominaux', 'pygidium', 'hypopygium', 'aiguillon',
   ],
   patte: ['coxa', 'trochanter', 'femur', 'tibia', 'eperon', 'basitarse', 'tarse', 'pretarse', 'griffe', 'arolium'],
   cellules: [
@@ -299,6 +306,12 @@ const DETAIL_PLATES: Partial<Record<TermId, PlateId>> = {
   mandibule: 'mandibule',
   antenne: 'antenne',
   mesosoma: 'mesosoma',
+  petiole: 'gastre',
+  tergite: 'gastre',
+  sternite: 'gastre',
+  pygidium: 'gastre',
+  hypopygium: 'gastre',
+  aiguillon: 'gastre',
   patte: 'patte',
 };
 

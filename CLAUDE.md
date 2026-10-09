@@ -1,7 +1,7 @@
 # CLAUDE.md
 
-Atlas anatomique interactif de la fourmi, avec sept planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
-(vue latérale), puis tête, mandibule, antenne, mésosoma et patte (vues composites), et enfin aile antérieure de reine
+Atlas anatomique interactif de la fourmi, avec huit planches choisies sur l'accueil : ouvrière de *Neoponera verenae*
+(vue latérale), puis tête, mandibule, antenne, mésosoma, gastre et patte (vues composites), et enfin aile antérieure de reine
 d'*Odontomachus* sp. Trois modes de jeu :
 **Trouver** (un nom est donné, on clique la structure), **Nommer** (on clique une structure, on tape son nom) et
 **Relier** (associer des mots à leur définition, par séries de 5, avec les structures de la planche ou tout le glossaire).
@@ -51,7 +51,7 @@ moment. Animations coupées si `prefers-reduced-motion`.
 ## Structure
 
 - `src/assets/ant.svg` (ouvrière), `src/assets/wing.svg` (aile) et `src/assets/head.svg` (tête), `src/assets/mandible.svg` (mandibule), `src/assets/antenna.svg`
-  (antenne), `src/assets/mesosoma.svg` (mésosoma), `src/assets/leg.svg` (patte) :
+  (antenne), `src/assets/mesosoma.svg` (mésosoma), `src/assets/gaster.svg` (gastre), `src/assets/leg.svg` (patte) :
   **sources uniques des dessins**. Importés en `?raw`
   et injectés par `AntPlate` selon la planche (`PlateId`). L'ouvrière est incluse dans le code principal (planche affichée
   à l'arrivée) ; les autres sont chargées à la demande (`import()` dans `LOADERS`, un fichier par dessin) et
@@ -73,7 +73,8 @@ moment. Animations coupées si `prefers-reduced-motion`.
     terme propre à une planche (singulier ou pluriel selon le nombre d'exemplaires dessinés). Une planche sans taxon
     (dessin composite) a un `detail` en romain à la place ; `PlateName` / `plateText` affichent son libellé.
   - `DETAIL_PLATES` : planche détaillée d'une structure de la vue d'ensemble (`tete` → planche `tete`,
-    `mandibule` → planche `mandibule`, `antenne` → planche `antenne`, `patte` → planche `patte`, `mesosoma` → planche `mesosoma`).
+    `mandibule` → planche `mandibule`, `antenne` → planche `antenne`, `patte` → planche `patte`, `mesosoma` → planche `mesosoma`, `petiole`, `tergite`, `sternite`, `pygidium`, `hypopygium`,
+    `aiguillon` → planche `gastre`).
     Sur l'accueil, la légende de la structure propose « Voir en détail », qui ouvre cette planche avec la structure
     sélectionnée et un zoom (`.plate-focus`) parti de l'endroit où elle se trouvait. À compléter à chaque planche détaillée. Les id de régions sont uniques toutes planches
     confondues.
@@ -205,6 +206,21 @@ dans les deux surfaces qu'elle sépare.
 - Coxas dessinées sous le mésosoma, chacune avec l'encoche en trou de serrure du trochanter.
 - Sur l'ouvrière, pronotum, mésonotum, mésopleure et propodéum sont fondus dans `mesosoma`, qui ouvre cette planche ;
   le spiracle y est un décor.
+
+## Planche du gastre : règles
+
+`gaster.svg` (planche `gastre`) : taille et gastre d'ouvrière, vue latérale, dessin composite d'EAnathos d'après la
+figure 530 de Bolton (1994) (CC BY-NC 4.0). Même méthode que le mésosoma : points relevés sur la figure (image de
+785 × 787), frontières partagées entre surfaces, silhouette grise dessous.
+- Structures : pétiole, processus subpétiolaire, helcium, tergites (A3 à A6), sternites (A3 à A6), présclérite,
+  étranglement annulaire, spiracles abdominaux (pétiole, A3, A4), pygidium, hypopygium, aiguillon.
+- Présclérite : emprunt à la figure 531. Le bord postérieur de l'A3 est reculé pour mettre à nu, devant
+  l'étranglement annulaire, le présclérite de l'A4 (tergal et sternal), rempli du motif pointillé `gastre-pointille`.
+- Helcium et étranglement annulaire (bandes tergale et sternale) : surfaces hachurées, hachures en décor.
+- A5 et A6 : bandes partagées en tergite et sternite par un court trait tergo-sternal, comme l'A7 en pygidium et
+  hypopygium. L'aiguillon sort entre les deux, dessiné dessous.
+- Arrière du propodéum (déclivité, lobe, bulle et orifice de la glande métapleurale) et métacoxa : décor, par-dessus
+  l'avant du pétiole.
 
 ## Planche de la patte : règles
 

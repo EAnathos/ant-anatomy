@@ -177,7 +177,7 @@ describe('sessions', () => {
 });
 
 describe('planche SVG', () => {
-  const FILES = { ouvriere: 'ant.svg', aile: 'wing.svg', tete: 'head.svg', mandibule: 'mandible.svg', antenne: 'antenna.svg', mesosoma: 'mesosoma.svg', patte: 'leg.svg' } as const;
+  const FILES = { ouvriere: 'ant.svg', aile: 'wing.svg', tete: 'head.svg', mandibule: 'mandible.svg', antenne: 'antenna.svg', mesosoma: 'mesosoma.svg', gastre: 'gaster.svg', patte: 'leg.svg' } as const;
 
   it.each(PLATES.map((p) => p.id))('%s : contient exactement les structures déclarées', (plate) => {
     const svg = readFileSync(new URL(`../assets/${FILES[plate]}`, import.meta.url), 'utf8');

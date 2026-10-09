@@ -16,6 +16,7 @@ export const PLATES_EN: Record<PlateId, { subject: string; example: string; deta
   mandibule: { subject: 'Mandible', detail: 'composite view', example: 'basal margin' },
   antenne: { subject: 'Antenna', detail: 'composite view', example: 'scape' },
   mesosoma: { subject: 'Mesosoma', detail: 'composite view', example: 'propleuron' },
+  gastre: { subject: 'Gaster', detail: 'composite view', example: 'helcium' },
   patte: { subject: 'Leg', detail: 'composite view', example: 'basitarsus' },
 };
 
@@ -25,6 +26,7 @@ export const REGIONS_EN: Record<RegionId, string> = {
   mandibule: 'Mandible',
   antenne: 'Antenna',
   mesosoma: 'Mesosoma',
+  gastre: 'Gaster',
   patte: 'Leg',
   cellules: 'Cells',
   nervures: 'Veins',
@@ -181,5 +183,6 @@ export const TERMS_EN: Record<TermId, TermText> = {
   ocelles: { name: 'Ocelli', definition: 'Small simple eyes on top of the head, three in number. Always present in males and queens, they are absent in most workers but occur in some groups, especially Formicinae.', synonyms: [], variants: ['ocellus'] },
   arolium: { name: 'Arolium', definition: 'Small membranous adhesive pad of the pretarsus, between the claws. Well developed in some ants, notably arboreal ones, it is vestigial or absent in others.', synonyms: [], variants: ['arolia'] },
   suture: { name: 'Suture', definition: 'Line of junction between two sclerites. In the strict sense (Keller 2011), a groove formed by the fusion of two formerly distinct sclerites, as opposed to an articulation, which stays movable.', synonyms: [], variants: ['sutures'] },
+  'spiracles-abdominaux': { name: 'Abdominal spiracles', definition: 'Breathing openings of the abdominal segments, one pair per segment. The first is the propodeal spiracle; those of the petiole and the first gastral segments open on the sides, while those of segments 5 to 7 are usually concealed under the margin of the preceding tergite.', synonyms: [], variants: ['abdominal spiracle', 'spiracles', 'spiracle', 'stigmata'] },
   sulcus: { name: 'Sulcus', definition: 'External groove of the cuticle matching an internal ridge. It is distinguished from a suture, which separates two fused sclerites, and from a line, a mere mark without internal invagination (Keller 2011).', synonyms: [], variants: ['sulci'] },
 };

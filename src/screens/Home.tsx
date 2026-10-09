@@ -159,6 +159,26 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
         </>
       ),
     },
+    gastre: {
+      title: () => 'Anatomie du gastre',
+      lead: (n) => `${n} structures de la taille et du gastre, du pétiole à l’aiguillon. Repère-les sur la planche, puis nomme-les sans aide.`,
+      note: (
+        <>
+          La planche montre la taille et le gastre d’une ouvrière, vue de côté, d’après la figure 530 de Bolton (1994). C’est un dessin composite, qui ne
+          représente aucune espèce. Le pétiole s’articule au gastre par le helcium. Entre les deux premiers segments du gastre, le présclérite de l’A4, d’ordinaire
+          caché sous l’A3, est montré à nu en pointillé, comme sur la figure 531, devant l’étranglement annulaire.
+        </>
+      ),
+      credit: (
+        <>
+          Planche : dessin composite d’EAnathos, sous licence{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          {' '}: réutilisation libre à des fins non commerciales, en citant l’auteur.
+        </>
+      ),
+    },
     patte: {
       title: () => 'Anatomie de la patte',
       lead: (n) => `${n} parties de la patte, de la coxa aux griffes. Repère-les sur la planche, puis nomme-les sans aide.`,
@@ -294,6 +314,26 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
           The plate shows the mesosoma of a worker, seen from the side, after figure 529 of Bolton (1994). It is a composite drawing, not based on any
           species. It combines the three thoracic segments and the propodeum, the first abdominal segment fused to the thorax. Here a groove divides the
           mesopleuron into anepisternum and katepisternum, and the metapleural gland bulla opens through an orifice above the hind coxa.
+        </>
+      ),
+      credit: (
+        <>
+          Plate: composite drawing by EAnathos, licensed under{' '}
+          <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">
+            CC BY-NC 4.0
+          </a>
+          : free to reuse for non-commercial purposes, with credit to the author.
+        </>
+      ),
+    },
+    gastre: {
+      title: () => 'Gaster anatomy',
+      lead: (n) => `${n} structures of the waist and gaster, from the petiole to the sting. Find them on the plate, then name them unaided.`,
+      note: (
+        <>
+          The plate shows the waist and gaster of a worker, seen from the side, after figure 530 of Bolton (1994). It is a composite drawing, not based on any
+          species. The petiole articulates with the gaster through the helcium. Between the first two gastral segments, the presclerite of A4, normally hidden
+          under A3, is shown exposed and stippled, as in figure 531, in front of the girdling constriction.
         </>
       ),
       credit: (

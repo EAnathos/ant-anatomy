@@ -24,9 +24,10 @@ const LABELS = t<Record<PlateId, string>>(
     mandibule: 'Planche : mandibule gauche ouverte, vue dorsale',
     antenne: 'Planche : antenne d’ouvrière, vue latérale',
     mesosoma: 'Planche : mésosoma d’ouvrière, vue latérale',
+    gastre: 'Planche : taille et gastre d’ouvrière, vue latérale',
     patte: 'Planche : patte postérieure d’ouvrière, vue latérale',
   },
-  { ouvriere: 'Plate: worker ant, side view', aile: 'Plate: queen forewing', tete: 'Plate: worker heads, full-face view', mandibule: 'Plate: open left mandible, dorsal view', antenne: 'Plate: worker antenna, side view', mesosoma: 'Plate: worker mesosoma, side view', patte: 'Plate: worker hind leg, side view' },
+  { ouvriere: 'Plate: worker ant, side view', aile: 'Plate: queen forewing', tete: 'Plate: worker heads, full-face view', mandibule: 'Plate: open left mandible, dorsal view', antenne: 'Plate: worker antenna, side view', mesosoma: 'Plate: worker mesosoma, side view', gastre: 'Plate: worker waist and gaster, side view', patte: 'Plate: worker hind leg, side view' },
 );
 
 const withLabel = (svg: string, label: string) => svg.replace(/aria-label="[^"]*"/, `aria-label="${label}"`);
@@ -39,6 +40,7 @@ const LOADERS: Record<Exclude<PlateId, 'ouvriere'>, () => Promise<{ default: str
   mandibule: () => import('../assets/mandible.svg?raw'),
   antenne: () => import('../assets/antenna.svg?raw'),
   mesosoma: () => import('../assets/mesosoma.svg?raw'),
+  gastre: () => import('../assets/gaster.svg?raw'),
   patte: () => import('../assets/leg.svg?raw'),
 };
 
