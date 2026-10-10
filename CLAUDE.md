@@ -161,7 +161,7 @@ figures 523 à 526 de Bolton (1994) (CC BY-NC 4.0). Formes décrites pour la moi
   frontales, scrobes en pointillés, bord occipital et coins occipitaux, trois ocelles sur le vertex (emprunt à la reine,
   la vue étant composite), clypéus en parties médiane et latérales.
 - B (droite) : moitié antérieure (`clipPath` et pointillé de coupe), sans lobes frontaux : torulus (anneau),
-  fossette antennaire, fossette tentoriale antérieure, sillon paraoculo-clypéal, carènes courtes, clypéus entier (une
+  fossette antennaire, fossette tentoriale antérieure, sillon paroculo-clypéal, carènes courtes, clypéus entier (une
   seule surface `clypeus`, sans partage en parties).
 - Le fond de la tête est un décor : pas de structure
   « Tête » sur cette planche. Les structures des deux têtes (yeux, genas, clypéus…) forment une seule structure, au
@@ -173,7 +173,7 @@ figures 523 à 526 de Bolton (1994) (CC BY-NC 4.0). Formes décrites pour la moi
 - Triangle frontal : sa base suit exactement la suture fronto-clypéale (sous-courbe de la suture).
 - Scrobes (tête A) : leur bord interne est la carène frontale elle-même (même courbe), le trait de la carène le recouvre.
 - Sur l'ouvrière, lobe frontal, clypéus et œil (ommatidies) sont fondus dans la structure `tete`, qui ouvre cette
-  planche. Le sillon paraoculo-clypéal est cliquable sur les deux têtes.
+  planche. Le sillon paroculo-clypéal est cliquable sur les deux têtes.
 
 ## Planche de l'antenne : règles
 
