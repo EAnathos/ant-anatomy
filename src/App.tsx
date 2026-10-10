@@ -166,7 +166,7 @@ export function App() {
       {/* Remonté à chaque écran pour entrer en fondu avec lui, plutôt que d'apparaître avant. */}
       {!hidden && (
         <div key={'run' in screen ? `${screen.name}-${screen.run}` : screen.name} className="container page-footer">
-          <Footer onGlossary={() => navigate('glossary')} />
+          <Footer onGlossary={screen.name === 'glossary' ? undefined : () => navigate('glossary')} />
         </div>
       )}
     </>

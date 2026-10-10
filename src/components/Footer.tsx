@@ -6,21 +6,24 @@ const T = t(
 );
 
 // Les crédits des planches sont sur l'accueil, sous le texte de la planche choisie.
-export function Footer({ onGlossary }: { onGlossary: () => void }) {
+// Sans onGlossary (sur le glossaire lui-même), le lien vers le glossaire n'est pas affiché.
+export function Footer({ onGlossary }: { onGlossary?: () => void }) {
   return (
     <footer className="site-footer">
-      <p>
-        <a
-          href={GLOSSARY_HASH}
-          onClick={(e) => {
-            e.preventDefault();
-            onGlossary();
-          }}
-        >
-          {T.glossary}
-        </a>
-        {T.glossaryText}
-      </p>
+      {onGlossary && (
+        <p>
+          <a
+            href={GLOSSARY_HASH}
+            onClick={(e) => {
+              e.preventDefault();
+              onGlossary();
+            }}
+          >
+            {T.glossary}
+          </a>
+          {T.glossaryText}
+        </p>
+      )}
       <p>
         {T.before}
         <a href="https://antwiki.org/wiki/Morphology_and_Terminology" target="_blank" rel="noopener noreferrer">
