@@ -12,6 +12,7 @@ const T = t(
     lead: (n: number) => `${n} termes d’anatomie de la fourmi, avec leur définition et leurs synonymes. Ceux qui figurent sur une planche y renvoient.`,
     source: 'Définitions d’après Bolton (1994), ',
     sourceAfter: ', pour le corps, complétées par Keller (2011), ',
+    sourceLast: ', et pour l’abdomen par Lieberman et al. (2022), ',
     sourceEnd: '.',
     quiz: 'Quiz : relier mots et définitions',
     search: 'Chercher un terme',
@@ -27,6 +28,7 @@ const T = t(
     lead: (n: number) => `${n} ant anatomy terms, with their definition and synonyms. Those shown on a plate link to it.`,
     source: 'Definitions follow Bolton (1994), ',
     sourceAfter: ', for the body, supplemented by Keller (2011), ',
+    sourceLast: ', and for the abdomen by Lieberman et al. (2022), ',
     sourceEnd: '.',
     quiz: 'Quiz: match words and definitions',
     search: 'Search a term',
@@ -76,6 +78,8 @@ export function Glossary({ onShowPart, onStartMatch }: GlossaryProps) {
           <em>Identification Guide to the Ant Genera of the World</em>
           {T.sourceAfter}
           <em>A phylogenetic analysis of ant morphology</em>
+          {T.sourceLast}
+          <em>The ant abdomen</em>
           {T.sourceEnd}
         </p>
         <div className="glossary__tools">

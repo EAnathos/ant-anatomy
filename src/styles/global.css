@@ -1226,7 +1226,8 @@ main.container {
   gap: 20px;
 }
 
-.glossary__head .lead { max-width: 52ch; }
+.glossary__head .lead { max-width: 80ch; }
+.glossary__head .plate-credit { max-width: 110ch; }
 
 .glossary__tools {
   display: flex;

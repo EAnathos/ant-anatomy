@@ -1,7 +1,7 @@
 # Atlas anatomique *Formicidae*
 
 Application web pour apprendre l'anatomie externe de la fourmi, structure par structure,
-sur des planches interactives. Huit planches au choix :
+sur des planches interactives (pas d'anatomie interne : ni muscles, ni organes). Huit planches au choix :
 
 - **Ouvrière *Neoponera verenae*** (Ponerinae), en vue latérale : la structure générale du corps, point d'entrée vers
   les planches composites détaillées de chaque partie (tête, mandibules, antennes, mésosoma, gastre, pattes).
@@ -12,7 +12,7 @@ sur des planches interactives. Huit planches au choix :
 - **Antenne**, vue composite d'une antenne d'ouvrière de 12 articles : bulbe condylaire, col du bulbe, scape,
   pédicelle, funicule et massue.
 - **Mésosoma**, vue composite d'un mésosoma d'ouvrière de profil, d'après la figure 529 de Bolton (1994) : pronotum,
-  mésonotum, propodéum, pleurites (propleure, anépisterne, katépisterne, métapleure), glande métapleurale et coxas.
+  mésonotum, propodéum, pleurites (propleure, mésopleure et ses deux parties, anépisterne et katépisterne, métapleure), glande métapleurale (coxas en décor).
 - **Gastre**, vue composite de la taille et du gastre d'ouvrière de profil, d'après la figure 530 de Bolton (1994) :
   pétiole, processus subpétiolaire, helcium, tergites, sternites, présclérite (mis à nu comme sur la figure 531),
   étranglement annulaire, spiracles, pygidium, hypopygium et aiguillon.
@@ -36,8 +36,8 @@ sur des planches interactives. Huit planches au choix :
   acceptés (« hanche » pour coxa, « épinotum » pour propodéum, « ommatidie » pour ommatidies…).
 - **Mode Relier** : des mots et des définitions mélangés à associer, par séries de cinq, avec les structures de la
   planche ou tout le glossaire.
-- **Glossaire** : tous les termes par ordre alphabétique, avec définition et synonymes, d'après Bolton (1994) et
-  Keller (2011), et un lien vers chaque planche où le terme figure.
+- **Glossaire** : tous les termes par ordre alphabétique, avec définition et synonymes, d'après Bolton (1994),
+  Keller (2011) et, pour l'abdomen, Lieberman et al. (2022), et un lien vers chaque planche où le terme figure.
 - **Paramètres de session** : choix de la planche (sur l'accueil) ou de toutes les planches à la fois, des régions de
   l'aile (cellules, nervures ou les deux), nombre de questions (10, 20 ou toutes), tolérance aux accents.
 - En français (`/`) et en anglais (`/en/`), avec un sélecteur dans l'en-tête et des aperçus de liens traduits.

@@ -193,12 +193,14 @@ massue de 3 dont le dernier en ogive). Base : bulbe condylaire et col du bulbe.
 (CC BY-NC 4.0). Points relevés sur la figure, même repère (image de 567 × 390) ; chaque frontière est le même tronçon
 dans les deux surfaces qu'elle sépare.
 - Structures : pronotum, suture promésonotale, mésonotum, sillon métanotal, propodéum, spiracle propodéal, déclivité
-  propodéale, lobe propodéal, propleure, anépisterne, katépisterne, métapleure, bulle et orifice de la glande
-  métapleurale.
+  propodéale, lobe propodéal, propleure, mésopleure, anépisterne, katépisterne, métapleure, bulle et orifice de la
+  glande métapleurale.
 - Surfaces sans contour posées sur une silhouette grise (pas de liseré) ; frontières, contour et hachures en décor,
   en trait plein ou en pointillés comme sur la figure.
 - Propleure : bande en S sous le pronotum, de l'avant jusqu'à la procoxa.
-- La mésopleure n'y est pas une structure : le sillon hachuré la partage en anépisterne et katépisterne. Le bord
+- Le sillon hachuré partage la mésopleure en anépisterne et katépisterne (surfaces). La mésopleure elle-même est
+  son contour, comme l'œil de la tête : trait `.nerv-hit` + `.nerv-core`, cœur transparent au repos ; on la choisit
+  en touchant le bord. Le bord
   postérieur de l'anépisterne se prolonge (pointillés puis trait plein) en frontière katépisterne / métapleure.
 - Suture promésonotale et déclivité : des traits (`.nerv-core` + `.nerv-hit`). Sillon métanotal : même principe, mais
   cœur transparent au repos (seules les hachures se voient, comme sur la figure).
@@ -253,7 +255,8 @@ fémur presque horizontal, tibia descendant, tarse étalé vers l'avant ; articl
   Bolton (1994, *Identification Guide to the Ant Genera of the World*, p. 191-201), à paraphraser, jamais recopier ;
   il ne couvre pas l'aile. Complément : Keller (2011, *A phylogenetic analysis of ant morphology*, Bull. AMNH 355),
   terminologie plus récente et plus stricte (sulcus/suture, lobe torulaire, aire supraclypéale…), citée dans les
-  définitions quand elle diffère de Bolton. Noms de genres et d'espèces entre astérisques (`*Eciton*`) dans les données : `Rich`
+  définitions quand elle diffère de Bolton. Pour l'abdomen : Lieberman et al. (2022, *The ant abdomen*, J. Morphol.
+  283), cité en tête du glossaire. Noms de genres et d'espèces entre astérisques (`*Eciton*`) dans les données : `Rich`
   les rend en italique. Le dessin n'a qu'un pétiole
   (pas de postpétiole) ; sur la planche du gastre, il est découpé en tergites, sternites, pygidium, hypopygium et aiguillon.
   Sur l'aile, les cellules submarginales et subdiscoïdales sont numérotées de la base vers l'apex.

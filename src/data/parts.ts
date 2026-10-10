@@ -125,7 +125,7 @@ const TERMS_FR: Term[] = [
   { id: 'sternite', name: 'Sternites', definition: 'Sclérites ventraux des segments du gastre.', synonyms: [] },
   { id: 'pygidium', name: 'Pygidium', definition: 'Tergite du septième segment abdominal : le dernier tergite visible, à l’extrémité du gastre.', synonyms: [] },
   { id: 'hypopygium', name: 'Hypopygium', definition: 'Sternite du septième segment abdominal : le dernier sternite visible du gastre.', synonyms: [] },
-  { id: 'aiguillon', name: 'Aiguillon', definition: 'Dard venimeux à l’extrémité du gastre.', synonyms: ['dard'] },
+  { id: 'aiguillon', name: 'Aiguillon', definition: 'Organe venimeux à l’extrémité du gastre, issu de l’ovipositeur. Il est formé des appendices des segments abdominaux 8 et 9, rentrés dans le gastre : deux lancettes coulissent le long d’un stylet et délimitent avec lui le canal du venin, où débouchent la glande à venin et la glande de Dufour. Rentré, il est en partie gainé par les gonostyles. Non fonctionnel chez les Formicinae et les Dolichoderinae.', synonyms: ['dard'] },
   { id: 'patte', name: 'Patte', definition: 'Appendice locomoteur, en trois paires articulées au mésosoma. De la base à l’extrémité : la coxa, le trochanter, le fémur, le tibia, souvent armé d’éperons, et le tarse de cinq articles terminé par les griffes.', synonyms: [], variants: ['pattes'] },
   { id: 'coxa', name: 'Coxa', definition: 'Premier article de la patte, le plus basal, articulé au mésosoma.', synonyms: ['hanche'], variants: ['coxa', 'coxae', 'hanches', 'coxas'] },
   { id: 'trochanter', name: 'Trochanter', definition: 'Deuxième article de la patte, petit, entre la coxa et le fémur.', synonyms: [], variants: ['trochanter', 'trochanters'] },
@@ -265,7 +265,7 @@ const LAYOUT: Record<RegionId, TermId[]> = {
   antenne: ['bulbe-condylaire', 'col-bulbe', 'scape', 'pedicelle', 'funicule', 'massue'],
   mesosoma: [
     'pronotum', 'suture-promesonotale', 'mesonotum', 'sillon-metanotal', 'propodeum', 'spiracle', 'declivite-propodeale',
-    'lobe-propodeal', 'propleure', 'anepisterne', 'katepisterne', 'metapleure', 'bulle-metapleurale',
+    'lobe-propodeal', 'propleure', 'mesopleure', 'anepisterne', 'katepisterne', 'metapleure', 'bulle-metapleurale',
     'orifice-metapleural',
   ],
   gastre: [

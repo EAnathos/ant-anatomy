@@ -38,7 +38,8 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       note: (
         <>
           La planche représente une ouvrière de <em>Neoponera verenae</em>, une Ponerinae, dans sa structure générale. Elle sert de point d’entrée : chaque
-          partie (tête, mandibules, antennes, mésosoma, gastre, pattes) ouvre une planche composite détaillée, où l’on retrouve ses structures une à une.
+          partie ouvre une planche composite détaillée, où l’on retrouve ses structures une à une. L’atlas ne montre que l’anatomie externe, sans les
+          organes internes.
         </>
       ),
       credit: (
@@ -206,8 +207,9 @@ const INTROS = t<Record<PlateId, PlateIntro>>(
       lead: () => `${WORKER_COUNT} main body parts, from head to gaster. Find them on the plate, then name them unaided.`,
       note: (
         <>
-          The plate shows a worker of <em>Neoponera verenae</em>, a member of the Ponerinae, in its general structure. It is the entry point: each part (head,
-          mandibles, antennae, mesosoma, gaster, legs) opens a detailed composite plate, where its structures can be found one by one.
+          The plate shows a worker of <em>Neoponera verenae</em>, a member of the Ponerinae, in its general structure. It is the entry point: each part
+          opens a detailed composite plate, where its structures can be found one by one. The atlas shows external anatomy only, not the internal
+          organs.
         </>
       ),
       credit: (

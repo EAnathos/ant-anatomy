@@ -66,7 +66,7 @@ export const TERMS_EN: Record<TermId, TermText> = {
   sternite: { name: 'Sternites', definition: 'Ventral sclerites of the gastral segments.', synonyms: ['sternum'], variants: ['sterna'] },
   pygidium: { name: 'Pygidium', definition: 'Tergite of abdominal segment 7: the last visible tergite, at the tip of the gaster.', synonyms: [] },
   hypopygium: { name: 'Hypopygium', definition: 'Sternite of abdominal segment 7: the last visible sternite of the gaster.', synonyms: [] },
-  aiguillon: { name: 'Sting', definition: 'Venomous stinger at the tip of the gaster.', synonyms: ['aculeus'], variants: ['stinger'] },
+  aiguillon: { name: 'Sting', definition: 'Venom organ at the tip of the gaster, derived from the ovipositor. It is formed by the appendages of abdominal segments 8 and 9, withdrawn into the gaster: two lancets slide along a stylet and, with it, enclose the venom canal, into which the venom gland and Dufour’s gland open. When retracted, it is partly sheathed by the gonostyli. Non-functional in Formicinae and Dolichoderinae.', synonyms: ['aculeus'], variants: ['stinger'] },
   patte: { name: 'Leg', definition: 'Walking appendage, in three pairs jointed to the mesosoma. From base to tip: the coxa, the trochanter, the femur, the tibia, often armed with spurs, and the five-segmented tarsus ending in the claws.', synonyms: [], variants: ['legs'] },
   coxa: { name: 'Coxa', definition: 'First, most basal segment of the leg, jointed to the mesosoma.', synonyms: [], variants: ['coxa', 'coxas', 'coxae'] },
   trochanter: { name: 'Trochanter', definition: 'Second segment of the leg, small, between the coxa and the femur.', synonyms: [], variants: ['trochanter', 'trochanters'] },
